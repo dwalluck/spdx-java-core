@@ -4,7 +4,6 @@
  */
 package org.spdx.core;
 
-import java.util.Map;
 
 import javax.annotation.Nullable;
 import org.spdx.storage.IModelStore;
@@ -30,7 +29,6 @@ public interface IModelCopyManager {
 		 * @param sourceUri URI for the Source object
 		 * @param type Type to copy
 		 * @param excludeLicenseDetails If true, don't copy over properties of the listed licenses
-		 * @param externalMap map of URI's to ExternalMaps for any external elements
 		 * @param fromNamespace optional namespace of the from property
 		 * @param toNamespace optional namespace of the to property
 		 * @param fromCollectionNamespace Optional namespace for the from collection to use when creating items for collections.  Defaults to toNamespace
@@ -49,7 +47,6 @@ public interface IModelCopyManager {
 		 * @param fromStore Model Store containing the source item
 		 * @param sourceObjectUri source object URI
 		 * @param type Type to copy
-		 * @param externalMap map of URI's to ExternalMaps for any external elements
 		 * @param fromNamespace optional namespace of the from property
 		 * @param toNamespace optional namespace of the to property
 		 * @param fromCollectionNamespace Optional namespace for the from collection to use when creating items for collections.  Defaults to toNamespace
@@ -59,7 +56,6 @@ public interface IModelCopyManager {
 		 */
 		public TypedValue copy(IModelStore toStore, IModelStore fromStore, 
 				String sourceObjectUri, String type,
-				@Nullable Map<String, IExternalElementInfo> externalMap,
 				@Nullable String fromNamespace, @Nullable String toNamespace,
 				@Nullable String fromCollectionNamespace, @Nullable String toCollectionNamespace) throws InvalidSPDXAnalysisException;
 		
@@ -73,7 +69,6 @@ public interface IModelCopyManager {
 			 * @param fromId ID source ID
 			 * @param type Type to copy
 			 * @param excludeLicenseDetails If true, don't copy over properties of the listed licenses
-			 * @param externalMap map of URI's to ExternalMaps for any external elements
 			 * @param fromNamespace optional namespace of the from property
 			 * @param toNamespace optional namespace of the to property
 			 * @param fromCollectionNamespace Optional namespace for the from collection to use when creating items for collections.  Defaults to toNamespace
@@ -83,7 +78,6 @@ public interface IModelCopyManager {
 			public void copy(IModelStore toStore, String toObjectUri, 
 					IModelStore fromStore, String fromObjectUri, 
 					String type, boolean excludeLicenseDetails,
-					@Nullable Map<String, IExternalElementInfo> externalMap,
 					@Nullable String fromNamespace, @Nullable String toNamespace,
 					@Nullable String fromCollectionNamespace,
 					@Nullable String toCollectionNamespace) throws InvalidSPDXAnalysisException;
@@ -95,7 +89,6 @@ public interface IModelCopyManager {
 			 * @param fromStore Model Store containing the source item
 			 * @param fromObjectUri Object URI for the source item
 			 * @param type Type to copy
-			 * @param externalMap map of URI's to ExternalMaps for any external elements
 			 * @param fromNamespace optional namespace of the from property
 			 * @param toNamespace optional namespace of the to property
 			 * @param fromCollectionNamespace Optional namespace for the from collection to use when creating items for collections.  Defaults to toNamespace
@@ -103,7 +96,6 @@ public interface IModelCopyManager {
 			 * @throws InvalidSPDXAnalysisException
 			 */
 			public void copy(IModelStore toStore, String toObjectUri, IModelStore fromStore, String fromObjectUri, String type,
-					@Nullable Map<String, IExternalElementInfo> externalMap,
 					@Nullable String fromNamespace, @Nullable String toNamespace, 
 					@Nullable String fromCollectionNamespace, @Nullable String toCollectionNamespace) throws InvalidSPDXAnalysisException;
 			

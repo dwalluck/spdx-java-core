@@ -19,13 +19,14 @@ package org.spdx.storage;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
+import org.spdx.core.IExternalElementInfo;
 import org.spdx.core.InvalidSPDXAnalysisException;
-import org.spdx.core.SpdxCoreConstants.SpdxMajorVersion;
 import org.spdx.core.TypedValue;
 
 /**
@@ -59,10 +60,9 @@ public interface IModelStore extends AutoCloseable {
 	 */
 	public enum IdType {
 		LicenseRef, 		// ID's that start with LicenseRef-
-		DocumentRef, 		// ID's that start with DocumentRef-
+		DocumentRef, 		// ID's that start with DocumentRef- - for compatibility in SPDX 2.X versions
 		SpdxId, 			// ID's that start with SpdxRef-
 		ListedLicense, 		// ID's associated with listed licenses
-		Literal,			// ID's for pre-defined literals (such as NONE, NOASSERTION)
 		Anonymous, 			// ID's for object only referenced internally
 		Unkown};			// ID's that just don't fit any pattern
 
@@ -73,12 +73,11 @@ public interface IModelStore extends AutoCloseable {
 	public boolean exists(String objectUri);
 
 	/**
-	 * Create a new object with objectUri and type
-	 * @param objectUri unique URI within the SPDX model store for the objects
-	 * @param type SPDX model type as defined in the CLASS constants in SpdxConstantsCompatV2
+	 * Create a new object with objectUri, type and version from the typedValue
+	 * @param typedValue TypedValue of the item to create
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public void create(String objectUri, String type) throws InvalidSPDXAnalysisException;
+	public void create(TypedValue typedValue) throws InvalidSPDXAnalysisException;
 
 	/**
 	 * @param objectUri unique URI within the SPDX model store for the objects
@@ -114,7 +113,8 @@ public interface IModelStore extends AutoCloseable {
 	public String getNextId(IdType idType, @Nullable String nameSpace) throws InvalidSPDXAnalysisException;
 	
 	/**
-	 * Removes a property from the document for the given ID if the property exists.  Does not raise any exception if the propertyDescriptor does not exist
+	 * Removes a property from the d@Override
+	ocument for the given ID if the property exists.  Does not raise any exception if the propertyDescriptor does not exist
 	 * @param objectUri unique URI within the SPDX model store for the objects
 	 * @param propertyDescriptor descriptor for the property
 	 * @throws InvalidSPDXAnalysisException
@@ -204,10 +204,12 @@ public interface IModelStore extends AutoCloseable {
 	 * @param objectUri unique URI within the SPDX model store for the objects
 	 * @param propertyDescriptor descriptor for the property
 	 * @param clazz Class to test compatibility with
+	 * @param specVersion version of the SPDX to check against
 	 * @return true if the value associated with the objectUri and propertyDescriptor can be assigned to the clazz
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	public boolean isPropertyValueAssignableTo(String objectUri, PropertyDescriptor propertyDescriptor, Class<?> clazz) throws InvalidSPDXAnalysisException;
+	public boolean isPropertyValueAssignableTo(String objectUri, PropertyDescriptor propertyDescriptor, 
+			Class<?> clazz, String specVersion) throws InvalidSPDXAnalysisException;
 
 	/**
 	 * @param objectUri unique URI within the SPDX model store for the objects
@@ -244,7 +246,27 @@ public interface IModelStore extends AutoCloseable {
 	public void delete(String objectUri) throws InvalidSPDXAnalysisException;
 
 	/**
-	 * @return the major SPDX version for the model store (e.g. "2" or "3")
+	 * Adds an external reference for a given collection
+	 * @param externalObjectUri URI of the external SPDX Element or License
+	 * @param collectionUri URI of the SPDX document or collection
+	 * @param externalElementInfo info about the external element
+	 * @return the previous external mapping for the collection, null if no previous value is present
 	 */
-	public SpdxMajorVersion getSpdxVersion();
+	IExternalElementInfo addExternalReference(String externalObjectUri,
+			String collectionUri, IExternalElementInfo externalElementInfo);
+
+	/**
+	 * @param externalObjectUri object URI for an element external to a collection
+	 * @return a map of collection (or document) URI's mapped to their external element info for the given object URI
+	 */
+	Map<String, IExternalElementInfo> getExternalReferenceMap(
+			String externalObjectUri);
+
+	/**
+	 * @param externalObjectUri URI of the external SPDX Element or License
+	 * @param collectionUri URI of the SPDX document or collection
+	 * @return the externalElementInfo associated with the collection for a given external element
+	 */
+	IExternalElementInfo getExternalElementInfo(String externalObjectUri,
+			String collectionUri);
 }

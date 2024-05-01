@@ -17,14 +17,11 @@
  */
 package org.spdx.core;
 
-import java.util.Map;
 import java.util.Objects;
-
-import javax.annotation.Nullable;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.spdx.core.SpdxCoreConstants.SpdxMajorVersion;
 import org.spdx.storage.IModelStore;
 
 /**
@@ -81,36 +78,30 @@ public class SimpleUriValue implements IndividualUriValue {
 	}
 	
 	/**
-	 * inflate the value back to either an Enum (if the URI matches),  an ExternalSpdxElement if the uri is found in the
-	 * externalMap or if it matches the pattern of a V2 compatible external SPDX element, an Individual object, or returns itself otherwise
+	 * inflate the value back to either an Enum (if the URI matches),  an Individual (if the URI matches),
+	 * the modelObject (if the store contains the object matching the URI), or an ExternalObject if not in
+	 * the store
 	 * @param store store to use for the inflated object
 	 * @param copyManager if non-null, implicitly copy any referenced properties from other model stores
-	 * @param defaultNamespace optional document namespace when creating V2 compatible external document references
-	 * @param externalMap map of URI's to ExternalMaps for any external elements
 	 * @param specVersion version of the SPDX spec the object complies with
 	 * @return Enum, ExternalSpdxElement or itself depending on the pattern
 	 * @throws InvalidSPDXAnalysisException on any store or parsing error
 	 */
-	public Object toModelObject(IModelStore store, IModelCopyManager copyManager, @Nullable String defaultNamespace,
-			@Nullable Map<String, IExternalElementInfo> externalMap, String specVersion) throws InvalidSPDXAnalysisException {
-		if (store.getSpdxVersion().compareTo(SpdxMajorVersion.VERSION_3) < 0 && Objects.isNull(defaultNamespace)) {
-			logger.error("Default namespace can not be null for SPDX 2 model stores");
-			throw new InvalidSPDXAnalysisException("Default namespace can not be null for SPDX 2 model stores");
-		}
-		Object retval = ModelRegistry.getModelRegistry().uriToEnum(specVersion ,uri);
+	public Object toModelObject(IModelStore store, IModelCopyManager copyManager,
+			String specVersion) throws InvalidSPDXAnalysisException {
+		Object retval = ModelRegistry.getModelRegistry().uriToEnum(uri, specVersion);
 		if (Objects.nonNull(retval)) {
 			return retval;
-		} else if (externalMap.containsKey(uri)) {
-			return ModelRegistry.getModelRegistry().getExternalElement(store, uri, copyManager, externalMap.get(uri), null, specVersion);
+		}
+		retval = ModelRegistry.getModelRegistry().uriToIndividual(uri, specVersion);
+		if (Objects.nonNull(retval)) {
+			return retval;
+		}
+		Optional<TypedValue> typedValue = store.getTypedValue(uri);
+		if (typedValue.isPresent()) {
+			return ModelRegistry.getModelRegistry().createModelObject(store, uri, typedValue.get().type, copyManager, specVersion, false);
 		} else {
-			retval = ModelRegistry.getModelRegistry().uriToIndividual(uri, specVersion);
-			if (Objects.nonNull(retval)) {
-				return retval;
-			} else {
-				// we assume this is an external element that is not in the externalMap
-				// TODO: Is there any validation we could / should do here?
-				return ModelRegistry.getModelRegistry().getExternalElement(store, uri, copyManager, null, null, specVersion);
-			}
+			return ModelRegistry.getModelRegistry().getExternalElement(store, uri, copyManager, specVersion);
 		}
 	}
 	

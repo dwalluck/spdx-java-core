@@ -34,28 +34,36 @@ public interface ISpdxModelInfo {
 	 * @param uri URI of the external element
 	 * @param copyManager if non-null, implicitly copy any referenced properties from other model stores
 	 * @param documentUri URI for the SPDX document to store the external element reference - used for compatibility with SPDX 2.X model stores
+	 * @param copyManager if non-null, create the external Doc ref if it is not a property of the SPDX Document
+	 * @param externalMap Map of URI's of elements referenced but not present in the store
+	 * @param specVersion version of the SPDX specification used by the external element
 	 * @return model object of type type
 	 */
-	public Object createExternalElement(IModelStore store, String uri,
-			@Nullable IModelCopyManager copyManager, @Nullable IExternalElementInfo externalElementInfo,
-			@Nullable String documentUri) throws InvalidSPDXAnalysisException;
+	public CoreModelObject createExternalElement(IModelStore store, String uri,
+			@Nullable IModelCopyManager copyManager,String specVersion) throws InvalidSPDXAnalysisException;
 
 	/**
 	 * @return a map of URIs to Individuals which represents individuals in the SPDX model
 	 */
-	public Map<String, ISpdxModelInfo> getUriToIndividualMap();
+	public Map<String, Object> getUriToIndividualMap();
 
 	/**
 	 * @param modelStore store to use for the inflated object
 	 * @param objectUri URI of the external element
+	 * @param documentUri URI for the SPDX document to store the external element reference - used for compatibility with SPDX 2.X model stores
 	 * @param type Type of the object to create
 	 * @param copyManager if non-null, implicitly copy any referenced properties from other model stores
-	 * @param externalMap map of URI's to ExternalMaps for any external elements
+	 * @param specVersion version of the SPDX specification used by the model object
 	 * @param create if true, create the model object ONLY if it does not already exist
 	 * @return fully inflated model object of type type
 	 */
 	public CoreModelObject createModelObject(IModelStore modelStore,
-			String objectUri, String type, IModelCopyManager copyManager, 
-			@Nullable Map<String, IExternalElementInfo> externalMap, boolean create);
+			String objectUri, String type, IModelCopyManager copyManager,
+			String specVersion, boolean create) throws InvalidSPDXAnalysisException;
+
+	/**
+	 * @return a map of string representation of types to classes which implement those types
+	 */
+	public Map<String, Class<?>> getTypeToClassMap();
 
 }

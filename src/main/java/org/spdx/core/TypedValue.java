@@ -8,17 +8,24 @@ public class TypedValue {
 	
 	String objectUri;
 	String type;
+	String specVersion;
 	
-	public TypedValue(String objectUri, String type) throws SpdxInvalidIdException, SpdxInvalidTypeException {
+	public TypedValue(String objectUri, String type, String specVersion) throws SpdxInvalidIdException, SpdxInvalidTypeException, ModelRegistryException {
 		if (objectUri == null) {
 			throw new SpdxInvalidIdException("Null value Id");
 		}
 		if (type == null) {
 			throw new SpdxInvalidTypeException("Null type");
 		}
-		// Note: We can no longer check that the type is valid since the classes are model dependent
+		if (specVersion == null) {
+			throw new SpdxInvalidTypeException("Null specVersion");
+		}
+		if (ModelRegistry.getModelRegistry().typeToClass(type, specVersion) == null) {
+			throw new SpdxInvalidTypeException("Unknown type "+type+" for spec Version "+specVersion);
+		}
 		this.objectUri = objectUri;
 		this.type = type;
+		this.specVersion = specVersion;
 	}
 
 	/**
@@ -33,6 +40,13 @@ public class TypedValue {
 	 */
 	public String getType() {
 		return type;
+	}
+
+	/**
+	 * @return the specVersion
+	 */
+	public String getSpecVersion() {
+		return specVersion;
 	}
 
 	@Override

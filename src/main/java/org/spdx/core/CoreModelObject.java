@@ -19,10 +19,8 @@ package org.spdx.core;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -90,12 +88,7 @@ public abstract class CoreModelObject {
 	protected boolean strict = true;
 	
 	NotEquivalentReason lastNotEquivalentReason = null;
-	
-	/**
-	 * Map of URI's of elements referenced but not present in the store
-	 */
-	protected Map<String, IExternalElementInfo> externalMap = new HashMap<>();
-	
+		
 	/**
 	 * Create a new Model Object using an Anonymous ID with the default store and default document URI
 	 * @param specVersion - version of the SPDX spec the object complies with
@@ -150,7 +143,7 @@ public abstract class CoreModelObject {
 				// re-check since previous check was done outside of the lock
 				try {
 					if (!modelStore.exists(objectUri)) {
-						modelStore.create(objectUri, getType());
+						modelStore.create(new TypedValue(objectUri, getType(), specVersion));
 					}
 				} finally {
 					lock.unlock();
@@ -161,16 +154,15 @@ public abstract class CoreModelObject {
 			}
 		}
 	}
-	
+
 	/**
 	 * @param builder base builder to create the CoreModelObject from
 	 * @param specVersion - version of the SPDX spec the object complies with
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public CoreModelObject(ModelObjectBuilder builder, String specVersion) throws InvalidSPDXAnalysisException {
+	public CoreModelObject(CoreModelObjectBuilder builder, String specVersion) throws InvalidSPDXAnalysisException {
 		this(builder.modelStore, builder.objectUri, builder.copyManager, true, specVersion);
 		this.strict = builder.strict;
-		this.externalMap = builder.externalMap;
 	}
 
 	// Abstract methods that must be implemented in the subclasses
@@ -226,6 +218,27 @@ public abstract class CoreModelObject {
 	}
 	
 	/**
+	 * Verifies all elements in a collection
+	 * @param specVersion version of the SPDX specification to verify against
+	 * @param collection collection to be verifies
+	 * @param verifiedIds verifiedIds list of all Id's which have already been verifieds - prevents infinite recursion
+	 * @param warningPrefix String to prefix any warning messages
+	 */
+	protected List<String> verifyCollection(Collection<? extends CoreModelObject> collection, String warningPrefix, Set<String> verifiedIds, String specVersion) {
+		List<String> retval = new ArrayList<>();
+		for (CoreModelObject mo:collection) {
+			for (String warning:mo.verify(verifiedIds, specVersion)) {
+				if (Objects.nonNull(warningPrefix)) {
+					retval.add(warningPrefix + warning);
+				} else {
+					retval.add(warning);
+				}
+			}
+		}
+		return retval;
+	}
+	
+	/**
 	 * @return the Object URI or anonymous ID
 	 */
 	public String getObjectUri() {
@@ -252,20 +265,6 @@ public abstract class CoreModelObject {
 	public void setStrict(boolean strict) {
 		this.strict = strict;
 	}
-	
-	/**
-	 * @return the externalMap
-	 */
-	public Map<String, IExternalElementInfo> getExternalMap() {
-		return externalMap;
-	}
-
-	/**
-	 * @param externalMap the externalMap to set
-	 */
-	public void setExternalMap(Map<String, IExternalElementInfo> externalMap) {
-		this.externalMap = externalMap;
-	}
 
 	//The following methods are to manage the properties associated with the model object
 	/**
@@ -283,7 +282,7 @@ public abstract class CoreModelObject {
 	 */
 	protected Optional<Object> getObjectPropertyValue(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
 		Optional<Object> retval = ModelObjectHelper.getObjectPropertyValue(modelStore, objectUri, 
-				propertyDescriptor, copyManager, externalMap, specVersion);
+				propertyDescriptor, copyManager, specVersion);
 		if (retval.isPresent() && retval.get() instanceof CoreModelObject && !strict) {
 			((CoreModelObject)retval.get()).setStrict(strict);
 		}
@@ -370,7 +369,7 @@ public abstract class CoreModelObject {
 		if (!(result.get() instanceof IndividualUriValue)) {
 			throw new SpdxInvalidTypeException("Property "+propertyDescriptor+" is not of type Individual Value or enum");
 		}
-		Enum<?> retval = ModelRegistry.getModelRegistry().uriToEnum(this.specVersion, ((IndividualUriValue)result.get()).getIndividualURI());
+		Enum<?> retval = ModelRegistry.getModelRegistry().uriToEnum(((IndividualUriValue)result.get()).getIndividualURI(), this.specVersion);
 		if (Objects.isNull(retval)) {
 			logger.error("Unknown individual value for enum: "+((IndividualUriValue)result.get()).getIndividualURI());
 			throw new InvalidSPDXAnalysisException("Unknown individual value for enum: "+((IndividualUriValue)result.get()).getIndividualURI());
@@ -498,7 +497,7 @@ public abstract class CoreModelObject {
 	 */
 	protected ModelSet<?> getObjectPropertyValueSet(PropertyDescriptor propertyDescriptor, Class<?> type) throws InvalidSPDXAnalysisException {
 		return new ModelSet<Object>(this.modelStore, this.objectUri, propertyDescriptor, 
-				this.copyManager, type, externalMap, specVersion);
+				this.copyManager, type, specVersion);
 	}
 	
 	/**
@@ -507,7 +506,7 @@ public abstract class CoreModelObject {
 	 */
 	protected ModelCollection<?> getObjectPropertyValueCollection(PropertyDescriptor propertyDescriptor, Class<?> type) throws InvalidSPDXAnalysisException {
 		return new ModelCollection<Object>(this.modelStore, this.objectUri, propertyDescriptor, 
-				this.copyManager, type, externalMap, specVersion);
+				this.copyManager, type, specVersion);
 	}
 	
 	/**
@@ -806,7 +805,8 @@ public abstract class CoreModelObject {
 		}
 		try {
 			CoreModelObject retval = ModelRegistry.getModelRegistry().createModelObject(
-					modelStore, objectUri, this.getType(), this.copyManager, this.externalMap, true, this.specVersion);
+					modelStore, objectUri, this.getType(), 
+					this.copyManager, this.specVersion, true);
 			retval.copyFrom(this);
 			return retval;
 		} catch (InvalidSPDXAnalysisException e) {
@@ -824,7 +824,7 @@ public abstract class CoreModelObject {
 			throw new InvalidSPDXAnalysisException("Copying is not enabled for "+objectUri);
 		}
 		copyManager.copy(this.modelStore, objectUri, 
-				source.getModelStore(), source.getObjectUri(), this.getType(), this.externalMap,
+				source.getModelStore(), source.getObjectUri(), this.getType(),
 				null, null, null, null);
 	}
 	
@@ -848,7 +848,7 @@ public abstract class CoreModelObject {
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	protected TypedValue toTypedValue() throws InvalidSPDXAnalysisException {
-		return new TypedValue(objectUri, getType());
+		return new TypedValue(objectUri, getType(), specVersion);
 	}
 	
 	@Override
@@ -860,15 +860,14 @@ public abstract class CoreModelObject {
 	 * Base builder class for all model objects
 	 *
 	 */
-	public static class ModelObjectBuilder  {
+	public static class CoreModelObjectBuilder  {
 		
 		public IModelStore modelStore;
 		public String objectUri;
 		public IModelCopyManager copyManager;
 		public boolean strict = true;
-		public Map<String, IExternalElementInfo> externalMap = new HashMap<>();
 
-		public ModelObjectBuilder(IModelStore modelStore, String objectUri, @Nullable IModelCopyManager copyManager) {
+		public CoreModelObjectBuilder(IModelStore modelStore, String objectUri, @Nullable IModelCopyManager copyManager) {
 			this.modelStore = modelStore;
 			this.objectUri = objectUri;
 			this.copyManager = copyManager;
@@ -876,10 +875,6 @@ public abstract class CoreModelObject {
 		
 		public void setStrict(boolean strict) {
 			this.strict = strict;
-		}
-		
-		public void setExternalMap(Map<String, IExternalElementInfo> externalMap) {
-			this.externalMap = externalMap;
 		}
 	}
 }

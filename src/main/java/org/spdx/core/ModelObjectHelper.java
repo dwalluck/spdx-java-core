@@ -20,7 +20,6 @@ package org.spdx.core;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -49,14 +48,13 @@ public class ModelObjectHelper {
 	 * @param objectUri the Object URI or anonymous ID
 	 * @param propertyDescriptor property descriptor for the property
 	 * @param copyManager if non null, any ModelObject property value not stored in the modelStore under the stDocumentUri will be copied to make it available
-	 * @param externalMap map of URI's to ExternalMaps for any external elements
+	 * @param documentUri URI for the SPDX document to store the external element reference - used for compatibility with SPDX 2.X model stores
 	 * @param specVersion - version of the SPDX spec the object complies with
 	 * @return value associated with a property
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	public static Optional<Object> getObjectPropertyValue(IModelStore modelStore, String objectUri,
 			PropertyDescriptor propertyDescriptor, IModelCopyManager copyManager,
-			@Nullable Map<String, IExternalElementInfo> externalMap,
 			String specVersion) throws InvalidSPDXAnalysisException {
 		IModelStoreLock lock = modelStore.enterCriticalSection(false);
 		// NOTE: we use a write lock since the ModelStorageClassConverter may end up creating objects in the store
@@ -65,10 +63,10 @@ public class ModelObjectHelper {
 				return Optional.empty();
 			} else if (modelStore.isCollectionProperty(objectUri, propertyDescriptor)) {
 				return Optional.of(new ModelCollection<>(modelStore, objectUri, propertyDescriptor, copyManager, 
-						null, externalMap, specVersion));
+						null, specVersion));
 			} else {
 				return optionalStoredObjectToModelObject(modelStore.getValue(objectUri,
-						propertyDescriptor), modelStore, copyManager, externalMap, specVersion);
+						propertyDescriptor), modelStore, copyManager, specVersion);
 			}
 		} finally {
 			lock.unlock();
@@ -84,7 +82,7 @@ public class ModelObjectHelper {
 	 * @param copyManager if non null, any ModelObject property value not stored in the modelStore under the stDocumentUri will be copied to make it available
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	protected static void setPropertyValue(IModelStore modelStore, String objectUri, 
+	public static void setPropertyValue(IModelStore modelStore, String objectUri, 
 			PropertyDescriptor propertyDescriptor, @Nullable Object value, IModelCopyManager copyManager) throws InvalidSPDXAnalysisException {
 		Objects.requireNonNull(modelStore, "Model Store can not be null");
 		Objects.requireNonNull(objectUri, "Object Uri or anonymous ID can not be null");
@@ -107,7 +105,7 @@ public class ModelObjectHelper {
 	 * @param propertyDescriptor Descriptor for the property associated with this object to be removed
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	protected static void removeProperty(IModelStore modelStore, String objectUri, PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
+	public static void removeProperty(IModelStore modelStore, String objectUri, PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
 		modelStore.removeProperty(objectUri, propertyDescriptor);
 	}
 	
@@ -118,7 +116,7 @@ public class ModelObjectHelper {
 	 * @param propertyDescriptor Descriptor for the property
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	protected static void clearValueCollection(IModelStore modelStore, String objectUri, PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
+	public static void clearValueCollection(IModelStore modelStore, String objectUri, PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
 		modelStore.clearValueCollection(objectUri, propertyDescriptor);
 	}
 	
@@ -130,11 +128,11 @@ public class ModelObjectHelper {
 	 * @param modelStore  Model store for the properties
 	 * @param objectUri URI or anonymous ID for the object
 	 * @param propertyDescriptor  Descriptor for the property
-	 * @param value         to add
+	 * @param value to add
 	 * @param copyManager
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	protected static void addValueToCollection(IModelStore modelStore, String objectUri, 
+	public static void addValueToCollection(IModelStore modelStore, String objectUri, 
 			PropertyDescriptor propertyDescriptor, Object value, IModelCopyManager copyManager) throws InvalidSPDXAnalysisException {
 		Objects.requireNonNull(value, "Value can not be null");
 		modelStore.addValueToCollection(objectUri, propertyDescriptor, 
@@ -151,7 +149,7 @@ public class ModelObjectHelper {
 	 * @param copyManager if non-null, any ModelObject property value not stored in the modelStore under the stDocumentUri will be copied to make it available
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	protected static void replacePropertyValueCollection(IModelStore modelStore, String objectUri, 
+	public static void replacePropertyValueCollection(IModelStore modelStore, String objectUri, 
 			PropertyDescriptor propertyDescriptor, Collection<?> values, IModelCopyManager copyManager) throws InvalidSPDXAnalysisException {
 		clearValueCollection(modelStore, objectUri, propertyDescriptor);
 		for (Object value:values) {
@@ -167,7 +165,7 @@ public class ModelObjectHelper {
 	 * @param value Value to be removed
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	protected static void removePropertyValueFromCollection(IModelStore modelStore, String objectUri, 
+	public static void removePropertyValueFromCollection(IModelStore modelStore, String objectUri, 
 			PropertyDescriptor propertyDescriptor, Object value) throws InvalidSPDXAnalysisException {
 		modelStore.removeValueFromCollection(objectUri, propertyDescriptor, 
 				modelObjectToStoredObject(value, modelStore, null));
@@ -181,23 +179,20 @@ public class ModelObjectHelper {
 	 * @param modelStore  ModelStore to use in fetching or creating
 	 * @param copyManager   if not null, copy any referenced ID's outside of this
 	 *                      document/model store
-	 * @param externalMap map of URI's to ExternalMaps for any external elements
 	 * @param specVersion - version of the SPDX spec the object complies with
 	 * @return the object itself unless it is a TypedValue, in which case a
 	 *         ModelObject is returned
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	public static Optional<Object> optionalStoredObjectToModelObject(Optional<Object> value, 
-			IModelStore modelStore, IModelCopyManager copyManager, 
-			@Nullable Map<String, IExternalElementInfo> externalMap,
-			String specVersion) throws InvalidSPDXAnalysisException {
+			IModelStore modelStore, IModelCopyManager copyManager, String specVersion) throws InvalidSPDXAnalysisException {
 		if (value.isPresent() && value.get() instanceof IndividualUriValue) {
 			return Optional.of(new SimpleUriValue((IndividualUriValue)value.get()).toModelObject(modelStore, copyManager, 
-					null, externalMap, specVersion));
+					specVersion));
 		} else if (value.isPresent() && value.get() instanceof TypedValue) {
 			TypedValue tv = (TypedValue)value.get();
 			return Optional.of(ModelRegistry.getModelRegistry().createModelObject(modelStore, 
-					tv.getObjectUri(), tv.getType(), copyManager, externalMap, true, specVersion));
+					tv.getObjectUri(), tv.getType(), copyManager, specVersion, true));
 		} else {
 			return value;
 		}
@@ -221,7 +216,7 @@ public class ModelObjectHelper {
 			if (!mValue.getModelStore().equals(modelStore)) {
 				if (Objects.nonNull(copyManager)) {
 					return copyManager.copy(modelStore, mValue.getModelStore(), mValue.getObjectUri(), 
-							mValue.getType(), mValue.getExternalMap(), null, null, null, null);
+							mValue.getType(), null, null, null, null);
 				} else {
 					throw new SpdxObjectNotInStoreException("Can not set a property value to a Model Object stored in a different model store");
 				}
@@ -245,22 +240,20 @@ public class ModelObjectHelper {
 	 * @param modelStore  ModelStore to use in fetching or creating
 	 * @param copyManager if not null, copy any referenced ID's outside of this
 	 *                    document/model store
-	 * @param externalMap map of URI's to ExternalMaps for any external elements
 	 * @param specVersion - version of the SPDX spec the object complies with
 	 * @return the object itself unless it is a TypedValue, in which case a
 	 *         ModelObject is returned
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	public static Object storedObjectToModelObject(Object value, IModelStore modelStore,
-			IModelCopyManager copyManager, @Nullable Map<String, IExternalElementInfo> externalMap,
-			String specVersion) throws InvalidSPDXAnalysisException {
+			IModelCopyManager copyManager, String specVersion) throws InvalidSPDXAnalysisException {
 		if (value instanceof IndividualUriValue) {	// Note: this must be before the check for TypedValue
 			SimpleUriValue suv = new SimpleUriValue((IndividualUriValue)value);
-			return suv.toModelObject(modelStore, copyManager, null, externalMap, specVersion);
+			return suv.toModelObject(modelStore, copyManager, specVersion);
 		} else if (value instanceof TypedValue) {
 			TypedValue tv = (TypedValue)value;
 			return ModelRegistry.getModelRegistry().createModelObject(modelStore, tv.getObjectUri(),
-					tv.getType(), copyManager, externalMap, true, specVersion);
+					tv.getType(), copyManager, specVersion, true);
 		} else {
 			return value;
 		}

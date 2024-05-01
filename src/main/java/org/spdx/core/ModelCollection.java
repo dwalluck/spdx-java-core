@@ -80,14 +80,12 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 	 * @param propertyDescriptor descriptor for the property use for the model collections
 	 * @param copyManager if non-null, use this to copy properties when referenced outside this model store
 	 * @param type The class of the elements to be stored in the collection if none, null if not known
-	 * @param externalMap Map of URI's of elements referenced but not present in the store
 	 * @param specVersion - version of the SPDX spec the object complies with
 	 * @throws InvalidSPDXAnalysisException on parsing or store errors
 	 */
 	public ModelCollection(IModelStore modelStore, String objectUri, PropertyDescriptor propertyDescriptor,
 			@Nullable IModelCopyManager copyManager,
-			@Nullable Class<?> type, Map<String, IExternalElementInfo> externalMap,
-			String specVersion) throws InvalidSPDXAnalysisException {
+			@Nullable Class<?> type, String specVersion) throws InvalidSPDXAnalysisException {
 		Objects.requireNonNull(modelStore, "Model store can not be null");
 		this.modelStore = modelStore;
 		Objects.requireNonNull(objectUri, "Object URI or anonymous ID can not be null");
@@ -147,7 +145,7 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 	
 	private Object checkConvertTypedValue(Object value) {
 		try {
-			Object retval = ModelObjectHelper.storedObjectToModelObject(value, modelStore, copyManager, externalMap, this.specVersion);
+			Object retval = ModelObjectHelper.storedObjectToModelObject(value, modelStore, copyManager, this.specVersion);
 //			if (licensePrimitiveAssignable && retval instanceof IndividualUriValue) {
 //				String uri = ((IndividualUriValue)retval).getIndividualURI();
 //				if (SpdxConstantsCompatV2.URI_VALUE_NOASSERTION.equals(uri)) {

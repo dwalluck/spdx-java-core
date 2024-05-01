@@ -13,12 +13,25 @@ package org.spdx.core;
 public class SpdxCoreConstants {
 
 	public enum SpdxMajorVersion {
-		VERSION_1,
-		VERSION_2,
-		VERSION_3;
+		VERSION_1("SPDX-1."),
+		VERSION_2("SPDX-2."),
+		VERSION_3("3.");
+		
+		final private String prefix;
+		
+		SpdxMajorVersion(String prefix) {
+			this.prefix = prefix;
+		}
 
 		public static SpdxMajorVersion latestVersion() {
 			return VERSION_3;
+		}
+
+		/**
+		 * @return the string prefix used in all version strings
+		 */
+		String prefix() {
+			return prefix;
 		}
 	}
 

@@ -19,13 +19,15 @@ package org.spdx.storage;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.spdx.core.IExternalElementInfo;
 import org.spdx.core.InvalidSPDXAnalysisException;
+import org.spdx.core.ModelRegistryException;
 import org.spdx.core.SpdxCoreConstants;
-import org.spdx.core.SpdxCoreConstants.SpdxMajorVersion;
 import org.spdx.core.SpdxInvalidIdException;
 import org.spdx.core.SpdxInvalidTypeException;
 import org.spdx.core.TypedValue;
@@ -37,6 +39,8 @@ import org.spdx.core.TypedValue;
  *
  */
 public class CompatibleModelStoreWrapper implements IModelStore {
+	
+	public static final String LATEST_SPDX_2X_VERSION = "SPDX-2.3";
 	
 	private IModelStore baseStore;
 	
@@ -98,9 +102,10 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 	 * @return TypedValue with the proper Object URI formed by the documentUri and ID
 	 * @throws SpdxInvalidIdException
 	 * @throws SpdxInvalidTypeException
+	 * @throws ModelRegistryException 
 	 */
-	public static TypedValue typedValueFromDocUri(String documentUri, String id, boolean anonymous, String type) throws SpdxInvalidIdException, SpdxInvalidTypeException {
-		return new TypedValue(documentUriIdToUri(documentUri, id, anonymous), type);
+	public static TypedValue typedValueFromDocUri(String documentUri, String id, boolean anonymous, String type) throws SpdxInvalidIdException, SpdxInvalidTypeException, ModelRegistryException {
+		return new TypedValue(documentUriIdToUri(documentUri, id, anonymous), type, LATEST_SPDX_2X_VERSION);
 	}
 	
 	/**
@@ -151,12 +156,13 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 	 */
 	public void create(String documentUri, String id, String type)
 			throws InvalidSPDXAnalysisException {
-		baseStore.create(documentUriIdToUri(documentUri, id, baseStore), type);
+		baseStore.create(
+				new TypedValue(documentUriIdToUri(documentUri, id, baseStore), type, LATEST_SPDX_2X_VERSION));
 	}
 	
 	@Override
-	public void create(String objectUri, String type) throws InvalidSPDXAnalysisException {
-		baseStore.create(objectUri, type);
+	public void create(TypedValue typedValue) throws InvalidSPDXAnalysisException {
+		baseStore.create(typedValue);
 	}
 
 	@Override
@@ -334,15 +340,16 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 
 	@Override
 	public boolean isPropertyValueAssignableTo(String objectUri,
-			PropertyDescriptor propertyDescriptor, Class<?> clazz)
+			PropertyDescriptor propertyDescriptor, Class<?> clazz, String specVersion)
 			throws InvalidSPDXAnalysisException {
-		return baseStore.isPropertyValueAssignableTo(objectUri, propertyDescriptor, clazz);
+		return baseStore.isPropertyValueAssignableTo(objectUri, propertyDescriptor, clazz, specVersion);
 	}
 	
 	public boolean isPropertyValueAssignableTo(String documentUri, String id,
 			PropertyDescriptor propertyDescriptor, Class<?> clazz)
 			throws InvalidSPDXAnalysisException {
-		return isPropertyValueAssignableTo(documentUriIdToUri(documentUri, id, baseStore), propertyDescriptor, clazz);
+		return isPropertyValueAssignableTo(documentUriIdToUri(documentUri, id, baseStore), propertyDescriptor, 
+				clazz, LATEST_SPDX_2X_VERSION);
 	}
 
 	@Override
@@ -391,11 +398,6 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 		delete(documentUriIdToUri(documentUri, id, baseStore));
 	}
 
-	@Override
-	public SpdxMajorVersion getSpdxVersion() {
-		return SpdxMajorVersion.VERSION_2;
-	}
-
 	/**
 	 * @return the store this store wraps
 	 */
@@ -405,14 +407,31 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 	
 	@Override
 	public boolean equals(Object comp) {
-		return super.equals(comp);
-		// TODO: Return true the base is equal since this contains no properties
+		return comp instanceof CompatibleModelStoreWrapper && super.equals(((CompatibleModelStoreWrapper)comp).getBaseModelStore());
+		// TODO: Return true if the base is equal since this contains no properties
 	}
 	
 	@Override
 	public int hashCode() {
-		//TODO: Update once equals is updated
-		return super.hashCode();
+		return 11 ^ super.hashCode();
+	}
+
+	@Override
+	public IExternalElementInfo addExternalReference(String externalObjectUri,
+			String collectionUri, IExternalElementInfo externalElementInfo) {
+		return this.baseStore.addExternalReference(externalObjectUri, collectionUri, externalElementInfo);
+	}
+
+	@Override
+	public Map<String, IExternalElementInfo> getExternalReferenceMap(
+			String externalObjectUri) {
+		return this.baseStore.getExternalReferenceMap(externalObjectUri);
+	}
+
+	@Override
+	public IExternalElementInfo getExternalElementInfo(String externalObjectUri,
+			String collectionUri) {
+		return this.baseStore.getExternalElementInfo(externalObjectUri, collectionUri);
 	}
 
 }

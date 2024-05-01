@@ -19,7 +19,6 @@ package org.spdx.core;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -46,14 +45,13 @@ public class ModelSet<T extends Object> extends ModelCollection<T> {
 	 * @param propertyDescriptor descriptor for the property use for the model collections
 	 * @param copyManager if non-null, use this to copy properties when referenced outside this model store
 	 * @param type The class of the elements to be stored in the collection if none, null if not known
-	 * @param externalMap Map of URI's of elements referenced but not present in the store
 	 * @param specVersion - version of the SPDX spec the object complies with
 	 * @throws InvalidSPDXAnalysisException on parsing or store errors
 	 */
 	public ModelSet(IModelStore modelStore, String objectUri, PropertyDescriptor propertyDescriptor, 
 			@Nullable IModelCopyManager copyManager, @Nullable Class<?> type,
-			Map<String, IExternalElementInfo> externalMap, String specVersion) throws InvalidSPDXAnalysisException {
-		super(modelStore, objectUri, propertyDescriptor, copyManager, type, externalMap, specVersion);
+			String specVersion) throws InvalidSPDXAnalysisException {
+		super(modelStore, objectUri, propertyDescriptor, copyManager, type, specVersion);
 	}
 	
 	@Override
