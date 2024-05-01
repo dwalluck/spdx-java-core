@@ -224,7 +224,7 @@ public abstract class CoreModelObject {
 	 * @param verifiedIds verifiedIds list of all Id's which have already been verifieds - prevents infinite recursion
 	 * @param warningPrefix String to prefix any warning messages
 	 */
-	protected List<String> verifyCollection(Collection<? extends CoreModelObject> collection, String warningPrefix, Set<String> verifiedIds, String specVersion) {
+	public List<String> verifyCollection(Collection<? extends CoreModelObject> collection, String warningPrefix, Set<String> verifiedIds, String specVersion) {
 		List<String> retval = new ArrayList<>();
 		for (CoreModelObject mo:collection) {
 			for (String warning:mo.verify(verifiedIds, specVersion)) {
@@ -280,7 +280,7 @@ public abstract class CoreModelObject {
 	 * @param propertyDescriptor Descriptor for the property
 	 * @return value associated with a property
 	 */
-	protected Optional<Object> getObjectPropertyValue(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
+	public Optional<Object> getObjectPropertyValue(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
 		Optional<Object> retval = ModelObjectHelper.getObjectPropertyValue(modelStore, objectUri, 
 				propertyDescriptor, copyManager, specVersion);
 		if (retval.isPresent() && retval.get() instanceof CoreModelObject && !strict) {
@@ -295,7 +295,7 @@ public abstract class CoreModelObject {
 	 * @param value Value to associate with the property
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	protected void setPropertyValue(PropertyDescriptor propertyDescriptor, @Nullable Object value) throws InvalidSPDXAnalysisException {
+	public void setPropertyValue(PropertyDescriptor propertyDescriptor, @Nullable Object value) throws InvalidSPDXAnalysisException {
 		if (this instanceof IndividualUriValue) {
 			throw new InvalidSPDXAnalysisException("Can not set a property for the literal value "+((IndividualUriValue)this).getIndividualURI());
 		}
@@ -308,7 +308,7 @@ public abstract class CoreModelObject {
 	 * @param value Value to associate with the property
 	 * @return an update which can be applied by invoking the apply method
 	 */
-	protected ModelUpdate updatePropertyValue(PropertyDescriptor propertyDescriptor, Object value) {
+	public ModelUpdate updatePropertyValue(PropertyDescriptor propertyDescriptor, Object value) {
 		return () ->{
 			ModelObjectHelper.setPropertyValue(this.modelStore, objectUri, propertyDescriptor, value, copyManager);
 		};
@@ -319,7 +319,7 @@ public abstract class CoreModelObject {
 	 * @return the Optional String value associated with a property, null if no value is present
 	 * @throws SpdxInvalidTypeException
 	 */
-	protected Optional<String> getStringPropertyValue(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
+	public Optional<String> getStringPropertyValue(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
 		Optional<Object> result = getObjectPropertyValue(propertyDescriptor);
 		if (result.isPresent()) {
 			if (result.get() instanceof String) {
@@ -338,7 +338,7 @@ public abstract class CoreModelObject {
 	 * @return the Optional Integer value associated with a property, null if no value is present
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	protected Optional<Integer> getIntegerPropertyValue(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
+	public Optional<Integer> getIntegerPropertyValue(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
 		Optional<Object> result = getObjectPropertyValue(propertyDescriptor);
 		Optional<Integer> retval;
 		if (result.isPresent()) {
@@ -358,7 +358,7 @@ public abstract class CoreModelObject {
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	@SuppressWarnings("unchecked")
-	protected Optional<Enum<?>> getEnumPropertyValue(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
+	public Optional<Enum<?>> getEnumPropertyValue(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
 		Optional<Object> result = getObjectPropertyValue(propertyDescriptor);
 		if (!result.isPresent()) {
 			return Optional.empty();
@@ -383,7 +383,7 @@ public abstract class CoreModelObject {
 	 * @return the Optional Boolean value for a property
 	 * @throws SpdxInvalidTypeException
 	 */
-	protected Optional<Boolean> getBooleanPropertyValue(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
+	public Optional<Boolean> getBooleanPropertyValue(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
 		Optional<Object> result = getObjectPropertyValue(propertyDescriptor);
 		if (result.isPresent()) {
 			if (result.get() instanceof Boolean) {
@@ -411,7 +411,7 @@ public abstract class CoreModelObject {
 	 * @param propertyDescriptor Descriptor for the property associated with this object to be removed
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	protected void removeProperty(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
+	public void removeProperty(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
 		ModelObjectHelper.removeProperty(modelStore, objectUri, propertyDescriptor);
 	}
 	
@@ -420,7 +420,7 @@ public abstract class CoreModelObject {
 	 * @param propertyDescriptor Descriptor for the property associated with this object to be removed
 	 * @return  an update which can be applied by invoking the apply method
 	 */
-	protected ModelUpdate updateRemoveProperty(PropertyDescriptor propertyDescriptor) {
+	public ModelUpdate updateRemoveProperty(PropertyDescriptor propertyDescriptor) {
 		return () -> {
 			ModelObjectHelper.removeProperty(modelStore, objectUri, propertyDescriptor);
 		};
@@ -430,7 +430,7 @@ public abstract class CoreModelObject {
 	 * Clears a collection of values associated with a property
 	 * @param propertyDescriptor Descriptor for the property
 	 */
-	protected void clearValueCollection(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
+	public void clearValueCollection(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
 		ModelObjectHelper.clearValueCollection(modelStore, objectUri, propertyDescriptor);
 	}
 	
@@ -439,7 +439,7 @@ public abstract class CoreModelObject {
 	 * @param propertyDescriptor Descriptor for the property
 	 * @return an update which can be applied by invoking the apply method
 	 */
-	protected ModelUpdate updateClearValueCollection(PropertyDescriptor propertyDescriptor) {
+	public ModelUpdate updateClearValueCollection(PropertyDescriptor propertyDescriptor) {
 		return () ->{
 			ModelObjectHelper.clearValueCollection(modelStore, objectUri, propertyDescriptor);
 		};
@@ -452,7 +452,7 @@ public abstract class CoreModelObject {
 	 * @param value to add
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	protected void addPropertyValueToCollection(PropertyDescriptor propertyDescriptor, Object value) throws InvalidSPDXAnalysisException {
+	public void addPropertyValueToCollection(PropertyDescriptor propertyDescriptor, Object value) throws InvalidSPDXAnalysisException {
 		ModelObjectHelper.addValueToCollection(modelStore, objectUri, propertyDescriptor, value, copyManager);
 	}
 	
@@ -463,7 +463,7 @@ public abstract class CoreModelObject {
 	 * @param value to add
 	 * @return an update which can be applied by invoking the apply method
 	 */
-	protected ModelUpdate updateAddPropertyValueToCollection(PropertyDescriptor propertyDescriptor, Object value) {
+	public ModelUpdate updateAddPropertyValueToCollection(PropertyDescriptor propertyDescriptor, Object value) {
 		return () ->{
 			ModelObjectHelper.addValueToCollection(modelStore, objectUri, propertyDescriptor, value, copyManager);
 		};
@@ -475,7 +475,7 @@ public abstract class CoreModelObject {
 	 * @param value Value to be removed
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	protected void removePropertyValueFromCollection(PropertyDescriptor propertyDescriptor, Object value) throws InvalidSPDXAnalysisException {
+	public void removePropertyValueFromCollection(PropertyDescriptor propertyDescriptor, Object value) throws InvalidSPDXAnalysisException {
 		ModelObjectHelper.removePropertyValueFromCollection(modelStore, objectUri, propertyDescriptor, value);
 	}
 	
@@ -485,7 +485,7 @@ public abstract class CoreModelObject {
 	 * @param value Value to be removed
 	 * @return an update which can be applied by invoking the apply method
 	 */
-	protected ModelUpdate updateRemovePropertyValueFromCollection(PropertyDescriptor propertyDescriptor, Object value) {
+	public ModelUpdate updateRemovePropertyValueFromCollection(PropertyDescriptor propertyDescriptor, Object value) {
 		return () -> {
 			ModelObjectHelper.removePropertyValueFromCollection(modelStore, objectUri, propertyDescriptor, value);
 		};
@@ -495,7 +495,7 @@ public abstract class CoreModelObject {
 	 * @param propertyDescriptor Descriptor for the property
 	 * @return Set of values associated with a property
 	 */
-	protected ModelSet<?> getObjectPropertyValueSet(PropertyDescriptor propertyDescriptor, Class<?> type) throws InvalidSPDXAnalysisException {
+	public ModelSet<?> getObjectPropertyValueSet(PropertyDescriptor propertyDescriptor, Class<?> type) throws InvalidSPDXAnalysisException {
 		return new ModelSet<Object>(this.modelStore, this.objectUri, propertyDescriptor, 
 				this.copyManager, type, specVersion);
 	}
@@ -504,7 +504,7 @@ public abstract class CoreModelObject {
 	 * @param propertyDescriptor Descriptor for the property
 	 * @return Collection of values associated with a property
 	 */
-	protected ModelCollection<?> getObjectPropertyValueCollection(PropertyDescriptor propertyDescriptor, Class<?> type) throws InvalidSPDXAnalysisException {
+	public ModelCollection<?> getObjectPropertyValueCollection(PropertyDescriptor propertyDescriptor, Class<?> type) throws InvalidSPDXAnalysisException {
 		return new ModelCollection<Object>(this.modelStore, this.objectUri, propertyDescriptor, 
 				this.copyManager, type, specVersion);
 	}
@@ -515,14 +515,14 @@ public abstract class CoreModelObject {
 	 * @throws SpdxInvalidTypeException
 	 */
 	@SuppressWarnings("unchecked")
-	protected Collection<String> getStringCollection(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
+	public Collection<String> getStringCollection(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
 		if (!isCollectionMembersAssignableTo(propertyDescriptor, String.class)) {
 			throw new SpdxInvalidTypeException("Property "+propertyDescriptor+" does not contain a collection of Strings");
 		}
 		return (Collection<String>)(Collection<?>)getObjectPropertyValueSet(propertyDescriptor, String.class);
 	}
 	
-	protected boolean isCollectionMembersAssignableTo(PropertyDescriptor propertyDescriptor, Class<?> clazz) throws InvalidSPDXAnalysisException {
+	public boolean isCollectionMembersAssignableTo(PropertyDescriptor propertyDescriptor, Class<?> clazz) throws InvalidSPDXAnalysisException {
 		return modelStore.isCollectionMembersAssignableTo(objectUri, propertyDescriptor, 
 				ModelObjectHelper.modelClassToStoredClass(clazz));
 	}
@@ -608,7 +608,7 @@ public abstract class CoreModelObject {
 	 * @param propertyDescriptor property descriptor for the object in question
 	 * @return true if the object is "to" part of a relationship
 	 */
-	protected abstract boolean isRelatedElement(PropertyDescriptor propertyDescriptor);
+	public abstract boolean isRelatedElement(PropertyDescriptor propertyDescriptor);
 	
 	/**
 	 * @param value value to test against an empty model collection
@@ -825,7 +825,7 @@ public abstract class CoreModelObject {
 		}
 		copyManager.copy(this.modelStore, objectUri, 
 				source.getModelStore(), source.getObjectUri(), this.getType(),
-				null, null, null, null);
+				specVersion, null);
 	}
 	
 	/**
@@ -847,7 +847,7 @@ public abstract class CoreModelObject {
 	 * @return a typed value representation of this object suitable for storage in the model store
 	 * @throws InvalidSPDXAnalysisException
 	 */
-	protected TypedValue toTypedValue() throws InvalidSPDXAnalysisException {
+	public TypedValue toTypedValue() throws InvalidSPDXAnalysisException {
 		return new TypedValue(objectUri, getType(), specVersion);
 	}
 	
@@ -876,5 +876,12 @@ public abstract class CoreModelObject {
 		public void setStrict(boolean strict) {
 			this.strict = strict;
 		}
+	}
+
+	/**
+	 * @return the version of the SPDX specification this object complies with
+	 */
+	public String getSpecVersion() {
+		return this.specVersion;
 	}
 }

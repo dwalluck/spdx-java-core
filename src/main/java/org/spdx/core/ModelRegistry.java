@@ -12,7 +12,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.annotation.Nullable;
 
-import org.spdx.core.SpdxCoreConstants.SpdxMajorVersion;
 import org.spdx.storage.IModelStore;
 
 /**
@@ -31,8 +30,6 @@ public class ModelRegistry {
 	
 	private Map<String, ISpdxModelInfo> registeredModels = new HashMap<>();
 	
-	private Map<SpdxMajorVersion, String> majorVersionLatest = new HashMap<>();
-	
 	/**
 	 * Private constructor - singleton class
 	 */
@@ -49,14 +46,6 @@ public class ModelRegistry {
 		try {
 			for (String specVersion:modelInfo.getSpecVersions()) {
 				registeredModels.put(specVersion, modelInfo);
-				for (SpdxMajorVersion version:SpdxMajorVersion.values()) {
-					if (specVersion.startsWith(version.prefix())) {
-						if (!majorVersionLatest.containsKey(version) &&
-								specVersion.compareToIgnoreCase(majorVersionLatest.get(version)) < 0) {
-							majorVersionLatest.put(version, specVersion);
-						}
-					}
-				}
 			}
 		} finally {
 			lock.writeLock().unlock();
@@ -96,26 +85,6 @@ public class ModelRegistry {
 		}
 	}
 	
-
-	/**
-	 * Use the default latest "dot" version within the major version
-	 * @param uri URI for the Enum individual
-	 * @param specMajorVersion major version of the spec	 * 
-	 * @return the Enum represented by the individualURI if it exists within the spec model
-	 */
-	public Enum<?> uriToEnum(String uri, SpdxMajorVersion specMajorVersion) throws ModelRegistryException {
-		Objects.requireNonNull(specMajorVersion, "Spec version must not be null");
-		Objects.requireNonNull(uri, "URI must not be null");
-		lock.readLock().lock();
-		try {
-			if (!majorVersionLatest.containsKey(specMajorVersion)) {
-				throw new ModelRegistryException("No implementation found for SPDX spec versions "+specMajorVersion.prefix()+"...");
-			}
-			return registeredModels.get(majorVersionLatest.get(specMajorVersion)).getUriToEnumMap().get(uri);
-		} finally {
-			lock.readLock().unlock();
-		}
-	}
 
 	/**
 	 * @param store store to use for the inflated object
@@ -160,26 +129,6 @@ public class ModelRegistry {
 				throw new ModelRegistryException(specVersion + " does not exits");
 			}
 			return registeredModels.get(specVersion).getUriToIndividualMap().get(individualUri);
-		} finally {
-			lock.readLock().unlock();
-		}
-	}
-	
-	/**
-	 * @param individualUri URI for the individual
-	 * @param specMajorVersion major version of the SPDX spec the object complies with
-	 * @return Individual represented by the URI from the latest dot release supporting the major version
-	 * @throws ModelRegistryException 
-	 */
-	public Object uriToIndividual(String individualUri, SpdxMajorVersion specMajorVersion) throws ModelRegistryException {
-		Objects.requireNonNull(specMajorVersion, "Spec version must not be null");
-		Objects.requireNonNull(individualUri, "individualURI must not be null");
-		lock.readLock().lock();
-		try {
-			if (!majorVersionLatest.containsKey(specMajorVersion)) {
-				throw new ModelRegistryException("No implementation found for SPDX spec versions "+specMajorVersion.prefix()+"...");
-			}
-			return registeredModels.get(majorVersionLatest.get(specMajorVersion)).getUriToIndividualMap().get(individualUri);
 		} finally {
 			lock.readLock().unlock();
 		}

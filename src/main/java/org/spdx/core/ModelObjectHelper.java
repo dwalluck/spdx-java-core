@@ -83,7 +83,8 @@ public class ModelObjectHelper {
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	public static void setPropertyValue(IModelStore modelStore, String objectUri, 
-			PropertyDescriptor propertyDescriptor, @Nullable Object value, IModelCopyManager copyManager) throws InvalidSPDXAnalysisException {
+			PropertyDescriptor propertyDescriptor, @Nullable Object value, 
+			IModelCopyManager copyManager) throws InvalidSPDXAnalysisException {
 		Objects.requireNonNull(modelStore, "Model Store can not be null");
 		Objects.requireNonNull(objectUri, "Object Uri or anonymous ID can not be null");
 		Objects.requireNonNull(propertyDescriptor, "Property descriptor can not be null");
@@ -91,7 +92,8 @@ public class ModelObjectHelper {
 			// we just remove the value
 			removeProperty(modelStore, objectUri, propertyDescriptor);
 		} else if (value instanceof Collection) {
-			replacePropertyValueCollection(modelStore, objectUri, propertyDescriptor, (Collection<?>)value, copyManager);
+			replacePropertyValueCollection(modelStore, objectUri, propertyDescriptor, (Collection<?>)value, 
+					copyManager);
 		} else {
 			modelStore.setValue(objectUri, propertyDescriptor, 
 					modelObjectToStoredObject(value, modelStore, copyManager));
@@ -216,7 +218,7 @@ public class ModelObjectHelper {
 			if (!mValue.getModelStore().equals(modelStore)) {
 				if (Objects.nonNull(copyManager)) {
 					return copyManager.copy(modelStore, mValue.getModelStore(), mValue.getObjectUri(), 
-							mValue.getType(), null, null, null, null);
+							mValue.getType(), mValue.getSpecVersion(), null);
 				} else {
 					throw new SpdxObjectNotInStoreException("Can not set a property value to a Model Object stored in a different model store");
 				}
