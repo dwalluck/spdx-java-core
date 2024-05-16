@@ -95,7 +95,7 @@ public abstract class CoreModelObject {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public CoreModelObject(String specVersion) throws InvalidSPDXAnalysisException {
-		this(DefaultModelStore.getDefaultModelStore().getNextId(IdType.Anonymous, DefaultModelStore.getDefaultDocumentUri()), specVersion);
+		this(DefaultModelStore.getDefaultModelStore().getNextId(IdType.Anonymous), specVersion);
 	}
 	
 	/**
@@ -191,9 +191,10 @@ public abstract class CoreModelObject {
 	 * Implementation of the specific verifications for this model object
 	 * @param specVersion Version of the SPDX spec to verify against
 	 * @param verifiedElementIds list of all Element Id's which have already been verified - prevents infinite recursion
+	 * @param profiles List of profiles to validate against
 	 * @return Any verification errors or warnings associated with this object
 	 */
-	protected abstract List<String> _verify(Set<String> verifiedElementIds, String specVersion);
+	public abstract List<String> _verify(Set<String> verifiedElementIds, String specVersion, List<IndividualUriValue> profiles);
 	
 	/**
 	 * @param specVersion Version of the SPDX spec to verify against
@@ -881,7 +882,7 @@ public abstract class CoreModelObject {
 	/**
 	 * @return the version of the SPDX specification this object complies with
 	 */
-	public String getSpecVersion() {
+	public String getSpecVersion() throws InvalidSPDXAnalysisException {
 		return this.specVersion;
 	}
 }

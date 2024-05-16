@@ -194,7 +194,7 @@ public class ModelObjectHelper {
 		} else if (value.isPresent() && value.get() instanceof TypedValue) {
 			TypedValue tv = (TypedValue)value.get();
 			return Optional.of(ModelRegistry.getModelRegistry().createModelObject(modelStore, 
-					tv.getObjectUri(), tv.getType(), copyManager, specVersion, true));
+					tv.getObjectUri(), tv.getType(), copyManager, specVersion, false));
 		} else {
 			return value;
 		}

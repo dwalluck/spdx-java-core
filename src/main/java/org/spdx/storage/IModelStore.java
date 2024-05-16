@@ -104,13 +104,12 @@ public interface IModelStore extends AutoCloseable {
 	public Optional<Object> getValue(String objectUri, PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException;
 
 	/**
-	 * Generate a unique ID within the document store
+	 * Generate a unique ID within the model store - Note: for a full URI, the id should be prepended with a URI prefix
 	 * @param idType Type of ID
-	 * @param nameSpace the SPDX namespace to use for the ID
-	 * @return next available unique ID for the specific idType as a full URI
+	 * @return next available unique ID for the specific idType - Note: for a full URI, the id should be prepended with a URI prefix
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public String getNextId(IdType idType, @Nullable String nameSpace) throws InvalidSPDXAnalysisException;
+	public String getNextId(IdType idType) throws InvalidSPDXAnalysisException;
 	
 	/**
 	 * Removes a property from the d@Override

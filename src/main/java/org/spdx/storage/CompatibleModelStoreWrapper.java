@@ -202,17 +202,22 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 		return getValue(documentUriIdToUri(documentUri, id, baseStore), propertyDescriptor);
 	}
 
-	@Override
 	public String getNextId(IdType idType, String documentUri)
 			throws InvalidSPDXAnalysisException {
 		Objects.requireNonNull(documentUri, "SPDX V2 requires a namespace for generating next ID's");
 		if (documentUri.contains("://spdx.org/licenses")) {
-			return baseStore.getNextId(idType, documentUri);
+			return documentUri + baseStore.getNextId(idType);
 		} else {
-			return baseStore.getNextId(idType, documentUri + "#");
+			return documentUri + "#" + baseStore.getNextId(idType);
 		}
 	}
 
+	@Override
+	public String getNextId(IdType idType)
+			throws InvalidSPDXAnalysisException {
+		return baseStore.getNextId(idType);
+	}
+	
 	@Override
 	public void removeProperty(String objectUri,
 			PropertyDescriptor propertyDescriptor)
