@@ -122,7 +122,7 @@ public class MockModelStore implements IModelStore {
 			throws InvalidSPDXAnalysisException {
 		@SuppressWarnings("unchecked")
 		Collection<Object> collection = (Collection<Object>)(valueMap.get(objectUri).get(propertyDescriptor));
-		return collection.size();
+		return Objects.isNull(collection) ? 0 : collection.size();
 	}
 
 	@Override

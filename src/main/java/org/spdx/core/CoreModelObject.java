@@ -874,8 +874,9 @@ public abstract class CoreModelObject {
 			this.copyManager = copyManager;
 		}
 		
-		public void setStrict(boolean strict) {
+		public CoreModelObjectBuilder setStrict(boolean strict) {
 			this.strict = strict;
+			return this;
 		}
 	}
 

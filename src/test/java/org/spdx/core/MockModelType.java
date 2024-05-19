@@ -5,6 +5,7 @@
 package org.spdx.core;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -19,7 +20,8 @@ import org.spdx.storage.PropertyDescriptor;
  */
 public class MockModelType extends CoreModelObject {
 	
-	static final String TYPE = "MockType";
+	public static final String TYPE = "MockType";
+	static final List<String> TEST_VERIFY = Arrays.asList(new String[] {"testVerify"});
 
 	/**
 	 * @param modelStore
@@ -33,7 +35,10 @@ public class MockModelType extends CoreModelObject {
 			IModelCopyManager copyManager, boolean create, String specVersion)
 			throws InvalidSPDXAnalysisException {
 		super(modelStore, objectUri, copyManager, create, specVersion);
-		// TODO Auto-generated constructor stub
+	}
+	
+	public MockModelType(CoreModelObjectBuilder builder, String specVersion) throws InvalidSPDXAnalysisException {
+		super(builder,specVersion);
 	}
 
 	@Override
@@ -44,12 +49,12 @@ public class MockModelType extends CoreModelObject {
 	@Override
 	public List<String> _verify(Set<String> verifiedElementIds,
 			String specVersion, List<IndividualUriValue> profiles) {
-		return new ArrayList<>();
+		return TEST_VERIFY;
 	}
 
 	@Override
 	public List<String> verify(Set<String> verifiedIds, String specVersion) {
-		return new ArrayList<>();
+		return _verify(verifiedIds, specVersion, new ArrayList<>());
 	}
 
 	@Override
