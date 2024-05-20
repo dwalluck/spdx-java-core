@@ -16,7 +16,9 @@ Each major version of the SPDX specification should generate it's own set of cla
 
 Below is a simplified class model diagram which includes example SPDX model versions:
 
-[Simplified Class Diagram](ClassDiagram.drawio.png?raw=true)
+
+
+[![Simplified Class Diagram](ClassDiagram.drawio.png)]
 
 
 
