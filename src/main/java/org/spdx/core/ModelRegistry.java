@@ -152,7 +152,7 @@ public class ModelRegistry {
 	 * @return model object of type type
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public CoreModelObject createModelObject(IModelStore modelStore, String objectUri, 
+	public CoreModelObject inflateModelObject(IModelStore modelStore, String objectUri, 
 			String type, IModelCopyManager copyManager,
 			String specVersion, boolean create) throws InvalidSPDXAnalysisException {
 		Objects.requireNonNull(specVersion, SPEC_VERSION_NULL_MSG);

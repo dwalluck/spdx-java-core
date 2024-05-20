@@ -90,7 +90,7 @@ public class TestModelRegistry {
 			
 		});
 		assertTrue(ModelRegistry.getModelRegistry().containsSpecVersion("3.0.0"));
-		CoreModelObject result = ModelRegistry.getModelRegistry().createModelObject(modelStore, OBJECT_URI, MockModelType.TYPE,
+		CoreModelObject result = ModelRegistry.getModelRegistry().inflateModelObject(modelStore, OBJECT_URI, MockModelType.TYPE,
 				copyManager, "3.0.0", true);
 		assertEquals(OBJECT_URI, result.getObjectUri());
 		Object oResult = ModelRegistry.getModelRegistry().getExternalElement(modelStore, OBJECT_URI, copyManager, "3.0.0");

@@ -193,7 +193,7 @@ public class ModelObjectHelper {
 					specVersion));
 		} else if (value.isPresent() && value.get() instanceof TypedValue) {
 			TypedValue tv = (TypedValue)value.get();
-			return Optional.of(ModelRegistry.getModelRegistry().createModelObject(modelStore, 
+			return Optional.of(ModelRegistry.getModelRegistry().inflateModelObject(modelStore, 
 					tv.getObjectUri(), tv.getType(), copyManager, specVersion, false));
 		} else {
 			return value;
@@ -254,7 +254,7 @@ public class ModelObjectHelper {
 			return suv.toModelObject(modelStore, copyManager, specVersion);
 		} else if (value instanceof TypedValue) {
 			TypedValue tv = (TypedValue)value;
-			return ModelRegistry.getModelRegistry().createModelObject(modelStore, tv.getObjectUri(),
+			return ModelRegistry.getModelRegistry().inflateModelObject(modelStore, tv.getObjectUri(),
 					tv.getType(), copyManager, specVersion, true);
 		} else {
 			return value;

@@ -786,7 +786,7 @@ public abstract class CoreModelObject {
 			throw new IllegalStateException("Can not clone - "+objectUri+" already exists.");
 		}
 		try {
-			CoreModelObject retval = ModelRegistry.getModelRegistry().createModelObject(
+			CoreModelObject retval = ModelRegistry.getModelRegistry().inflateModelObject(
 					modelStore, objectUri, this.getType(), 
 					this.copyManager, this.specVersion, true);
 			retval.copyFrom(this);
