@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Spliterator;
 import java.util.Spliterators;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -52,6 +52,7 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 	 */
 	protected Map<String, IExternalElementInfo> externalMap;
 	private Class<?> type;
+	//TODO: See if this boolean is needed before deleting the comments
 //	private boolean licensePrimitiveAssignable;  // If true, NONE and NOASSERTION should be converted to NoneLicense and NoAssertionLicense
 	
 	class ModelCollectionIterator implements Iterator<Object> {
@@ -100,6 +101,7 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 		}
 		if (Objects.nonNull(type)) {
 			this.type = type;
+			// TODO: make sure the following commented logic is not needed
 //			licensePrimitiveAssignable = type.isAssignableFrom(SpdxNoneLicense.class) || type.isAssignableFrom(SpdxNoAssertionLicense.class);
 			if (!modelStore.isCollectionMembersAssignableTo(objectUri, propertyDescriptor, type)) {
 				throw new SpdxInvalidTypeException("Incompatible type for property "+propertyDescriptor+": "+type.toString());
@@ -146,14 +148,6 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 	private Object checkConvertTypedValue(Object value) {
 		try {
 			Object retval = ModelObjectHelper.storedObjectToModelObject(value, modelStore, copyManager, this.specVersion);
-//			if (licensePrimitiveAssignable && retval instanceof IndividualUriValue) {
-//				String uri = ((IndividualUriValue)retval).getIndividualURI();
-//				if (SpdxConstantsCompatV2.URI_VALUE_NOASSERTION.equals(uri)) {
-//					retval = new SpdxNoAssertionLicense();
-//				} else if (SpdxConstantsCompatV2.URI_VALUE_NONE.equals(uri)) {
-//					retval = new SpdxNoneLicense();
-//				}
-//			}
 			if (Objects.nonNull(this.type) && !this.type.isAssignableFrom(retval.getClass())) {
 				if (retval instanceof IndividualUriValue) {
 					throw new SpdxInvalidTypeException("No enumeration was found for URI "+((IndividualUriValue)retval).getIndividualURI()+
@@ -171,12 +165,12 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 	/**
 	 * Converts any typed or individual value objects to a ModelObject
 	 */
-	private Function<Object, Object> checkConvertTypedValue = value -> {
+	private UnaryOperator<Object> checkConvertTypedValue = value -> {
 		return checkConvertTypedValue(value);
 	};
 	
-	public List<Object> toImmutableList() {		
-		return (List<Object>) Collections.unmodifiableList(StreamSupport.stream(
+	public List<Object> toImmutableList() {
+		return Collections.unmodifiableList(StreamSupport.stream(
 				Spliterators.spliteratorUnknownSize(this.iterator(), Spliterator.ORDERED), false).map(checkConvertTypedValue)
 				.collect(Collectors.toList()));
 	}
@@ -197,7 +191,7 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 	}
 
 	@Override
-	public <AT> AT[] toArray(AT[] a) {
+	public <T1> T1[] toArray(T1[] a) {
 		return toImmutableList().toArray(a);
 	}
 
@@ -256,10 +250,8 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 		List<Object> values = toImmutableList();
 		boolean retval = false;
 		for (Object value:values) {
-			if (!c.contains(value)) {
-				if (remove(value)) {
-					retval = true;
-				}
+			if (!c.contains(value) && remove(value)) {
+				retval = true;
 			}
 		}
 		return retval;

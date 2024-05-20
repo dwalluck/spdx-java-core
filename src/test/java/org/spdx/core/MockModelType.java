@@ -62,4 +62,9 @@ public class MockModelType extends CoreModelObject {
 		return false;
 	}
 
+	@Override
+	protected boolean isNoAssertion(Object propertyValue) {
+		return false;
+	}
+
 }

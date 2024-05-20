@@ -37,7 +37,7 @@ public class TestCompatibleModelStoreWrapper {
 	 * @throws java.lang.Exception
 	 */
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		modelStore = new MockModelStore();
 		ModelRegistry.getModelRegistry().registerModel(new MockModelInfo());
 	}

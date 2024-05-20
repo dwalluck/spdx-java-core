@@ -29,7 +29,7 @@ import org.spdx.storage.PropertyDescriptor;
 public class NotEquivalentReason {
 	
 	public enum NotEquivalent {
-		DIFFERENT_CLASS, MISSING_PROPERTY, PROPERTY_NOT_EQUIVALENT, COMPARE_PROPERTY_MISSING};
+		DIFFERENT_CLASS, MISSING_PROPERTY, PROPERTY_NOT_EQUIVALENT, COMPARE_PROPERTY_MISSING}
 		
 		NotEquivalent reason;
 		PropertyDescriptor property = null;

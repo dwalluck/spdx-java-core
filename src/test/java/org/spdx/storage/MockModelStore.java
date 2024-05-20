@@ -131,7 +131,7 @@ public class MockModelStore implements IModelStore {
 			throws InvalidSPDXAnalysisException {
 		@SuppressWarnings("unchecked")
 		Collection<Object> collection = (Collection<Object>)(valueMap.get(objectUri).get(propertyDescriptor));
-		return collection.contains(value);
+		return Objects.isNull(collection) ? false : collection.contains(value);
 	}
 
 	@Override
@@ -196,7 +196,7 @@ public class MockModelStore implements IModelStore {
 	@Override
 	public Optional<String> getCaseSensisitiveId(String nameSpace,
 			String caseInsensisitiveId) {
-		return null;
+		return Optional.empty();
 	}
 
 	@Override

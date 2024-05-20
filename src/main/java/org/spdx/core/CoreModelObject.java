@@ -73,6 +73,8 @@ import org.spdx.storage.IModelStore.ModelUpdate;
 public abstract class CoreModelObject {
 	
 	static final Logger logger = LoggerFactory.getLogger(CoreModelObject.class);
+	
+	static final String PROPERTY_MSG = "Property ";
 	protected IModelStore modelStore;
 	protected String objectUri;
 	protected String specVersion;
@@ -94,7 +96,7 @@ public abstract class CoreModelObject {
 	 * @param specVersion - version of the SPDX spec the object complies with
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public CoreModelObject(String specVersion) throws InvalidSPDXAnalysisException {
+	protected CoreModelObject(String specVersion) throws InvalidSPDXAnalysisException {
 		this(DefaultModelStore.getDefaultModelStore().getNextId(IdType.Anonymous), specVersion);
 	}
 	
@@ -104,7 +106,7 @@ public abstract class CoreModelObject {
 	 * @param specVersion - version of the SPDX spec the object complies with
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public CoreModelObject(String objectUri, String specVersion) throws InvalidSPDXAnalysisException {
+	protected CoreModelObject(String objectUri, String specVersion) throws InvalidSPDXAnalysisException {
 		this(DefaultModelStore.getDefaultModelStore(), objectUri, 
 				DefaultModelStore.getDefaultCopyManager(), true, specVersion);
 	}
@@ -118,7 +120,7 @@ public abstract class CoreModelObject {
 	 * @param specVersion - version of the SPDX spec the object complies with
 	 * @throws InvalidSPDXAnalysisException invalid parameters or duplicate objectUri
 	 */
-	public CoreModelObject(IModelStore modelStore, String objectUri, @Nullable IModelCopyManager copyManager, 
+	protected CoreModelObject(IModelStore modelStore, String objectUri, @Nullable IModelCopyManager copyManager, 
 			boolean create, String specVersion) throws InvalidSPDXAnalysisException {
 		Objects.requireNonNull(modelStore, "Model Store can not be null");
 		Objects.requireNonNull(objectUri, "Object URI can not be null");
@@ -134,8 +136,9 @@ public abstract class CoreModelObject {
 		Optional<TypedValue> existing = modelStore.getTypedValue(objectUri);
 		if (existing.isPresent()) {
 			if (create && !existing.get().getType().equals(getType())) {
-				logger.error("Can not create "+objectUri+".  It is already in use with type "+existing.get().getType()+" which is incompatible with type "+getType());
-				throw new SpdxIdInUseException("Can not create "+objectUri+".  It is already in use with type "+existing.get().getType()+" which is incompatible with type "+getType());
+				String msg = "Can not create "+objectUri+".  It is already in use with type "+existing.get().getType()+" which is incompatible with type "+getType();
+				logger.error(msg);
+				throw new SpdxIdInUseException(msg);
 			}
 		} else {
 			if (create) {
@@ -149,8 +152,9 @@ public abstract class CoreModelObject {
 					lock.unlock();
 				}
 			} else {
-				logger.error(objectUri+" does not exist");
-				throw new SpdxIdNotFoundException(objectUri+" does not exist");
+				String msg = objectUri+" does not exist";
+				logger.error(msg);
+				throw new SpdxIdNotFoundException(msg);
 			}
 		}
 	}
@@ -160,7 +164,7 @@ public abstract class CoreModelObject {
 	 * @param specVersion - version of the SPDX spec the object complies with
 	 * @throws InvalidSPDXAnalysisException 
 	 */
-	public CoreModelObject(CoreModelObjectBuilder builder, String specVersion) throws InvalidSPDXAnalysisException {
+	protected CoreModelObject(CoreModelObjectBuilder builder, String specVersion) throws InvalidSPDXAnalysisException {
 		this(builder.modelStore, builder.objectUri, builder.copyManager, true, specVersion);
 		this.strict = builder.strict;
 	}
@@ -326,8 +330,9 @@ public abstract class CoreModelObject {
 			if (result.get() instanceof String) {
 				return Optional.of((String)result.get());
 			} else {
-				logger.error("Property "+propertyDescriptor+" is not of type String");
-				throw new SpdxInvalidTypeException("Property "+propertyDescriptor+" is not of type String");
+				String msg = PROPERTY_MSG+propertyDescriptor+" is not of type String";
+				logger.error(msg);
+				throw new SpdxInvalidTypeException(msg);
 			}
 		} else {
 			return Optional.empty();
@@ -344,7 +349,7 @@ public abstract class CoreModelObject {
 		Optional<Integer> retval;
 		if (result.isPresent()) {
 			if (!(result.get() instanceof Integer)) {
-				throw new SpdxInvalidTypeException("Property "+propertyDescriptor+" is not of type Integer");
+				throw new SpdxInvalidTypeException(PROPERTY_MSG+propertyDescriptor+" is not of type Integer");
 			}
 			retval = Optional.of((Integer)result.get());
 		} else {
@@ -368,12 +373,13 @@ public abstract class CoreModelObject {
 			return (Optional<Enum<?>>)(Optional<?>)result;
 		}
 		if (!(result.get() instanceof IndividualUriValue)) {
-			throw new SpdxInvalidTypeException("Property "+propertyDescriptor+" is not of type Individual Value or enum");
+			throw new SpdxInvalidTypeException(PROPERTY_MSG+propertyDescriptor+" is not of type Individual Value or enum");
 		}
 		Enum<?> retval = ModelRegistry.getModelRegistry().uriToEnum(((IndividualUriValue)result.get()).getIndividualURI(), this.specVersion);
 		if (Objects.isNull(retval)) {
-			logger.error("Unknown individual value for enum: "+((IndividualUriValue)result.get()).getIndividualURI());
-			throw new InvalidSPDXAnalysisException("Unknown individual value for enum: "+((IndividualUriValue)result.get()).getIndividualURI());
+			String msg = "Unknown individual value for enum: "+((IndividualUriValue)result.get()).getIndividualURI();
+			logger.error(msg);
+			throw new InvalidSPDXAnalysisException(msg);
 		} else {
 			return Optional.of(retval);
 		}
@@ -397,10 +403,10 @@ public abstract class CoreModelObject {
 				} else if ("false".equals(sResult)) {
 					return Optional.of(Boolean.valueOf(false));
 				} else {
-					throw new SpdxInvalidTypeException("Property "+propertyDescriptor+" is not of type Boolean");
+					throw new SpdxInvalidTypeException(PROPERTY_MSG+propertyDescriptor+" is not of type Boolean");
 				}
 			} else {
-				throw new SpdxInvalidTypeException("Property "+propertyDescriptor+" is not of type Boolean");
+				throw new SpdxInvalidTypeException(PROPERTY_MSG+propertyDescriptor+" is not of type Boolean");
 			}
 		} else {
 			return Optional.empty();
@@ -518,7 +524,7 @@ public abstract class CoreModelObject {
 	@SuppressWarnings("unchecked")
 	public Collection<String> getStringCollection(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
 		if (!isCollectionMembersAssignableTo(propertyDescriptor, String.class)) {
-			throw new SpdxInvalidTypeException("Property "+propertyDescriptor+" does not contain a collection of Strings");
+			throw new SpdxInvalidTypeException(PROPERTY_MSG+propertyDescriptor+" does not contain a collection of Strings");
 		}
 		return (Collection<String>)(Collection<?>)getObjectPropertyValueSet(propertyDescriptor, String.class);
 	}
@@ -560,48 +566,39 @@ public abstract class CoreModelObject {
 				    return false;
 				}
 				comparePropertyValueDescriptors.remove(propertyDescriptor);
-			} else {
+			} else if (!isEquivalentToNull(this.getObjectPropertyValue(propertyDescriptor))) {
 				// No property value
-			    Optional<Object> propertyValueOptional = this.getObjectPropertyValue(propertyDescriptor);
-				if (propertyValueOptional.isPresent()) {
-					Object propertyValue = propertyValueOptional.get();
-					if (isEquivalentToNull(propertyValue, propertyDescriptor)) {
-						continue;
-					}
 					lastNotEquivalentReason = new NotEquivalentReason(
 							NotEquivalent.COMPARE_PROPERTY_MISSING, propertyDescriptor);
 					return false;
-				}
 			}
 		}
 		for (PropertyDescriptor propertyDescriptor:comparePropertyValueDescriptors) { // check any remaining property values
 			if (ignoreRelatedElements && isRelatedElement(propertyDescriptor)) {
 				continue;
 			}
-			Optional<Object> comparePropertyValueOptional = compare.getObjectPropertyValue(propertyDescriptor);
-			if (!comparePropertyValueOptional.isPresent()) {
-				continue;
+			if (!isEquivalentToNull(compare.getObjectPropertyValue(propertyDescriptor))) {
+				lastNotEquivalentReason = new NotEquivalentReason(
+						NotEquivalent.MISSING_PROPERTY, propertyDescriptor);
+				return false;
 			}
-			Object comparePropertyValue = comparePropertyValueOptional.get();
-			if (isEquivalentToNull(comparePropertyValue, propertyDescriptor)) {
-				continue;
-			}
-			lastNotEquivalentReason = new NotEquivalentReason(
-					NotEquivalent.MISSING_PROPERTY, propertyDescriptor);
-			return false;
 		}
 		return true;
 	}
 	
 	// Some values are treated like null in comparisons - in particular empty model collections and 
 	// "no assertion" values and a filesAnalyzed filed with a value of true
-	private boolean isEquivalentToNull(Object propertyValue, PropertyDescriptor propertyDescriptor) {
+	private boolean isEquivalentToNull(Object propertyValue) {
 		if (propertyValue instanceof ModelCollection) {
 			return isEmptyModelCollection(propertyValue);
-		} else if (isNoAssertion(propertyValue)) {
-			return true;
+		} else if (propertyValue instanceof Optional) {
+			if (((Optional<?>)propertyValue).isPresent()) {
+				return isEquivalentToNull(propertyValue);
+			} else {
+				return true;
+			}
 		} else {
-			return false;
+			return isNoAssertion(propertyValue);
 		}
 	}
 	
@@ -617,13 +614,10 @@ public abstract class CoreModelObject {
 	 */
 	private boolean isEmptyModelCollection(Object value) {
 		return (value instanceof ModelCollection)
-				&& (((ModelCollection<?>) value).size() == 0);
+				&& (((ModelCollection<?>) value).isEmpty());
 	}
 	
-	private boolean isNoAssertion(Object propertyValue) {
-		return false;
-		//TODO: Implement
-	}
+	protected abstract boolean isNoAssertion(Object propertyValue);
 	
 	/**
 	 * @param propertyDescriptor Descriptor for the property
@@ -636,36 +630,23 @@ public abstract class CoreModelObject {
 	private boolean propertyValuesEquivalent(PropertyDescriptor propertyDescriptor, Optional<Object> valueA,
             Optional<Object> valueB, boolean ignoreRelatedElements) throws InvalidSPDXAnalysisException {
 	    if (!valueA.isPresent()) {
-            if (valueB.isPresent()) {
-                return isEmptyModelCollection(valueB.get());
-            }
+	    	return isEquivalentToNull(valueB);
         } else if (!valueB.isPresent()) {
-            return isEmptyModelCollection(valueA.get());
+            return isEquivalentToNull(valueA);
         } else if (valueA.get() instanceof ModelCollection && valueB.get() instanceof ModelCollection) {
-            List<?> myList = ((ModelCollection<?>)valueA.get()).toImmutableList();
-            List<?> compareList = ((ModelCollection<?>)valueB.get()).toImmutableList();
-            if (!areEquivalent(myList, compareList, ignoreRelatedElements)) {
-                return false;
-            }
+            return areEquivalent(((ModelCollection<?>)valueA.get()).toImmutableList(),
+            		((ModelCollection<?>)valueB.get()).toImmutableList(), ignoreRelatedElements);
         } else if (valueA.get() instanceof List && valueB.get() instanceof List) {
-            if (!areEquivalent((List<?>)valueA.get(), (List<?>)valueB.get(), ignoreRelatedElements)) {
-                return false;
-            }
+            return areEquivalent((List<?>)valueA.get(), (List<?>)valueB.get(), ignoreRelatedElements);
         } else if (valueA.get() instanceof IndividualUriValue && valueB.get() instanceof IndividualUriValue) {
-            if (!Objects.equals(((IndividualUriValue)valueA.get()).getIndividualURI(), ((IndividualUriValue)valueB.get()).getIndividualURI())) {
-                return false;
-            }
+            return Objects.equals(((IndividualUriValue)valueA.get()).getIndividualURI(), ((IndividualUriValue)valueB.get()).getIndividualURI());
             // Note: we must check the IndividualValue before the CoreModelObject types since the IndividualValue takes precedence
         } else if (valueA.get() instanceof CoreModelObject && valueB.get() instanceof CoreModelObject) {
-            if (!((CoreModelObject)valueA.get()).equivalent(((CoreModelObject)valueB.get()), 
-                    isRelatedElement(propertyDescriptor) ? true : ignoreRelatedElements)) {
-                return false;
-            }
-            
-        } else if (!optionalObjectsEquivalent(valueA, valueB)) { // Present, not a list, and not a TypedValue
-            return false;
+            return ((CoreModelObject)valueA.get()).equivalent(((CoreModelObject)valueB.get()), 
+                    isRelatedElement(propertyDescriptor) || ignoreRelatedElements);
+        } else {
+        	return optionalObjectsEquivalent(valueA, valueB); // Present, not a list, and not a TypedValue
         }
-	    return true;
     }
 	
     /**
@@ -703,7 +684,7 @@ public abstract class CoreModelObject {
 	 * @return DOS style only linefeeds
 	 */
 	private Object normalizeString(String s) {
-		return s.replaceAll("\r\n", "\n").trim();
+		return s.replace("\r\n", "\n").trim();
 	}
 
 	/**
@@ -863,10 +844,10 @@ public abstract class CoreModelObject {
 	 */
 	public static class CoreModelObjectBuilder  {
 		
-		public IModelStore modelStore;
-		public String objectUri;
-		public IModelCopyManager copyManager;
-		public boolean strict = true;
+		private IModelStore modelStore;
+		private String objectUri;
+		private IModelCopyManager copyManager;
+		private boolean strict = true;
 
 		public CoreModelObjectBuilder(IModelStore modelStore, String objectUri, @Nullable IModelCopyManager copyManager) {
 			this.modelStore = modelStore;
@@ -877,6 +858,55 @@ public abstract class CoreModelObject {
 		public CoreModelObjectBuilder setStrict(boolean strict) {
 			this.strict = strict;
 			return this;
+		}
+
+		/**
+		 * @return the modelStore
+		 */
+		public IModelStore getModelStore() {
+			return modelStore;
+		}
+
+		/**
+		 * @param modelStore the modelStore to set
+		 */
+		public void setModelStore(IModelStore modelStore) {
+			this.modelStore = modelStore;
+		}
+
+		/**
+		 * @return the objectUri
+		 */
+		public String getObjectUri() {
+			return objectUri;
+		}
+
+		/**
+		 * @param objectUri the objectUri to set
+		 */
+		public void setObjectUri(String objectUri) {
+			this.objectUri = objectUri;
+		}
+
+		/**
+		 * @return the copyManager
+		 */
+		public IModelCopyManager getCopyManager() {
+			return copyManager;
+		}
+
+		/**
+		 * @param copyManager the copyManager to set
+		 */
+		public void setCopyManager(IModelCopyManager copyManager) {
+			this.copyManager = copyManager;
+		}
+
+		/**
+		 * @return the strict
+		 */
+		public boolean isStrict() {
+			return strict;
 		}
 	}
 

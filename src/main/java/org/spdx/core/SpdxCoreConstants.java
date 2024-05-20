@@ -16,15 +16,15 @@ public class SpdxCoreConstants {
 		VERSION_1("SPDX-1."),
 		VERSION_2("SPDX-2."),
 		VERSION_3("3.");
+
+		private final String prefix;
 		
-		final private String prefix;
+		public static SpdxMajorVersion latestVersion() {
+			return VERSION_3;
+		}
 		
 		SpdxMajorVersion(String prefix) {
 			this.prefix = prefix;
-		}
-
-		public static SpdxMajorVersion latestVersion() {
-			return VERSION_3;
 		}
 
 		/**

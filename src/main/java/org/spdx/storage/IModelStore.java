@@ -64,7 +64,7 @@ public interface IModelStore extends AutoCloseable {
 		SpdxId, 			// ID's that start with SpdxRef-
 		ListedLicense, 		// ID's associated with listed licenses
 		Anonymous, 			// ID's for object only referenced internally
-		Unkown};			// ID's that just don't fit any pattern
+		Unkown}				// ID's that just don't fit any pattern
 
 	/**
 	 * @param objectUri unique URI within the SPDX model store for the objects

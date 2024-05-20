@@ -187,7 +187,7 @@ public class TestHtmlTemplateOutputHandler {
 	 * @throws LicenseTemplateRuleException
 	 */
 	@Test
-	public void testFormatStartOptionalHTML() throws LicenseTemplateRuleException {
+	public void testFormatStartOptionalHTML() {
 		String optRuleName = "optionalRule";
 		String escapedBeginRuleText = "\n<div objectUri=\"" + optRuleName + "\" class=\"optional-license-text\">\n";
 		assertEquals(escapedBeginRuleText, HtmlTemplateOutputHandler.formatStartOptionalHTML(optRuleName));

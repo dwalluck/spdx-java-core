@@ -259,7 +259,7 @@ public class ModelObjectHelper {
 		} else {
 			return value;
 		}
-	};
+	}
 	
 	/**
 	 * Convert the class to the appropriate stored class

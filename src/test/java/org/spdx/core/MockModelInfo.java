@@ -43,7 +43,7 @@ public class MockModelInfo implements ISpdxModelInfo {
 	public CoreModelObject createExternalElement(IModelStore store, String uri,
 			IModelCopyManager copyManager, String specVersion)
 			throws InvalidSPDXAnalysisException {
-		// TODO Auto-generated method stub
+		// Mock - not implemented
 		return null;
 	}
 

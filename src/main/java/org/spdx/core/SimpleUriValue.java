@@ -60,11 +60,11 @@ public class SimpleUriValue implements IndividualUriValue {
 		return Objects.equals(individualUri.getIndividualURI(), ((IndividualUriValue)comp).getIndividualURI());
 	}
 
-	public SimpleUriValue(IndividualUriValue fromIndividualValue) throws InvalidSPDXAnalysisException {
+	public SimpleUriValue(IndividualUriValue fromIndividualValue) {
 		this(fromIndividualValue.getIndividualURI());
 	}
 	
-	public SimpleUriValue(String uri) throws InvalidSPDXAnalysisException {
+	public SimpleUriValue(String uri) {
 		Objects.requireNonNull(uri, "URI can not be null");
 		this.uri = uri;
 	}

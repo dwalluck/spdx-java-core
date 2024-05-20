@@ -31,7 +31,7 @@ public class TestModelRegistry {
 	 * @throws java.lang.Exception
 	 */
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		modelStore = new MockModelStore();
 		copyManager = new MockCopyManager();
 	}
@@ -42,6 +42,7 @@ public class TestModelRegistry {
 	 */
 	@Test
 	public void testAll() throws InvalidSPDXAnalysisException {
+		ModelRegistry.getModelRegistry().clearAll();
 		assertFalse(ModelRegistry.getModelRegistry().containsSpecVersion("3.0.0"));
 		Map<String, Enum<?>> uriToEnum = new HashMap<>();
 		uriToEnum.put(MockEnum.ENUM1.getIndividualURI(), MockEnum.ENUM1);

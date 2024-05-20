@@ -36,6 +36,7 @@ public class DefaultModelStore {
 	static IModelStore defaultModelStore = null;
 	static String defaultDocumentUri = "http://www.spdx.org/documents/default_doc_uri_for_SPDX_tools";
 	static IModelCopyManager defaultCopyManager = null;
+	static final String NOT_INITIALIZED_MSG = "Default model store has not been initialized";
 	private static final ReadWriteLock lock = new ReentrantReadWriteLock();
 	
 	private DefaultModelStore() {
@@ -46,7 +47,7 @@ public class DefaultModelStore {
 		lock.readLock().lock();
 		try {
 			if (Objects.isNull(defaultModelStore)) {
-				throw new DefaultStoreNotInitialized("Default model store has not been initialized");
+				throw new DefaultStoreNotInitialized(NOT_INITIALIZED_MSG);
 			}
 			return defaultModelStore;
 		} finally {
@@ -58,7 +59,7 @@ public class DefaultModelStore {
 		lock.readLock().lock();
 		try {
 			if (Objects.isNull(defaultDocumentUri)) {
-				throw new DefaultStoreNotInitialized("Default model store has not been initialized");
+				throw new DefaultStoreNotInitialized(NOT_INITIALIZED_MSG);
 			}
 			return defaultDocumentUri;
 		} finally {
@@ -88,7 +89,7 @@ public class DefaultModelStore {
 		lock.readLock().lock();
 		try {
 			if (Objects.isNull(defaultCopyManager)) {
-				throw new DefaultStoreNotInitialized("Default model store has not been initialized");
+				throw new DefaultStoreNotInitialized(NOT_INITIALIZED_MSG);
 			}
 			return defaultCopyManager;
 		} finally {

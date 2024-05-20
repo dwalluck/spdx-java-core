@@ -25,9 +25,15 @@ import org.spdx.storage.IModelStore;
  */
 public class ModelRegistry {
 
+	private static final String SPEC_VERSION_NULL_MSG = "Spec version must not be null";
+	private static final String URI_NULL_MSG = "URI must not be null";
+	private static final String STORE_NULL_MSG = "Store must nut be null";
+	private static final String TYPE_NULL_MSG = "Type must not be null";
+	private static final String DOES_NOT_EXIST_MSG = " does not exits";
+	
 	private static final ModelRegistry _instance = new ModelRegistry();
 	private static final ReadWriteLock lock = new ReentrantReadWriteLock();
-	
+
 	private Map<String, ISpdxModelInfo> registeredModels = new HashMap<>();
 	
 	/**
@@ -72,12 +78,12 @@ public class ModelRegistry {
 	 * @throws ModelRegistryException if the spec version does not exist
 	 */
 	public @Nullable Enum<?> uriToEnum(String uri, String specVersion) throws ModelRegistryException {
-		Objects.requireNonNull(specVersion, "Spec version must not be null");
-		Objects.requireNonNull(uri, "URI must not be null");
+		Objects.requireNonNull(specVersion, SPEC_VERSION_NULL_MSG);
+		Objects.requireNonNull(uri, URI_NULL_MSG);
 		lock.readLock().lock();
 		try {
 			if (!containsSpecVersion(specVersion)) {
-				throw new ModelRegistryException(specVersion + " does not exits");
+				throw new ModelRegistryException(specVersion + DOES_NOT_EXIST_MSG);
 			}
 			return registeredModels.get(specVersion).getUriToEnumMap().get(uri);
 		} finally {
@@ -99,13 +105,13 @@ public class ModelRegistry {
 	public Object getExternalElement(IModelStore store, String uri,
 			@Nullable IModelCopyManager copyManager,
 			String specVersion) throws InvalidSPDXAnalysisException {
-		Objects.requireNonNull(specVersion, "Spec version must not be null");
-		Objects.requireNonNull(uri, "URI must not be null");
-		Objects.requireNonNull(store, "Store must nut be null");
+		Objects.requireNonNull(specVersion, SPEC_VERSION_NULL_MSG);
+		Objects.requireNonNull(uri, URI_NULL_MSG);
+		Objects.requireNonNull(store, STORE_NULL_MSG);
 		lock.readLock().lock();
 		try {
 			if (!containsSpecVersion(specVersion)) {
-				throw new ModelRegistryException(specVersion + " does not exits");
+				throw new ModelRegistryException(specVersion + DOES_NOT_EXIST_MSG);
 			}
 			return registeredModels.get(specVersion).createExternalElement(store, uri, copyManager, 
 					specVersion);
@@ -121,12 +127,12 @@ public class ModelRegistry {
 	 * @throws ModelRegistryException 
 	 */
 	public Object uriToIndividual(String individualUri, String specVersion) throws ModelRegistryException {
-		Objects.requireNonNull(specVersion, "Spec version must not be null");
+		Objects.requireNonNull(specVersion, SPEC_VERSION_NULL_MSG);
 		Objects.requireNonNull(individualUri, "individualURI must not be null");
 		lock.readLock().lock();
 		try {
 			if (!containsSpecVersion(specVersion)) {
-				throw new ModelRegistryException(specVersion + " does not exits");
+				throw new ModelRegistryException(specVersion + DOES_NOT_EXIST_MSG);
 			}
 			return registeredModels.get(specVersion).getUriToIndividualMap().get(individualUri);
 		} finally {
@@ -149,14 +155,14 @@ public class ModelRegistry {
 	public CoreModelObject createModelObject(IModelStore modelStore, String objectUri, 
 			String type, IModelCopyManager copyManager,
 			String specVersion, boolean create) throws InvalidSPDXAnalysisException {
-		Objects.requireNonNull(specVersion, "Spec version must not be null");
-		Objects.requireNonNull(objectUri, "URI must not be null");
-		Objects.requireNonNull(modelStore, "Store must nut be null");
-		Objects.requireNonNull(type, "Type must not be null");
+		Objects.requireNonNull(specVersion, SPEC_VERSION_NULL_MSG);
+		Objects.requireNonNull(objectUri, URI_NULL_MSG);
+		Objects.requireNonNull(modelStore, STORE_NULL_MSG);
+		Objects.requireNonNull(type, TYPE_NULL_MSG);
 		lock.readLock().lock();
 		try {
 			if (!containsSpecVersion(specVersion)) {
-				throw new ModelRegistryException(specVersion + " does not exits");
+				throw new ModelRegistryException(specVersion + DOES_NOT_EXIST_MSG);
 			}
 			return registeredModels.get(specVersion).createModelObject(modelStore, objectUri, 
 					type, copyManager, specVersion, create);
@@ -172,8 +178,8 @@ public class ModelRegistry {
 	 * @throws ModelRegistryException if the spec version isn't found
 	 */
 	public @Nullable Class<?> typeToClass(String type, String specVersion) throws ModelRegistryException {
-		Objects.requireNonNull(type, "Type must not be null");
-		Objects.requireNonNull(specVersion, "Version must not be null");
+		Objects.requireNonNull(type, TYPE_NULL_MSG);
+		Objects.requireNonNull(specVersion, SPEC_VERSION_NULL_MSG);
 		lock.readLock().lock();
 		try {
 			if (!registeredModels.containsKey(specVersion)) {
@@ -182,6 +188,18 @@ public class ModelRegistry {
 			return registeredModels.get(specVersion).getTypeToClassMap().get(type);
 		} finally {
 			lock.readLock().unlock();
+		}
+	}
+
+	/**
+	 * Removes all the registered models - should only be used in testing
+	 */
+	public void clearAll() {
+		lock.writeLock().lock();
+		try {
+			registeredModels.clear();
+		} finally {
+			lock.writeLock().unlock();
 		}
 	}
 }

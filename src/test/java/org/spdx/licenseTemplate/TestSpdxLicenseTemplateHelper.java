@@ -165,7 +165,7 @@ public class TestSpdxLicenseTemplateHelper {
 	 * @throws LicenseParserException
 	 */
 	@Test
-	public void testTemplateToText() throws LicenseTemplateRuleException, LicenseParserException {
+	public void testTemplateToText() throws LicenseTemplateRuleException {
 		String ret = SpdxLicenseTemplateHelper.templateToText(TEMPLATE_TEXT);
 		assertEquals(TEXT_LICENSE, ret);
 	}

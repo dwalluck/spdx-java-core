@@ -38,6 +38,10 @@ public class SpdxLicenseTemplateHelper {
 	private static final int SPACES_PER_TAB = 5;
 	private static final int MAX_TABS = 4;
 	private static final int[] PIXELS_PER_TAB = new int[] { 20, 40, 60, 70 };
+	
+	private SpdxLicenseTemplateHelper() {
+		// Utility class - it should not be instantiated
+	}
 
 	/**
 	 * Parses the license template calling the templateOutputHandler for any text

@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
  */
 public class LicenseTemplateRule {
 	
-	public enum RuleType {VARIABLE, BEGIN_OPTIONAL, END_OPTIONAL};
+	public enum RuleType {VARIABLE, BEGIN_OPTIONAL, END_OPTIONAL}
 	
 	RuleType type;
 	String original = null;
@@ -71,9 +71,9 @@ public class LicenseTemplateRule {
 			}
 			return "var: "+myName;
 		} else if (RuleType.BEGIN_OPTIONAL.equals(this.type)) {
-			return "beginOptional";
+			return BEGIN_OPTIONAL_TYPE_STR;
 		} else if (RuleType.END_OPTIONAL.equals(this.type)) {
-			return "endOptional";
+			return END_OPTIONAL_TYPE_STR;
 		} else {
 			return "Unknown";
 		}

@@ -70,11 +70,11 @@ public class TestLicenseTemplateRule {
 	public void testparseLicenseTemplateRule() throws LicenseTemplateRuleException {
 		LicenseTemplateRule rule = new LicenseTemplateRule("Name", RuleType.BEGIN_OPTIONAL, "original", "match", "example");
 		rule.parseLicenseTemplateRule(PARSEABLE_RULE);
-		assertEquals(rule.getExample(), RULE_EXAMPLE);
-		assertEquals(rule.getName(), RULE_NAME);
-		assertEquals(rule.getOriginal(), RULE_ORIGINAL);
-		assertEquals(rule.getType(), RULE_TYPE);
-		assertEquals(rule.getMatch(), RULE_MATCH);
+		assertEquals(RULE_EXAMPLE, rule.getExample());
+		assertEquals(RULE_NAME, rule.getName());
+		assertEquals(RULE_ORIGINAL, rule.getOriginal());
+		assertEquals(RULE_TYPE, rule.getType());
+		assertEquals(RULE_MATCH, rule.getMatch());
 	}
 
 	@Test

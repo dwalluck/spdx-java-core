@@ -18,7 +18,7 @@ public class MockCopyManager implements IModelCopyManager {
 	public TypedValue copy(IModelStore toStore, IModelStore fromStore,
 			String sourceUri, String type, String toSpecVersion,
 			String toNamespace) throws InvalidSPDXAnalysisException {
-		// TODO Auto-generated method stub
+		// Mock - not implemented
 		return null;
 	}
 
@@ -27,21 +27,21 @@ public class MockCopyManager implements IModelCopyManager {
 			IModelStore fromStore, String fromObjectUri, String type,
 			String toSpecVersion, String toNamespace)
 			throws InvalidSPDXAnalysisException {
-		// TODO Auto-generated method stub
+		// Mock - not implemented
 
 	}
 
 	@Override
 	public String getCopiedObjectUri(IModelStore fromStore,
 			String fromObjectUri, IModelStore toStore) {
-		// TODO Auto-generated method stub
+		// Mock - not implemented
 		return null;
 	}
 
 	@Override
 	public String putCopiedId(IModelStore fromStore, String fromObjectUri,
 			IModelStore toStore, String toObjectUri) {
-		// TODO Auto-generated method stub
+		// Mock - not implemented
 		return null;
 	}
 
