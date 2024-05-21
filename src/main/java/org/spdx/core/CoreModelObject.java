@@ -593,7 +593,7 @@ public abstract class CoreModelObject {
 			return isEmptyModelCollection(propertyValue);
 		} else if (propertyValue instanceof Optional) {
 			if (((Optional<?>)propertyValue).isPresent()) {
-				return isEquivalentToNull(propertyValue);
+				return isEquivalentToNull(((Optional<?>)propertyValue).get());
 			} else {
 				return true;
 			}

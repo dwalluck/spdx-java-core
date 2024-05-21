@@ -4,7 +4,10 @@
  */
 package org.spdx.core;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -72,6 +75,7 @@ public class ModelRegistry {
 	}
 
 	/**
+	 * Converts a URI to enum
 	 * @param uri URI for the Enum individual
 	 * @param specVersion Version of the spec the enum belongs to
 	 * @return the Enum represented by the individualURI if it exists within the spec model
@@ -99,7 +103,7 @@ public class ModelRegistry {
 	 * @param documentUri URI for the SPDX document to store the external element reference - used for compatibility with SPDX 2.X model stores
 	 * @param externalMap Map of URI's of elements referenced but not present in the store
 	 * @param specVersion version of the SPDX spec the object complies with
-	 * @return external element
+	 * @return a java object representing an SPDX element external to model store, collection or document
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public Object getExternalElement(IModelStore store, String uri,
@@ -141,6 +145,9 @@ public class ModelRegistry {
 	}
 
 	/**
+	 * If the object exists in the model store, it will be "inflated" back to the Java object.
+	 * If the object does not exist AND the create parameter is true, a new object will be created and
+	 * its inflated form will be returned
 	 * @param modelStore store to use for the inflated object
 	 * @param objectUri URI of the external element
 	 * @param documentUri URI for the SPDX document to store the external element reference - used for compatibility with SPDX 2.X model stores
@@ -201,5 +208,12 @@ public class ModelRegistry {
 		} finally {
 			lock.writeLock().unlock();
 		}
+	}
+
+	/**
+	 * @return a list of all supported versions
+	 */
+	public List<String> getSupportedVersions() {
+		return Collections.unmodifiableList(new ArrayList<>(registeredModels.keySet()));
 	}
 }
