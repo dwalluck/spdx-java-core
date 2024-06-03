@@ -19,6 +19,7 @@ package org.spdx.core;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -35,7 +36,7 @@ import org.spdx.storage.PropertyDescriptor;
  * @author Gary O'Neall
  *
  */
-public class ModelSet<T extends Object> extends ModelCollection<T> {
+public class ModelSet<T extends Object> extends ModelCollection<Object> implements Set<Object> {
 	
 	static final Logger logger = LoggerFactory.getLogger(ModelSet.class);
 	
@@ -73,8 +74,9 @@ public class ModelSet<T extends Object> extends ModelCollection<T> {
 		}
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@Override
-	public boolean addAll(Collection<? extends Object> c) {
+	public boolean addAll(Collection c) {
 		IModelStoreLock lock;
 		try {
 			lock = this.getModelStore().enterCriticalSection(false);
@@ -83,7 +85,7 @@ public class ModelSet<T extends Object> extends ModelCollection<T> {
 		}
 		try {
 			boolean retval = false;
-			Iterator<? extends Object> iter = c.iterator();
+			Iterator iter = c.iterator();
 			while (iter.hasNext()) {
 				Object item = iter.next();
 				if (!super.contains(item) && super.add(item)) {
@@ -95,5 +97,4 @@ public class ModelSet<T extends Object> extends ModelCollection<T> {
 			this.getModelStore().leaveCriticalSection(lock);
 		}
 	}
-	
 }
