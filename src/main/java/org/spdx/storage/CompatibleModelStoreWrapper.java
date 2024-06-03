@@ -40,6 +40,8 @@ import org.spdx.core.TypedValue;
  */
 public class CompatibleModelStoreWrapper implements IModelStore {
 	
+	//TODO: Move this to the SPDX 2.X library
+	
 	public static final String LATEST_SPDX_2X_VERSION = "SPDX-2.3";
 	
 	private IModelStore baseStore;

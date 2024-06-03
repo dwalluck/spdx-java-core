@@ -65,4 +65,9 @@ public class TypedValue {
 	public int hashCode() {
 		return 181 ^ this.objectUri.hashCode() ^ this.type.hashCode();
 	}
+	
+	@Override
+	public String toString() {
+		return this.objectUri + ":" + this.type + "(" + this.specVersion + ")";
+	}
 }
