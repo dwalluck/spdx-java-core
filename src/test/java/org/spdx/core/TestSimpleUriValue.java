@@ -29,6 +29,7 @@ public class TestSimpleUriValue {
 	public void setUp() {
 		modelStore = new MockModelStore();
 		copyManager = new MockCopyManager();
+		ModelRegistry.getModelRegistry().registerModel(new MockModelInfo());
 	}
 
 	/**
