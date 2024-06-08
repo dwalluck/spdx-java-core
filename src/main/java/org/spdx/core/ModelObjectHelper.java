@@ -189,7 +189,7 @@ public class ModelObjectHelper {
 	public static Optional<Object> optionalStoredObjectToModelObject(Optional<Object> value, 
 			IModelStore modelStore, IModelCopyManager copyManager, String specVersion) throws InvalidSPDXAnalysisException {
 		if (value.isPresent() && value.get() instanceof IndividualUriValue) {
-			return Optional.of(new SimpleUriValue((IndividualUriValue)value.get()).toModelObject(modelStore, copyManager, 
+			return Optional.ofNullable(new SimpleUriValue((IndividualUriValue)value.get()).toModelObject(modelStore, copyManager, 
 					specVersion));
 		} else if (value.isPresent() && value.get() instanceof TypedValue) {
 			TypedValue tv = (TypedValue)value.get();

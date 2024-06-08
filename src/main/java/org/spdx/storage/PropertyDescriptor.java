@@ -85,6 +85,6 @@ public class PropertyDescriptor {
 
 	@Override
 	public String toString() {
-		return this.nameSpace + "/" + this.name;
+		return this.nameSpace + this.name;
 	}
 }
