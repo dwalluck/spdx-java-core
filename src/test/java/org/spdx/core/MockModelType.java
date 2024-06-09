@@ -34,7 +34,7 @@ public class MockModelType extends CoreModelObject {
 	public MockModelType(IModelStore modelStore, String objectUri,
 			IModelCopyManager copyManager, boolean create, String specVersion)
 			throws InvalidSPDXAnalysisException {
-		super(modelStore, objectUri, copyManager, create, specVersion);
+		super(modelStore, objectUri, copyManager, create, specVersion, null);
 	}
 	
 	public MockModelType(CoreModelObjectBuilder builder, String specVersion) throws InvalidSPDXAnalysisException {

@@ -48,8 +48,8 @@ public class MockModelInfo implements ISpdxModelInfo {
 	}
 
 	@Override
-	public Map<String, Object> getUriToIndividualMap() {
-		return URI_TO_INDIVIDUAL_MAP;
+	public Object uriToIndividual(String uri) {
+		return URI_TO_INDIVIDUAL_MAP.get(uri);
 	}
 
 	@Override

@@ -218,7 +218,7 @@ public class ModelObjectHelper {
 			if (!mValue.getModelStore().equals(modelStore)) {
 				if (Objects.nonNull(copyManager)) {
 					return copyManager.copy(modelStore, mValue.getModelStore(), mValue.getObjectUri(), 
-							mValue.getType(), mValue.getSpecVersion(), null);
+							mValue.getType(), mValue.getSpecVersion(), mValue.getIdPrefix());
 				} else {
 					throw new SpdxObjectNotInStoreException("Can not set a property value to a Model Object stored in a different model store");
 				}

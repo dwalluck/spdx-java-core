@@ -78,6 +78,7 @@ public abstract class CoreModelObject {
 	protected IModelStore modelStore;
 	protected String objectUri;
 	protected String specVersion;
+	protected String idPrefix; // Optional prefix to be used when generating new IDs
 	
 	/**
 	 * If non null, a reference made to a model object stored in a different modelStore and/or
@@ -108,7 +109,8 @@ public abstract class CoreModelObject {
 	 */
 	protected CoreModelObject(String objectUri, String specVersion) throws InvalidSPDXAnalysisException {
 		this(DefaultModelStore.getDefaultModelStore(), objectUri, 
-				DefaultModelStore.getDefaultCopyManager(), true, specVersion);
+				DefaultModelStore.getDefaultCopyManager(), true, specVersion, 
+				DefaultModelStore.getDefaultDocumentUri() + "#");
 	}
 	
 	/**
@@ -118,10 +120,11 @@ public abstract class CoreModelObject {
 	 * @param copyManager - if supplied, model objects will be implicitly copied into this model store and document URI when referenced by setting methods
 	 * @param create - if true, the object will be created in the store if it is not already present
 	 * @param specVersion - version of the SPDX spec the object complies with
+	 * @param idPrefix - prefix to be used when generating new SPDX IDs
 	 * @throws InvalidSPDXAnalysisException invalid parameters or duplicate objectUri
 	 */
 	protected CoreModelObject(IModelStore modelStore, String objectUri, @Nullable IModelCopyManager copyManager, 
-			boolean create, String specVersion) throws InvalidSPDXAnalysisException {
+			boolean create, String specVersion, String idPrefix) throws InvalidSPDXAnalysisException {
 		Objects.requireNonNull(modelStore, "Model Store can not be null");
 		Objects.requireNonNull(objectUri, "Object URI can not be null");
 		Objects.requireNonNull(specVersion, "Spec version can not be null");
@@ -132,6 +135,7 @@ public abstract class CoreModelObject {
 		this.copyManager = copyManager;
 		this.objectUri = objectUri;
 		this.specVersion = specVersion;
+		this.idPrefix = idPrefix;
 
 		Optional<TypedValue> existing = modelStore.getTypedValue(objectUri);
 		if (existing.isPresent()) {
@@ -165,7 +169,7 @@ public abstract class CoreModelObject {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	protected CoreModelObject(CoreModelObjectBuilder builder, String specVersion) throws InvalidSPDXAnalysisException {
-		this(builder.modelStore, builder.objectUri, builder.copyManager, true, specVersion);
+		this(builder.modelStore, builder.objectUri, builder.copyManager, true, specVersion, builder.idPrefix);
 		this.strict = builder.strict;
 	}
 
@@ -848,6 +852,7 @@ public abstract class CoreModelObject {
 		private String objectUri;
 		private IModelCopyManager copyManager;
 		private boolean strict = true;
+		private String idPrefix = null;
 
 		public CoreModelObjectBuilder(IModelStore modelStore, String objectUri, @Nullable IModelCopyManager copyManager) {
 			this.modelStore = modelStore;
@@ -857,6 +862,11 @@ public abstract class CoreModelObject {
 		
 		public CoreModelObjectBuilder setStrict(boolean strict) {
 			this.strict = strict;
+			return this;
+		}
+		
+		public CoreModelObjectBuilder setIdPrefix(String idPrefix) {
+			this.idPrefix = idPrefix;
 			return this;
 		}
 
@@ -915,5 +925,20 @@ public abstract class CoreModelObject {
 	 */
 	public String getSpecVersion() throws InvalidSPDXAnalysisException {
 		return this.specVersion;
+	}
+
+	/**
+	 * @return prefix to be used when generating new IDs
+	 */
+	public @Nullable String getIdPrefix() {
+		return idPrefix;
+	}
+	
+	/**
+	 * Sets the idPrefix
+	 * @param idPrefix prefix to be used when generating new IDs
+	 */
+	public void setIdPrefix(@Nullable String idPrefix) {
+		this.idPrefix = idPrefix;
 	}
 }

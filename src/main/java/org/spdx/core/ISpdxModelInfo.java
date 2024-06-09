@@ -43,9 +43,10 @@ public interface ISpdxModelInfo {
 			@Nullable IModelCopyManager copyManager,String specVersion) throws InvalidSPDXAnalysisException;
 
 	/**
-	 * @return a map of URIs to Individuals which represents individuals in the SPDX model
+	 * @param uri URI for the individual
+	 * @return a matching individual for a given URI or null if no individual exists
 	 */
-	public Map<String, Object> getUriToIndividualMap();
+	public @Nullable Object uriToIndividual(String uri);
 
 	/**
 	 * @param modelStore store to use for the inflated object

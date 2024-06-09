@@ -71,11 +71,6 @@ public class TestModelRegistry {
 			}
 
 			@Override
-			public Map<String, Object> getUriToIndividualMap() {
-				return uriToIndividual;
-			}
-
-			@Override
 			public CoreModelObject createModelObject(IModelStore modelStore,
 					String objectUri, String type,
 					IModelCopyManager copyManager, String specVersion,
@@ -86,6 +81,11 @@ public class TestModelRegistry {
 			@Override
 			public Map<String, Class<?>> getTypeToClassMap() {
 				return classMap;
+			}
+
+			@Override
+			public Object uriToIndividual(String uri) {
+				return uriToIndividual.get(uri);
 			}
 			
 		});

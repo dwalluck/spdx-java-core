@@ -138,7 +138,7 @@ public class ModelRegistry {
 			if (!containsSpecVersion(specVersion)) {
 				throw new ModelRegistryException(specVersion + DOES_NOT_EXIST_MSG);
 			}
-			return registeredModels.get(specVersion).getUriToIndividualMap().get(individualUri);
+			return registeredModels.get(specVersion).uriToIndividual(individualUri);
 		} finally {
 			lock.readLock().unlock();
 		}
