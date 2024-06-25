@@ -68,8 +68,8 @@ public class TestModelObjectHelper {
 	public void testGetObjectPropertyValue() throws InvalidSPDXAnalysisException {
 		String valueObjectUri = "https://value/object/uri";
 		MockModelType value = new MockModelType(modelStore, valueObjectUri, copyManager, true, "3.0.0");
-		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, OBJECT_PROPERTY_DESCRIPTOR, value, copyManager);
-		Optional<Object> result = ModelObjectHelper.getObjectPropertyValue(modelStore, OBJECT_URI, OBJECT_PROPERTY_DESCRIPTOR, copyManager, "3.0.0");
+		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, OBJECT_PROPERTY_DESCRIPTOR, value, copyManager, null);
+		Optional<Object> result = ModelObjectHelper.getObjectPropertyValue(modelStore, OBJECT_URI, OBJECT_PROPERTY_DESCRIPTOR, copyManager, "3.0.0", null, null);
 		assertTrue(result.isPresent());
 		assertTrue(result.get() instanceof MockModelType);
 		MockModelType resultModelType = (MockModelType)(result.get());
@@ -86,17 +86,17 @@ public class TestModelObjectHelper {
 		
 		// String
 		String strValue = "This is a string";
-		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, STRING_PROPERTY_DESCRIPTOR, strValue, copyManager);
+		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, STRING_PROPERTY_DESCRIPTOR, strValue, copyManager, null);
 		Optional<Object> result = modelStore.getValue(OBJECT_URI, STRING_PROPERTY_DESCRIPTOR);
 		assertTrue(result.isPresent());
 		assertEquals(strValue, result.get());
 		// boolean
-		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, BOOLEAN_PROPERTY_DESCRIPTOR, false, copyManager);
+		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, BOOLEAN_PROPERTY_DESCRIPTOR, false, copyManager, null);
 		result = modelStore.getValue(OBJECT_URI, BOOLEAN_PROPERTY_DESCRIPTOR);
 		assertTrue(result.isPresent());
 		assertEquals(false, result.get());
 		// enumeration
-		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, ENUM_PROPERTY_DESCRIPTOR, MockEnum.ENUM1, copyManager);
+		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, ENUM_PROPERTY_DESCRIPTOR, MockEnum.ENUM1, copyManager, null);
 		result = modelStore.getValue(OBJECT_URI, ENUM_PROPERTY_DESCRIPTOR);
 		assertTrue(result.isPresent());
 		assertTrue(result.get() instanceof SimpleUriValue);
@@ -104,7 +104,7 @@ public class TestModelObjectHelper {
 		assertEquals(MockEnum.ENUM1.getIndividualURI(), simpleResult.getIndividualURI());
 		// individual
 		MockIndividual individual = new MockIndividual();
-		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, INDIVIDUAL_PROPERTY_DESCRIPTOR, individual, copyManager);
+		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, INDIVIDUAL_PROPERTY_DESCRIPTOR, individual, copyManager, null);
 		result = modelStore.getValue(OBJECT_URI, INDIVIDUAL_PROPERTY_DESCRIPTOR);
 		assertTrue(result.isPresent());
 		assertTrue(result.get() instanceof SimpleUriValue);
@@ -113,14 +113,14 @@ public class TestModelObjectHelper {
 		// collection
 		Collection<String> c1 = Arrays.asList(new String[] {"s1", "s2"});
 		Collection<String> c2 = Arrays.asList(new String[] {"s3"});
-		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, COLLECTION_PROPERTY_DESCRIPTOR, c1, copyManager);
+		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, COLLECTION_PROPERTY_DESCRIPTOR, c1, copyManager, null);
 		result = modelStore.getValue(OBJECT_URI, COLLECTION_PROPERTY_DESCRIPTOR);
 		assertTrue(result.isPresent());
 		assertTrue(result.get() instanceof Collection);
 		Collection<String> colResult = (Collection<String>)(result.get());
 		assertTrue(c1.size() == colResult.size() && c1.containsAll(colResult) && colResult.containsAll(c1));
 		
-		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, COLLECTION_PROPERTY_DESCRIPTOR, c2, copyManager);
+		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, COLLECTION_PROPERTY_DESCRIPTOR, c2, copyManager, null);
 		result = modelStore.getValue(OBJECT_URI, COLLECTION_PROPERTY_DESCRIPTOR);
 		assertTrue(result.isPresent());
 		assertTrue(result.get() instanceof Collection);
@@ -136,7 +136,7 @@ public class TestModelObjectHelper {
 	@Test
 	public void testRemoveProperty() throws InvalidSPDXAnalysisException {
 		String strValue = "This is a string";
-		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, STRING_PROPERTY_DESCRIPTOR, strValue, copyManager);
+		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, STRING_PROPERTY_DESCRIPTOR, strValue, copyManager, null);
 		Optional<Object> result = modelStore.getValue(OBJECT_URI, STRING_PROPERTY_DESCRIPTOR);
 		assertTrue(result.isPresent());
 		assertEquals(strValue, result.get());
@@ -153,7 +153,7 @@ public class TestModelObjectHelper {
 	@Test
 	public void testClearValueCollection() throws InvalidSPDXAnalysisException {
 		Collection<String> c1 = Arrays.asList(new String[] {"s1", "s2"});
-		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, COLLECTION_PROPERTY_DESCRIPTOR, c1, copyManager);
+		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, COLLECTION_PROPERTY_DESCRIPTOR, c1, copyManager, null);
 		Optional<Object> result = modelStore.getValue(OBJECT_URI, COLLECTION_PROPERTY_DESCRIPTOR);
 		assertTrue(result.isPresent());
 		assertTrue(result.get() instanceof Collection);
@@ -175,13 +175,13 @@ public class TestModelObjectHelper {
 	@Test
 	public void testAddValueToCollection() throws InvalidSPDXAnalysisException {
 		Collection<String> c1 = Arrays.asList(new String[] {"s1", "s2"});
-		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, COLLECTION_PROPERTY_DESCRIPTOR, c1, copyManager);
+		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, COLLECTION_PROPERTY_DESCRIPTOR, c1, copyManager, null);
 		Optional<Object> result = modelStore.getValue(OBJECT_URI, COLLECTION_PROPERTY_DESCRIPTOR);
 		assertTrue(result.isPresent());
 		assertTrue(result.get() instanceof Collection);
 		Collection<String> colResult = (Collection<String>)(result.get());
 		assertTrue(c1.size() == colResult.size() && c1.containsAll(colResult) && colResult.containsAll(c1));
-		ModelObjectHelper.addValueToCollection(modelStore, OBJECT_URI, COLLECTION_PROPERTY_DESCRIPTOR, "S3", copyManager);
+		ModelObjectHelper.addValueToCollection(modelStore, OBJECT_URI, COLLECTION_PROPERTY_DESCRIPTOR, "S3", copyManager, null);
 		result = modelStore.getValue(OBJECT_URI, COLLECTION_PROPERTY_DESCRIPTOR);
 		assertTrue(result.isPresent());
 		assertTrue(result.get() instanceof Collection);
@@ -198,14 +198,14 @@ public class TestModelObjectHelper {
 	public void testReplacePropertyValueCollection() throws InvalidSPDXAnalysisException {
 		Collection<String> c1 = Arrays.asList(new String[] {"s1", "s2"});
 		Collection<String> c2 = Arrays.asList(new String[] {"s3"});
-		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, COLLECTION_PROPERTY_DESCRIPTOR, c1, copyManager);
+		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, COLLECTION_PROPERTY_DESCRIPTOR, c1, copyManager, null);
 		Optional<Object> result = modelStore.getValue(OBJECT_URI, COLLECTION_PROPERTY_DESCRIPTOR);
 		assertTrue(result.isPresent());
 		assertTrue(result.get() instanceof Collection);
 		Collection<String> colResult = (Collection<String>)(result.get());
 		assertTrue(c1.size() == colResult.size() && c1.containsAll(colResult) && colResult.containsAll(c1));
 		
-		ModelObjectHelper.replacePropertyValueCollection(modelStore, OBJECT_URI, COLLECTION_PROPERTY_DESCRIPTOR, c2, copyManager);
+		ModelObjectHelper.replacePropertyValueCollection(modelStore, OBJECT_URI, COLLECTION_PROPERTY_DESCRIPTOR, c2, copyManager, null);
 		result = modelStore.getValue(OBJECT_URI, COLLECTION_PROPERTY_DESCRIPTOR);
 		assertTrue(result.isPresent());
 		assertTrue(result.get() instanceof Collection);
@@ -221,7 +221,7 @@ public class TestModelObjectHelper {
 	@Test
 	public void testRemovePropertyValueFromCollection() throws InvalidSPDXAnalysisException {
 		Collection<String> c1 = Arrays.asList(new String[] {"s1", "s2"});
-		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, COLLECTION_PROPERTY_DESCRIPTOR, c1, copyManager);
+		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, COLLECTION_PROPERTY_DESCRIPTOR, c1, copyManager, null);
 		Optional<Object> result = modelStore.getValue(OBJECT_URI, COLLECTION_PROPERTY_DESCRIPTOR);
 		assertTrue(result.isPresent());
 		assertTrue(result.get() instanceof Collection);
@@ -243,26 +243,26 @@ public class TestModelObjectHelper {
 	public void testOptionalStoredObjectToModelObject() throws InvalidSPDXAnalysisException {
 		// TypedValue
 		Optional<Object> tv = Optional.of(new TypedValue(OBJECT_URI, MockModelType.TYPE, "3.0.0"));
-		Optional<Object> result = ModelObjectHelper.optionalStoredObjectToModelObject(tv, modelStore, copyManager, "3.0.0");
+		Optional<Object> result = ModelObjectHelper.optionalStoredObjectToModelObject(tv, modelStore, copyManager, "3.0.0", null);
 		assertTrue(result.isPresent());
 		assertTrue(result.get() instanceof MockModelType);
 		assertEquals(OBJECT_URI, ((MockModelType)result.get()).getObjectUri());
 		// Enum
-		result = ModelObjectHelper.optionalStoredObjectToModelObject(Optional.of(MockEnum.ENUM1), modelStore, copyManager, "3.0.0");
+		result = ModelObjectHelper.optionalStoredObjectToModelObject(Optional.of(MockEnum.ENUM1), modelStore, copyManager, "3.0.0", null);
 		assertTrue(result.isPresent());
 		assertEquals(MockEnum.ENUM1, result.get());
 		// Individual URI
-		result = ModelObjectHelper.optionalStoredObjectToModelObject(Optional.of(new MockIndividual()), modelStore, copyManager, "3.0.0");
+		result = ModelObjectHelper.optionalStoredObjectToModelObject(Optional.of(new MockIndividual()), modelStore, copyManager, "3.0.0", null);
 		assertTrue(result.isPresent());
 		assertTrue(result.get() instanceof MockIndividual);
 		assertEquals(MockIndividual.INDIVIDUAL_URI, ((MockIndividual)result.get()).getIndividualURI());
 		// String
 		String s = "string";
-		result = ModelObjectHelper.optionalStoredObjectToModelObject(Optional.of(s), modelStore, copyManager, "3.0.0");
+		result = ModelObjectHelper.optionalStoredObjectToModelObject(Optional.of(s), modelStore, copyManager, "3.0.0", null);
 		assertTrue(result.isPresent());
 		assertEquals(s, result.get());
 		// empty
-		result = ModelObjectHelper.optionalStoredObjectToModelObject(Optional.empty(), modelStore, copyManager, "3.0.0");
+		result = ModelObjectHelper.optionalStoredObjectToModelObject(Optional.empty(), modelStore, copyManager, "3.0.0", null);
 		assertFalse(result.isPresent());
 	}
 
@@ -274,26 +274,26 @@ public class TestModelObjectHelper {
 	public void testModelObjectToStoredObject() throws InvalidSPDXAnalysisException {
 		String valueObjectUri = "https://value/object/uri";
 		MockModelType mockType = new MockModelType(modelStore, valueObjectUri, copyManager, true, "3.0.0");
-		Object result = ModelObjectHelper.modelObjectToStoredObject(mockType, modelStore, copyManager);
+		Object result = ModelObjectHelper.modelObjectToStoredObject(mockType, modelStore, copyManager, null);
 		assertTrue(result instanceof TypedValue);
 		TypedValue tvResult = (TypedValue)result;
 		assertEquals(valueObjectUri, tvResult.getObjectUri());
 		assertEquals(MockModelType.TYPE, tvResult.getType());
 		assertEquals("3.0.0", tvResult.getSpecVersion());
 		// Enum
-		result = ModelObjectHelper.modelObjectToStoredObject(MockEnum.ENUM1, modelStore, copyManager);
+		result = ModelObjectHelper.modelObjectToStoredObject(MockEnum.ENUM1, modelStore, copyManager, null);
 		assertTrue(result instanceof IndividualUriValue);
 		assertEquals(MockEnum.ENUM1.getIndividualURI(), ((IndividualUriValue)result).getIndividualURI());
 		// Individual
-		result = ModelObjectHelper.modelObjectToStoredObject(new MockIndividual(), modelStore, copyManager);
+		result = ModelObjectHelper.modelObjectToStoredObject(new MockIndividual(), modelStore, copyManager, null);
 		assertTrue(result instanceof IndividualUriValue);
 		assertEquals(MockIndividual.INDIVIDUAL_URI, ((IndividualUriValue)result).getIndividualURI());
 		// String
 		String s = "this is a String";
-		result = ModelObjectHelper.modelObjectToStoredObject(s, modelStore, copyManager);
+		result = ModelObjectHelper.modelObjectToStoredObject(s, modelStore, copyManager, null);
 		assertEquals(s, result);
 		// boolean
-		result = ModelObjectHelper.modelObjectToStoredObject(false, modelStore, copyManager);
+		result = ModelObjectHelper.modelObjectToStoredObject(false, modelStore, copyManager, null);
 		assertEquals(false, result);
 	}
 
@@ -305,19 +305,19 @@ public class TestModelObjectHelper {
 	public void testStoredObjectToModelObject() throws InvalidSPDXAnalysisException {
 		// TypedValue
 		String valueObjectUri = "https://value/object/uri";
-		Object result = ModelObjectHelper.storedObjectToModelObject(new TypedValue(valueObjectUri, MockModelType.TYPE, "3.0.0"), modelStore, copyManager, "3.0.0");
+		Object result = ModelObjectHelper.storedObjectToModelObject(new TypedValue(valueObjectUri, MockModelType.TYPE, "3.0.0"), modelStore, copyManager, "3.0.0", null);
 		assertTrue(result instanceof MockModelType);
 		assertEquals(valueObjectUri, ((MockModelType)result).getObjectUri());
 		// Enum
-		result = ModelObjectHelper.storedObjectToModelObject(MockEnum.ENUM1, modelStore, copyManager, "3.0.0");
+		result = ModelObjectHelper.storedObjectToModelObject(MockEnum.ENUM1, modelStore, copyManager, "3.0.0", null);
 		assertEquals(MockEnum.ENUM1, result);
 		// Individual URI
-		result = ModelObjectHelper.storedObjectToModelObject(new MockIndividual(), modelStore, copyManager, "3.0.0");
+		result = ModelObjectHelper.storedObjectToModelObject(new MockIndividual(), modelStore, copyManager, "3.0.0", null);
 		assertTrue(result instanceof MockIndividual);
 		assertEquals(MockIndividual.INDIVIDUAL_URI, ((MockIndividual)result).getIndividualURI());
 		// String
 		String s = "string";
-		result = ModelObjectHelper.storedObjectToModelObject(s, modelStore, copyManager, "3.0.0");
+		result = ModelObjectHelper.storedObjectToModelObject(s, modelStore, copyManager, "3.0.0", null);
 		assertEquals(s, result);
 	}
 

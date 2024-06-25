@@ -47,6 +47,8 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 	private PropertyDescriptor propertyDescriptor;
 	private IModelCopyManager copyManager;
 	private String specVersion;
+	private String idPrefix;
+	
 	/**
 	 * Map of URI's of elements referenced but not present in the store
 	 */
@@ -81,12 +83,13 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 	 * @param propertyDescriptor descriptor for the property use for the model collections
 	 * @param copyManager if non-null, use this to copy properties when referenced outside this model store
 	 * @param type The class of the elements to be stored in the collection if none, null if not known
-	 * @param specVersion - version of the SPDX spec the object complies with
+	 * @param specVersion version of the SPDX spec the object complies with
+	 * @param idPrefix prefix to be used when generating new SPDX IDs
 	 * @throws InvalidSPDXAnalysisException on parsing or store errors
 	 */
 	public ModelCollection(IModelStore modelStore, String objectUri, PropertyDescriptor propertyDescriptor,
 			@Nullable IModelCopyManager copyManager,
-			@Nullable Class<?> type, String specVersion) throws InvalidSPDXAnalysisException {
+			@Nullable Class<?> type, String specVersion, String idPrefix) throws InvalidSPDXAnalysisException {
 		Objects.requireNonNull(modelStore, "Model store can not be null");
 		this.modelStore = modelStore;
 		Objects.requireNonNull(objectUri, "Object URI or anonymous ID can not be null");
@@ -96,6 +99,7 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 		this.copyManager = copyManager;
 		Objects.requireNonNull(specVersion, "specVersion can not be null");
 		this.specVersion = specVersion;
+		this.idPrefix = idPrefix;
 		if (!modelStore.exists(objectUri)) {
 			throw new SpdxIdNotFoundException(objectUri+" does not exist.");
 		}
@@ -134,7 +138,7 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 		try {
 			Object storedObject = null;
 			try {
-				storedObject = ModelObjectHelper.modelObjectToStoredObject(o, modelStore, copyManager);
+				storedObject = ModelObjectHelper.modelObjectToStoredObject(o, modelStore, copyManager, idPrefix);
 			} catch (SpdxObjectNotInStoreException e1) {
 				return false;	// The exception is due to the model object not being in the store
 			}
@@ -147,7 +151,7 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 	
 	private Object checkConvertTypedValue(Object value) {
 		try {
-			Object retval = ModelObjectHelper.storedObjectToModelObject(value, modelStore, copyManager, this.specVersion);
+			Object retval = ModelObjectHelper.storedObjectToModelObject(value, modelStore, copyManager, this.specVersion, this.type);
 			if (Objects.nonNull(this.type) && !this.type.isAssignableFrom(retval.getClass())) {
 				if (retval instanceof IndividualUriValue) {
 					throw new SpdxInvalidTypeException("No enumeration was found for URI "+((IndividualUriValue)retval).getIndividualURI()+
@@ -200,7 +204,7 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 		try {
 			return modelStore.addValueToCollection(
 					objectUri, propertyDescriptor, 
-					ModelObjectHelper.modelObjectToStoredObject(element, modelStore, copyManager));
+					ModelObjectHelper.modelObjectToStoredObject(element, modelStore, copyManager, idPrefix));
 		} catch (InvalidSPDXAnalysisException e) {
 			throw new RuntimeException(e);
 		}
@@ -210,7 +214,7 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 	public boolean remove(Object element) {
 		try {
 			return modelStore.removeValueFromCollection(objectUri, propertyDescriptor,
-					ModelObjectHelper.modelObjectToStoredObject(element, modelStore, null));
+					ModelObjectHelper.modelObjectToStoredObject(element, modelStore, null, null));
 		} catch (InvalidSPDXAnalysisException e) {
 			throw new RuntimeException(e);
 		}

@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.spdx.storage.IModelStore;
@@ -84,7 +86,7 @@ public class TestModelRegistry {
 			}
 
 			@Override
-			public Object uriToIndividual(String uri) {
+			public Object uriToIndividual(String uri, @Nullable Class<?> type) {
 				return uriToIndividual.get(uri);
 			}
 			
@@ -100,7 +102,7 @@ public class TestModelRegistry {
 		assertEquals(cResult, MockModelType.class);
 		Enum<?> eResult = ModelRegistry.getModelRegistry().uriToEnum(MockEnum.ENUM1.getIndividualURI(), "3.0.0");
 		assertEquals(MockEnum.ENUM1, eResult);
-		Object iResult = ModelRegistry.getModelRegistry().uriToIndividual(individual.getIndividualURI(), "3.0.0");
+		Object iResult = ModelRegistry.getModelRegistry().uriToIndividual(individual.getIndividualURI(), "3.0.0", null);
 		assertEquals(individual.getIndividualURI(), ((MockIndividual)iResult).getIndividualURI());
 	}
 

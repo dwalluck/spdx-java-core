@@ -117,10 +117,10 @@ public abstract class CoreModelObject {
 	 * Creates a new model object
 	 * @param modelStore Storage for the model objects - Must support model V3 classes
 	 * @param objectUri Anonymous ID or URI for the model object
-	 * @param copyManager - if supplied, model objects will be implicitly copied into this model store and document URI when referenced by setting methods
-	 * @param create - if true, the object will be created in the store if it is not already present
-	 * @param specVersion - version of the SPDX spec the object complies with
-	 * @param idPrefix - prefix to be used when generating new SPDX IDs
+	 * @param copyManager if supplied, model objects will be implicitly copied into this model store and document URI when referenced by setting methods
+	 * @param create if true, the object will be created in the store if it is not already present
+	 * @param specVersion version of the SPDX spec the object complies with
+	 * @param idPrefix prefix to be used when generating new SPDX IDs
 	 * @throws InvalidSPDXAnalysisException invalid parameters or duplicate objectUri
 	 */
 	protected CoreModelObject(IModelStore modelStore, String objectUri, @Nullable IModelCopyManager copyManager, 
@@ -290,8 +290,19 @@ public abstract class CoreModelObject {
 	 * @return value associated with a property
 	 */
 	public Optional<Object> getObjectPropertyValue(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
+		return getObjectPropertyValue(propertyDescriptor, null);
+	}
+	
+	/**
+	 * Get an object value for a property
+	 * @param propertyDescriptor Descriptor for the property
+	 * @param type optional type hint - used for individuals where the type may be ambiguous
+	 * @return value associated with a property
+	 */
+	public Optional<Object> getObjectPropertyValue(PropertyDescriptor propertyDescriptor,
+			@Nullable Class<?> type) throws InvalidSPDXAnalysisException {
 		Optional<Object> retval = ModelObjectHelper.getObjectPropertyValue(modelStore, objectUri, 
-				propertyDescriptor, copyManager, specVersion);
+				propertyDescriptor, copyManager, specVersion, type, idPrefix);
 		if (retval.isPresent() && retval.get() instanceof CoreModelObject && !strict) {
 			((CoreModelObject)retval.get()).setStrict(strict);
 		}
@@ -308,7 +319,8 @@ public abstract class CoreModelObject {
 		if (this instanceof IndividualUriValue) {
 			throw new InvalidSPDXAnalysisException("Can not set a property for the literal value "+((IndividualUriValue)this).getIndividualURI());
 		}
-		ModelObjectHelper.setPropertyValue(this.modelStore, objectUri, propertyDescriptor, value, copyManager);
+		ModelObjectHelper.setPropertyValue(this.modelStore, objectUri, propertyDescriptor, value, 
+				copyManager, idPrefix);
 	}
 	
 	/**
@@ -319,7 +331,8 @@ public abstract class CoreModelObject {
 	 */
 	public ModelUpdate updatePropertyValue(PropertyDescriptor propertyDescriptor, Object value) {
 		return () ->{
-			ModelObjectHelper.setPropertyValue(this.modelStore, objectUri, propertyDescriptor, value, copyManager);
+			ModelObjectHelper.setPropertyValue(this.modelStore, objectUri, propertyDescriptor, value, 
+					copyManager, idPrefix);
 		};
 	}
 	
@@ -329,7 +342,7 @@ public abstract class CoreModelObject {
 	 * @throws SpdxInvalidTypeException
 	 */
 	public Optional<String> getStringPropertyValue(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
-		Optional<Object> result = getObjectPropertyValue(propertyDescriptor);
+		Optional<Object> result = getObjectPropertyValue(propertyDescriptor, String.class);
 		if (result.isPresent()) {
 			if (result.get() instanceof String) {
 				return Optional.of((String)result.get());
@@ -349,7 +362,7 @@ public abstract class CoreModelObject {
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	public Optional<Integer> getIntegerPropertyValue(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
-		Optional<Object> result = getObjectPropertyValue(propertyDescriptor);
+		Optional<Object> result = getObjectPropertyValue(propertyDescriptor, Integer.class);
 		Optional<Integer> retval;
 		if (result.isPresent()) {
 			if (!(result.get() instanceof Integer)) {
@@ -369,7 +382,7 @@ public abstract class CoreModelObject {
 	 */
 	@SuppressWarnings("unchecked")
 	public Optional<Enum<?>> getEnumPropertyValue(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
-		Optional<Object> result = getObjectPropertyValue(propertyDescriptor);
+		Optional<Object> result = getObjectPropertyValue(propertyDescriptor, Enum.class);
 		if (!result.isPresent()) {
 			return Optional.empty();
 		}
@@ -395,7 +408,7 @@ public abstract class CoreModelObject {
 	 * @throws SpdxInvalidTypeException
 	 */
 	public Optional<Boolean> getBooleanPropertyValue(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
-		Optional<Object> result = getObjectPropertyValue(propertyDescriptor);
+		Optional<Object> result = getObjectPropertyValue(propertyDescriptor, Boolean.class);
 		if (result.isPresent()) {
 			if (result.get() instanceof Boolean) {
 				return Optional.of((Boolean)result.get());
@@ -464,7 +477,8 @@ public abstract class CoreModelObject {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public void addPropertyValueToCollection(PropertyDescriptor propertyDescriptor, Object value) throws InvalidSPDXAnalysisException {
-		ModelObjectHelper.addValueToCollection(modelStore, objectUri, propertyDescriptor, value, copyManager);
+		ModelObjectHelper.addValueToCollection(modelStore, objectUri, propertyDescriptor, value, 
+				copyManager, idPrefix);
 	}
 	
 	/**
@@ -476,7 +490,8 @@ public abstract class CoreModelObject {
 	 */
 	public ModelUpdate updateAddPropertyValueToCollection(PropertyDescriptor propertyDescriptor, Object value) {
 		return () ->{
-			ModelObjectHelper.addValueToCollection(modelStore, objectUri, propertyDescriptor, value, copyManager);
+			ModelObjectHelper.addValueToCollection(modelStore, objectUri, propertyDescriptor, value, 
+					copyManager, idPrefix);
 		};
 	}
 	
@@ -508,7 +523,7 @@ public abstract class CoreModelObject {
 	 */
 	public ModelSet<?> getObjectPropertyValueSet(PropertyDescriptor propertyDescriptor, Class<?> type) throws InvalidSPDXAnalysisException {
 		return new ModelSet<Object>(this.modelStore, this.objectUri, propertyDescriptor, 
-				this.copyManager, type, specVersion);
+				this.copyManager, type, specVersion, idPrefix);
 	}
 	
 	/**
@@ -517,7 +532,7 @@ public abstract class CoreModelObject {
 	 */
 	public ModelCollection<?> getObjectPropertyValueCollection(PropertyDescriptor propertyDescriptor, Class<?> type) throws InvalidSPDXAnalysisException {
 		return new ModelCollection<Object>(this.modelStore, this.objectUri, propertyDescriptor, 
-				this.copyManager, type, specVersion);
+				this.copyManager, type, specVersion, idPrefix);
 	}
 	
 	/**

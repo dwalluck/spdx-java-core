@@ -44,9 +44,10 @@ public interface ISpdxModelInfo {
 
 	/**
 	 * @param uri URI for the individual
+	 * @param type optional type hint - used for individuals where the type may be ambiguous
 	 * @return a matching individual for a given URI or null if no individual exists
 	 */
-	public @Nullable Object uriToIndividual(String uri);
+	public @Nullable Object uriToIndividual(String uri, Class<?> type);
 
 	/**
 	 * @param modelStore store to use for the inflated object

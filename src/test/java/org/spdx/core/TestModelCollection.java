@@ -43,7 +43,7 @@ public class TestModelCollection {
 		modelType = new MockModelType(modelStore, OBJECT_URI, copyManager, true, "3.0.0"); // creates the mock model in the store
 		modelStore.create(new TypedValue(MODEL_COLLECTION_URI, MockModelType.TYPE, "3.0.0"));
 		modelCollection = new ModelCollection(modelStore, MODEL_COLLECTION_URI, COLLECTION_PROPERTY_DESCRIPTOR,
-				copyManager, MockModelType.class, "3.0.0");
+				copyManager, MockModelType.class, "3.0.0", null);
 	}
 
 	/**

@@ -19,13 +19,11 @@ package org.spdx.storage;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
-import org.spdx.core.IExternalElementInfo;
 import org.spdx.core.InvalidSPDXAnalysisException;
 import org.spdx.core.TypedValue;
 
@@ -122,7 +120,8 @@ public interface IModelStore extends AutoCloseable {
 
 	/**
 	 * @param nameSpace Optional SPDX namespace to filter items by
-	 * @param typeFilter Optional parameter to specify the type of objects to be retrieved
+	 * @para@Override
+	m typeFilter Optional parameter to specify the type of objects to be retrieved
 	 * @return Stream of all items store within the document
 	 * @throws InvalidSPDXAnalysisException
 	 */
@@ -245,27 +244,8 @@ public interface IModelStore extends AutoCloseable {
 	public void delete(String objectUri) throws InvalidSPDXAnalysisException;
 
 	/**
-	 * Adds an external reference for a given collection
-	 * @param externalObjectUri URI of the external SPDX Element or License
-	 * @param collectionUri URI of the SPDX document or collection
-	 * @param externalElementInfo info about the external element
-	 * @return the previous external mapping for the collection, null if no previous value is present
+	 * @param objectUri ID or URI for an item
+	 * @return true if the ID is anonymous
 	 */
-	IExternalElementInfo addExternalReference(String externalObjectUri,
-			String collectionUri, IExternalElementInfo externalElementInfo);
-
-	/**
-	 * @param externalObjectUri object URI for an element external to a collection
-	 * @return a map of collection (or document) URI's mapped to their external element info for the given object URI
-	 */
-	Map<String, IExternalElementInfo> getExternalReferenceMap(
-			String externalObjectUri);
-
-	/**
-	 * @param externalObjectUri URI of the external SPDX Element or License
-	 * @param collectionUri URI of the SPDX document or collection
-	 * @return the externalElementInfo associated with the collection for a given external element
-	 */
-	IExternalElementInfo getExternalElementInfo(String externalObjectUri,
-			String collectionUri);
+	boolean isAnon(String objectUri);
 }

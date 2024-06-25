@@ -64,10 +64,9 @@ public class TestCompatibleModelStoreWrapper {
 	@Test
 	public void testDocumentUriToNamespace() {
 
-		assertEquals(DOC_DOC_URI + "#", CompatibleModelStoreWrapper.documentUriToNamespace(DOC_DOC_URI, false));
-		assertEquals("", CompatibleModelStoreWrapper.documentUriToNamespace(ANON_ID, true));
-		assertEquals(LICENSE_DOC_URI, CompatibleModelStoreWrapper.documentUriToNamespace(LICENSE_DOC_URI, false));
-		assertEquals(LICENSE_DOC_URI2, CompatibleModelStoreWrapper.documentUriToNamespace(LICENSE_DOC_URI2, false));
+		assertEquals(DOC_DOC_URI + "#", CompatibleModelStoreWrapper.documentUriToNamespace(DOC_DOC_URI));
+		assertEquals(LICENSE_DOC_URI, CompatibleModelStoreWrapper.documentUriToNamespace(LICENSE_DOC_URI));
+		assertEquals(LICENSE_DOC_URI2, CompatibleModelStoreWrapper.documentUriToNamespace(LICENSE_DOC_URI2));
 	}
 
 	/**

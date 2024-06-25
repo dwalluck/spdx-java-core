@@ -31,21 +31,19 @@ import org.spdx.core.InvalidSPDXAnalysisException;
 public interface ISerializableModelStore extends IModelStore {
 
 	/**
-	 * Serialize the items stored in the documentUri.  The specific format for serialization depends on the document store.
-	 * @param documentUri URI for the document to be serialized
+	 * Serialize the items stored in the model store.  The specific format for serialization depends on the document store.
 	 * @param stream output stream to serialize to
 	 * @throws InvalidSPDXAnalysisException
 	 * @throws IOException
 	 */
-	public void serialize(String documentUri, OutputStream stream)  throws InvalidSPDXAnalysisException, IOException;
+	public void serialize(OutputStream stream)  throws InvalidSPDXAnalysisException, IOException;
 	
 	/**
 	 * Deserialize / read an SPDX document from a stream
 	 * @param stream input stream to deserialize from
 	 * @param overwrite if true, allow any existing documents with the same documentUri to be overwritten
-	 * @return document URI of the document
 	 * @throws InvalidSPDXAnalysisException
 	 * @throws IOException
 	 */
-	public String deSerialize(InputStream stream, boolean overwrite) throws InvalidSPDXAnalysisException, IOException;
+	public void deSerialize(InputStream stream, boolean overwrite) throws InvalidSPDXAnalysisException, IOException;
 }

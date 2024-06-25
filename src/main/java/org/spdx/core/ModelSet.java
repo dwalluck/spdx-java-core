@@ -47,12 +47,13 @@ public class ModelSet<T extends Object> extends ModelCollection<Object> implemen
 	 * @param copyManager if non-null, use this to copy properties when referenced outside this model store
 	 * @param type The class of the elements to be stored in the collection if none, null if not known
 	 * @param specVersion - version of the SPDX spec the object complies with
+	 * @param idPrefix prefix to be used when generating new SPDX IDs
 	 * @throws InvalidSPDXAnalysisException on parsing or store errors
 	 */
 	public ModelSet(IModelStore modelStore, String objectUri, PropertyDescriptor propertyDescriptor, 
 			@Nullable IModelCopyManager copyManager, @Nullable Class<?> type,
-			String specVersion) throws InvalidSPDXAnalysisException {
-		super(modelStore, objectUri, propertyDescriptor, copyManager, type, specVersion);
+			String specVersion, String idPrefix) throws InvalidSPDXAnalysisException {
+		super(modelStore, objectUri, propertyDescriptor, copyManager, type, specVersion, idPrefix);
 	}
 	
 	@Override

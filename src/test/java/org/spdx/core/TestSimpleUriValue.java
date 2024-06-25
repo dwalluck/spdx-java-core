@@ -75,13 +75,13 @@ public class TestSimpleUriValue {
 	public void testToModelObject() throws InvalidSPDXAnalysisException {
 		// enum
 		SimpleUriValue enumSimple = new SimpleUriValue(MockEnum.ENUM1);
-		Object result = enumSimple.toModelObject(modelStore, copyManager, "3.0.0");
+		Object result = enumSimple.toModelObject(modelStore, copyManager, "3.0.0", null);
 		assertTrue(result instanceof MockEnum);
 		assertEquals(MockEnum.ENUM1, result);
 		// individual
 		MockIndividual individual = new MockIndividual();
 		SimpleUriValue indSimple = new SimpleUriValue(individual);
-		result = indSimple.toModelObject(modelStore, copyManager, "3.0.0");
+		result = indSimple.toModelObject(modelStore, copyManager, "3.0.0", null);
 		assertTrue(result instanceof MockIndividual);
 		// neither
 	}

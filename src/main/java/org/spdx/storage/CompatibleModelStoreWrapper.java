@@ -17,14 +17,18 @@
  */
 package org.spdx.storage;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
-import org.spdx.core.IExternalElementInfo;
 import org.spdx.core.InvalidSPDXAnalysisException;
 import org.spdx.core.ModelRegistryException;
 import org.spdx.core.SpdxCoreConstants;
@@ -42,13 +46,57 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 	
 	//TODO: Move this to the SPDX 2.X library
 	
+	public static class TypedValueCompatV2 {
+		String id;
+		String type;
+		
+		public TypedValueCompatV2(String id, String type) {
+			this.id = id;
+			this.type = type;
+		}
+	}
+	
 	public static final String LATEST_SPDX_2X_VERSION = "SPDX-2.3";
+	
+	// Namespaces
+	public static final String RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+	public static final String RDFS_NAMESPACE = "http://www.w3.org/2000/01/rdf-schema#";
+	public static final String SPDX_NAMESPACE = "http://spdx.org/rdf/terms#";
+	public static final String DOAP_NAMESPACE = "http://usefulinc.com/ns/doap#";
+	public static final String OWL_NAMESPACE = "http://www.w3.org/2002/07/owl#";
+	public static final String RDF_POINTER_NAMESPACE = "http://www.w3.org/2009/pointers#";
+	public static final String XML_SCHEMA_NAMESPACE = "http://www.w3.org/2001/XMLSchema#";
+	
+	static final Map<String, String> PROP_NAME_TO_NON_SPDX_NS;
+	
+	static {
+		Map<String, String> nameToNS = new HashMap<>();
+		nameToNS.put("type", RDF_NAMESPACE);
+		nameToNS.put("resource", RDF_NAMESPACE);
+		nameToNS.put("sameAs", OWL_NAMESPACE);
+		nameToNS.put("comment", RDFS_NAMESPACE);
+		nameToNS.put("label", RDFS_NAMESPACE);
+		nameToNS.put("seeAlso", RDFS_NAMESPACE);
+		nameToNS.put("homepage", DOAP_NAMESPACE);
+		nameToNS.put("startPointer", RDF_POINTER_NAMESPACE);
+		nameToNS.put("endPointer", RDF_POINTER_NAMESPACE);
+		nameToNS.put("reference", RDF_POINTER_NAMESPACE);
+		nameToNS.put("offset", RDF_POINTER_NAMESPACE);
+		nameToNS.put("lineNumber", RDF_POINTER_NAMESPACE);
+		
+		PROP_NAME_TO_NON_SPDX_NS = Collections.unmodifiableMap(nameToNS);
+	}
 	
 	private IModelStore baseStore;
 	
 	public CompatibleModelStoreWrapper(IModelStore baseStore) {
 		Objects.requireNonNull(baseStore, "A base store must be provided for the CompatibileModelStoreWrapper");
 		this.baseStore = baseStore;
+	}
+	
+	public static PropertyDescriptor propNameToPropDescriptor(String propName) {
+		return new PropertyDescriptor(propName, 
+				PROP_NAME_TO_NON_SPDX_NS.getOrDefault(propName, SPDX_NAMESPACE));
 	}
 
 	@Override
@@ -72,13 +120,11 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 	 * @return true if the objectUri already exists for the documentUri
 	 */
 	public static String documentUriIdToUri(String documentUri, String id, IModelStore store) {
-		return documentUriIdToUri(documentUri, id, store.getIdType(id).equals(IdType.Anonymous));
+		return documentUriIdToUri(documentUri, id, store.isAnon(id));
 	}
 	
-	public static String documentUriToNamespace(String documentUri, boolean anonymous) {
-		if (anonymous) {
-			return "";
-		} else if (documentUri.contains("://spdx.org/licenses/"))  {
+	public static String documentUriToNamespace(String documentUri) {
+		if (documentUri.contains("://spdx.org/licenses/"))  {
 			return documentUri;
 		} else {
 			return documentUri + "#";
@@ -92,7 +138,7 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 	 * @return a URI based on the document URI and ID - if anonymous is true, the ID is returned
 	 */
 	public static String documentUriIdToUri(String documentUri, String id, boolean anonymous) {
-		return documentUriToNamespace(documentUri, anonymous) + id;
+		return anonymous ? id : documentUriToNamespace(documentUri) + id;
 	}
 	
 	/**
@@ -111,6 +157,21 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 	}
 	
 	/**
+	 * Convenience method to convert an SPDX 2.X style typed value to the current TypedValue
+	 * @param documentUri SPDX v2 Document URI
+	 * @param id ID consistent with SPDX v2 spec
+	 * @param modelStore store used
+	 * @param type SPDX type
+	 * @return TypedValue with the proper Object URI formed by the documentUri and ID
+	 * @throws SpdxInvalidIdException
+	 * @throws SpdxInvalidTypeException
+	 * @throws ModelRegistryException 
+	 */
+	public static TypedValue typedValueFromDocUri(String documentUri, String id, IModelStore store, String type) throws SpdxInvalidIdException, SpdxInvalidTypeException, ModelRegistryException {
+		return new TypedValue(documentUriIdToUri(documentUri, id, store), type, LATEST_SPDX_2X_VERSION);
+	}
+	
+	/**
 	 * @param store Store storing the objet URI
 	 * @param objectUri Object URI
 	 * @param documentUri SPDX 2 document URI for the ID
@@ -118,7 +179,7 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public static String objectUriToId(IModelStore store, String objectUri, String documentUri) throws InvalidSPDXAnalysisException {
-		return objectUriToId(store.getIdType(objectUri) == IdType.Anonymous, objectUri, documentUri);
+		return objectUriToId(store.isAnon(objectUri), objectUri, documentUri);
 	}
 	
 	/**
@@ -135,6 +196,15 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 		}
 		if (objectUri.startsWith(SpdxCoreConstants.LISTED_LICENSE_URL)) {
 			return objectUri.substring(SpdxCoreConstants.LISTED_LICENSE_URL.length());
+		}
+		if (objectUri.startsWith(SpdxCoreConstants.LISTED_LICENSE_NAMESPACE_PREFIX)) {
+			return objectUri.substring(SpdxCoreConstants.LISTED_LICENSE_NAMESPACE_PREFIX.length());
+		}
+		if ("http://spdx.org/rdf/terms#noassertion".equals(objectUri)) {
+			return "NOASSERTION";
+		}
+		if ("http://spdx.org/rdf/terms#none".equals(objectUri)) {
+			return "NONE";
 		}
 		Objects.requireNonNull(documentUri, "Document URI can not be null");
 		String nameSpace = documentUri + "#";
@@ -159,7 +229,7 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 	public void create(String documentUri, String id, String type)
 			throws InvalidSPDXAnalysisException {
 		baseStore.create(
-				new TypedValue(documentUriIdToUri(documentUri, id, baseStore), type, LATEST_SPDX_2X_VERSION));
+				new TypedValue(documentUriIdToUri(documentUri, id, this), type, LATEST_SPDX_2X_VERSION));
 	}
 	
 	@Override
@@ -178,6 +248,29 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 		return getPropertyValueDescriptors(documentUriIdToUri(documentUri, id, baseStore));
 	}
 	
+	/**
+	 * @param objectUri URI for the item
+	 * @return all property names stored for the Object URI
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public Collection<? extends String> getPropertyValueNames(
+			String objectUri) throws InvalidSPDXAnalysisException {
+		return StreamSupport.stream(getPropertyValueDescriptors(objectUri).spliterator(), false)
+						.map(descriptor -> descriptor.getName())
+								.collect(Collectors.toList());
+	}
+	
+	/**
+	 * @param documentUri document URI
+	 * @param id ID for the item
+	 * @return all property names stored for the documentUri#id
+	 * @throws InvalidSPDXAnalysisException 
+	 */
+	public Collection<? extends String> getPropertyValueNames(
+			String documentUri, String id) throws InvalidSPDXAnalysisException {
+		return getPropertyValueNames(documentUriIdToUri(documentUri, id, baseStore));
+	}
+	
 	@Override
 	public void setValue(String objectUri,
 			PropertyDescriptor propertyDescriptor, Object value)
@@ -189,6 +282,12 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 			PropertyDescriptor propertyDescriptor, Object value)
 			throws InvalidSPDXAnalysisException {
 		setValue(documentUriIdToUri(documentUri, id, baseStore), propertyDescriptor, value);
+	}
+	
+	public void setValue(String documentUri, String id,
+			String propertyName, Object value)
+			throws InvalidSPDXAnalysisException {
+		setValue(documentUriIdToUri(documentUri, id, baseStore), propNameToPropDescriptor(propertyName), value);
 	}
 
 	@Override
@@ -203,15 +302,17 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 			throws InvalidSPDXAnalysisException {
 		return getValue(documentUriIdToUri(documentUri, id, baseStore), propertyDescriptor);
 	}
+	
+	public Optional<Object> getValue(String documentUri, String id,
+			String propertyName)
+			throws InvalidSPDXAnalysisException {
+		return getValue(documentUriIdToUri(documentUri, id, baseStore), propNameToPropDescriptor(propertyName));
+	}
 
 	public String getNextId(IdType idType, String documentUri)
 			throws InvalidSPDXAnalysisException {
 		Objects.requireNonNull(documentUri, "SPDX V2 requires a namespace for generating next ID's");
-		if (documentUri.contains("://spdx.org/licenses")) {
-			return documentUri + baseStore.getNextId(idType);
-		} else {
-			return documentUri + "#" + baseStore.getNextId(idType);
-		}
+		return baseStore.getNextId(idType);
 	}
 
 	@Override
@@ -231,6 +332,12 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 			PropertyDescriptor propertyDescriptor)
 			throws InvalidSPDXAnalysisException {
 		removeProperty(documentUriIdToUri(documentUri, id, baseStore), propertyDescriptor);
+	}
+	
+	public void removeProperty(String documentUri, String id,
+			String propertyName)
+			throws InvalidSPDXAnalysisException {
+		removeProperty(documentUriIdToUri(documentUri, id, baseStore), propNameToPropDescriptor(propertyName));
 	}
 
 	@Override
@@ -266,6 +373,12 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 			throws InvalidSPDXAnalysisException {
 		return removeValueFromCollection(documentUriIdToUri(documentUri, id, baseStore), propertyDescriptor, value);
 	}
+	
+	public boolean removeValueFromCollection(String documentUri, String id,
+			String propertyName, Object value)
+			throws InvalidSPDXAnalysisException {
+		return removeValueFromCollection(documentUriIdToUri(documentUri, id, baseStore), propNameToPropDescriptor(propertyName), value);
+	}
 
 	@Override
 	public int collectionSize(String objectUri,
@@ -278,6 +391,12 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 			PropertyDescriptor propertyDescriptor)
 			throws InvalidSPDXAnalysisException {
 		return collectionSize(documentUriIdToUri(documentUri, id, baseStore), propertyDescriptor);
+	}
+	
+	public int collectionSize(String documentUri, String id,
+			String propertyName)
+			throws InvalidSPDXAnalysisException {
+		return collectionSize(documentUriIdToUri(documentUri, id, baseStore), propNameToPropDescriptor(propertyName));
 	}
 
 	@Override
@@ -292,6 +411,12 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 			throws InvalidSPDXAnalysisException {
 		return collectionContains(documentUriIdToUri(documentUri, id, baseStore), propertyDescriptor, value);
 	}
+	
+	public boolean collectionContains(String documentUri, String id,
+			String propertyName, Object value)
+			throws InvalidSPDXAnalysisException {
+		return collectionContains(documentUriIdToUri(documentUri, id, baseStore), propNameToPropDescriptor(propertyName), value);
+	}
 
 	@Override
 	public void clearValueCollection(String objectUri,
@@ -304,6 +429,12 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 			PropertyDescriptor propertyDescriptor)
 			throws InvalidSPDXAnalysisException {
 		clearValueCollection(documentUriIdToUri(documentUri, id, baseStore), propertyDescriptor);
+	}
+	
+	public void clearValueCollection(String documentUri, String id,
+			String propertyName)
+			throws InvalidSPDXAnalysisException {
+		clearValueCollection(documentUriIdToUri(documentUri, id, baseStore), propNameToPropDescriptor(propertyName));
 	}
 
 	@Override
@@ -318,6 +449,12 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 			throws InvalidSPDXAnalysisException {
 		return addValueToCollection(documentUriIdToUri(documentUri, id, baseStore), propertyDescriptor, value);
 	}
+	
+	public boolean addValueToCollection(String documentUri, String id,
+			String propertyName, Object value)
+			throws InvalidSPDXAnalysisException {
+		return addValueToCollection(documentUriIdToUri(documentUri, id, baseStore), propNameToPropDescriptor(propertyName), value);
+	}
 
 	@Override
 	public Iterator<Object> listValues(String objectUri,
@@ -331,7 +468,12 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 			throws InvalidSPDXAnalysisException {
 		return listValues(documentUriIdToUri(documentUri, id, baseStore), propertyDescriptor);
 	}
-
+	
+	public Iterator<Object> listValues(String documentUri, String id,
+			String propertyName)
+			throws InvalidSPDXAnalysisException {
+		return listValues(documentUriIdToUri(documentUri, id, baseStore), propNameToPropDescriptor(propertyName));
+	}
 	@Override
 	public boolean isCollectionMembersAssignableTo(String objectUri,
 			PropertyDescriptor propertyDescriptor, Class<?> clazz)
@@ -344,7 +486,12 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 			throws InvalidSPDXAnalysisException {
 		return isCollectionMembersAssignableTo(documentUriIdToUri(documentUri, id, baseStore), propertyDescriptor, clazz);
 	}
-
+	
+	public boolean isCollectionMembersAssignableTo(String documentUri,
+			String id, String propertyName, Class<?> clazz)
+			throws InvalidSPDXAnalysisException {
+		return isCollectionMembersAssignableTo(documentUriIdToUri(documentUri, id, baseStore), propNameToPropDescriptor(propertyName), clazz);
+	}
 	@Override
 	public boolean isPropertyValueAssignableTo(String objectUri,
 			PropertyDescriptor propertyDescriptor, Class<?> clazz, String specVersion)
@@ -356,6 +503,13 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 			PropertyDescriptor propertyDescriptor, Class<?> clazz)
 			throws InvalidSPDXAnalysisException {
 		return isPropertyValueAssignableTo(documentUriIdToUri(documentUri, id, baseStore), propertyDescriptor, 
+				clazz, LATEST_SPDX_2X_VERSION);
+	}
+	
+	public boolean isPropertyValueAssignableTo(String documentUri, String id,
+			String propertyName, Class<?> clazz)
+			throws InvalidSPDXAnalysisException {
+		return isPropertyValueAssignableTo(documentUriIdToUri(documentUri, id, baseStore), propNameToPropDescriptor(propertyName), 
 				clazz, LATEST_SPDX_2X_VERSION);
 	}
 
@@ -370,6 +524,12 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 			PropertyDescriptor propertyDescriptor)
 			throws InvalidSPDXAnalysisException {
 		return isCollectionProperty(documentUriIdToUri(documentUri, id, baseStore), propertyDescriptor);
+	}
+	
+	public boolean isCollectionProperty(String documentUri, String id,
+			String propertyName)
+			throws InvalidSPDXAnalysisException {
+		return isCollectionProperty(documentUriIdToUri(documentUri, id, baseStore), propNameToPropDescriptor(propertyName));
 	}
 
 	@Override
@@ -414,7 +574,7 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 	
 	@Override
 	public boolean equals(Object comp) {
-		return comp instanceof CompatibleModelStoreWrapper && super.equals(((CompatibleModelStoreWrapper)comp).getBaseModelStore());
+		return comp instanceof CompatibleModelStoreWrapper && getBaseModelStore().equals(((CompatibleModelStoreWrapper)comp).getBaseModelStore());
 		// TODO: Return true if the base is equal since this contains no properties
 	}
 	
@@ -424,21 +584,7 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 	}
 
 	@Override
-	public IExternalElementInfo addExternalReference(String externalObjectUri,
-			String collectionUri, IExternalElementInfo externalElementInfo) {
-		return this.baseStore.addExternalReference(externalObjectUri, collectionUri, externalElementInfo);
+	public boolean isAnon(String objectUri) {
+		return baseStore.isAnon(objectUri);
 	}
-
-	@Override
-	public Map<String, IExternalElementInfo> getExternalReferenceMap(
-			String externalObjectUri) {
-		return this.baseStore.getExternalReferenceMap(externalObjectUri);
-	}
-
-	@Override
-	public IExternalElementInfo getExternalElementInfo(String externalObjectUri,
-			String collectionUri) {
-		return this.baseStore.getExternalElementInfo(externalObjectUri, collectionUri);
-	}
-
 }

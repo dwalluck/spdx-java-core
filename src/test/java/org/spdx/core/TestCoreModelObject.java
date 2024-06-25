@@ -140,17 +140,17 @@ public class TestCoreModelObject {
 		
 		// String
 		String strValue = "This is a string";
-		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, STRING_PROPERTY_DESCRIPTOR, strValue, copyManager);
+		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, STRING_PROPERTY_DESCRIPTOR, strValue, copyManager, null);
 		// boolean
-		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, BOOLEAN_PROPERTY_DESCRIPTOR, false, copyManager);
+		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, BOOLEAN_PROPERTY_DESCRIPTOR, false, copyManager, null);
 		// enumeration
-		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, ENUM_PROPERTY_DESCRIPTOR, MockEnum.ENUM1, copyManager);
+		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, ENUM_PROPERTY_DESCRIPTOR, MockEnum.ENUM1, copyManager, null);
 		// individual
 		MockIndividual individual = new MockIndividual();
-		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, INDIVIDUAL_PROPERTY_DESCRIPTOR, individual, copyManager);
+		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, INDIVIDUAL_PROPERTY_DESCRIPTOR, individual, copyManager, null);
 		// collection
 		Collection<String> c1 = Arrays.asList(new String[] {"s1", "s2"});
-		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, COLLECTION_PROPERTY_DESCRIPTOR, c1, copyManager);
+		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, COLLECTION_PROPERTY_DESCRIPTOR, c1, copyManager, null);
 		List<PropertyDescriptor> result = modelType.getPropertyValueDescriptors();
 		List<PropertyDescriptor> expected = Arrays.asList(new PropertyDescriptor[] {
 				STRING_PROPERTY_DESCRIPTOR, BOOLEAN_PROPERTY_DESCRIPTOR, 
@@ -168,7 +168,7 @@ public class TestCoreModelObject {
 	public void testGetObjectPropertyValue() throws InvalidSPDXAnalysisException {
 		String valueObjectUri = "https://value/object/uri";
 		MockModelType value = new MockModelType(modelStore, valueObjectUri, copyManager, true, "3.0.0");
-		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, OBJECT_PROPERTY_DESCRIPTOR, value, copyManager);
+		ModelObjectHelper.setPropertyValue(modelStore, OBJECT_URI, OBJECT_PROPERTY_DESCRIPTOR, value, copyManager, null);
 		Optional<Object> result = modelType.getObjectPropertyValue(OBJECT_PROPERTY_DESCRIPTOR);
 		assertTrue(result.isPresent());
 		assertTrue(result.get() instanceof MockModelType);

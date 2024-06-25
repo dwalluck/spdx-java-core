@@ -127,10 +127,11 @@ public class ModelRegistry {
 	/**
 	 * @param individualUri URI for the individual
 	 * @param specVersion version of the SPDX spec the object complies with
+	 * @param type optional type hint - used for individuals where the type may be ambiguous
 	 * @return Individual represented by the URI
 	 * @throws ModelRegistryException 
 	 */
-	public Object uriToIndividual(String individualUri, String specVersion) throws ModelRegistryException {
+	public Object uriToIndividual(String individualUri, String specVersion, @Nullable Class<?> type) throws ModelRegistryException {
 		Objects.requireNonNull(specVersion, SPEC_VERSION_NULL_MSG);
 		Objects.requireNonNull(individualUri, "individualURI must not be null");
 		lock.readLock().lock();
@@ -138,7 +139,7 @@ public class ModelRegistry {
 			if (!containsSpecVersion(specVersion)) {
 				throw new ModelRegistryException(specVersion + DOES_NOT_EXIST_MSG);
 			}
-			return registeredModels.get(specVersion).uriToIndividual(individualUri);
+			return registeredModels.get(specVersion).uriToIndividual(individualUri, type);
 		} finally {
 			lock.readLock().unlock();
 		}

@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import org.spdx.storage.IModelStore;
 
 /**
@@ -48,7 +50,7 @@ public class MockModelInfo implements ISpdxModelInfo {
 	}
 
 	@Override
-	public Object uriToIndividual(String uri) {
+	public Object uriToIndividual(String uri, @Nullable Class<?> type) {
 		return URI_TO_INDIVIDUAL_MAP.get(uri);
 	}
 

@@ -84,16 +84,17 @@ public class SimpleUriValue implements IndividualUriValue {
 	 * @param store store to use for the inflated object
 	 * @param copyManager if non-null, implicitly copy any referenced properties from other model stores
 	 * @param specVersion version of the SPDX spec the object complies with
+	 * @param type optional type hint - used for individuals where the type may be ambiguous
 	 * @return Enum, ExternalSpdxElement or itself depending on the pattern
 	 * @throws InvalidSPDXAnalysisException on any store or parsing error
 	 */
 	public Object toModelObject(IModelStore store, IModelCopyManager copyManager,
-			String specVersion) throws InvalidSPDXAnalysisException {
+			String specVersion, Class<?> type) throws InvalidSPDXAnalysisException {
 		Object retval = ModelRegistry.getModelRegistry().uriToEnum(uri, specVersion);
 		if (Objects.nonNull(retval)) {
 			return retval;
 		}
-		retval = ModelRegistry.getModelRegistry().uriToIndividual(uri, specVersion);
+		retval = ModelRegistry.getModelRegistry().uriToIndividual(uri, specVersion, type);
 		if (Objects.nonNull(retval)) {
 			return retval;
 		}
