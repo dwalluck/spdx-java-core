@@ -76,7 +76,7 @@ public class TestModelRegistry {
 			public CoreModelObject createModelObject(IModelStore modelStore,
 					String objectUri, String type,
 					IModelCopyManager copyManager, String specVersion,
-					boolean create) throws InvalidSPDXAnalysisException {
+					boolean create, String idPrefix) throws InvalidSPDXAnalysisException {
 				return new MockModelType(modelStore, objectUri, copyManager, create, specVersion);
 			}
 
@@ -93,7 +93,7 @@ public class TestModelRegistry {
 		});
 		assertTrue(ModelRegistry.getModelRegistry().containsSpecVersion("3.0.0"));
 		CoreModelObject result = ModelRegistry.getModelRegistry().inflateModelObject(modelStore, OBJECT_URI, MockModelType.TYPE,
-				copyManager, "3.0.0", true);
+				copyManager, "3.0.0", true, null);
 		assertEquals(OBJECT_URI, result.getObjectUri());
 		Object oResult = ModelRegistry.getModelRegistry().getExternalElement(modelStore, OBJECT_URI, copyManager, "3.0.0");
 		assertTrue(oResult instanceof MockModelType);

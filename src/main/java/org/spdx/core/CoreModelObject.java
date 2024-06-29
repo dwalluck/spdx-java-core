@@ -19,6 +19,7 @@ package org.spdx.core;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -137,30 +138,42 @@ public abstract class CoreModelObject {
 		this.specVersion = specVersion;
 		this.idPrefix = idPrefix;
 
-		Optional<TypedValue> existing = modelStore.getTypedValue(objectUri);
-		if (existing.isPresent()) {
-			if (create && !existing.get().getType().equals(getType())) {
-				String msg = "Can not create "+objectUri+".  It is already in use with type "+existing.get().getType()+" which is incompatible with type "+getType();
-				logger.error(msg);
-				throw new SpdxIdInUseException(msg);
-			}
-		} else {
-			if (create) {
-				IModelStoreLock lock = enterCriticalSection(false);
-				// re-check since previous check was done outside of the lock
-				try {
-					if (!modelStore.exists(objectUri)) {
-						modelStore.create(new TypedValue(objectUri, getType(), specVersion));
-					}
-				} finally {
-					lock.unlock();
+		if (!isExternal()) {
+			Optional<TypedValue> existing = modelStore.getTypedValue(objectUri);
+			if (existing.isPresent()) {
+				if (create && !existing.get().getType().equals(getType())) {
+					String msg = "Can not create "+objectUri+".  It is already in use with type "+existing.get().getType()+" which is incompatible with type "+getType();
+					logger.error(msg);
+					throw new SpdxIdInUseException(msg);
 				}
 			} else {
-				String msg = objectUri+" does not exist";
-				logger.error(msg);
-				throw new SpdxIdNotFoundException(msg);
+				if (create) {
+					IModelStoreLock lock = enterCriticalSection(false);
+					// re-check since previous check was done outside of the lock
+					try {
+						if (!modelStore.exists(objectUri)) {
+							modelStore.create(new TypedValue(objectUri, getType(), specVersion));
+						}
+					} finally {
+						lock.unlock();
+					}
+				} else {
+					String msg = objectUri+" does not exist";
+					logger.error(msg);
+					throw new SpdxIdNotFoundException(msg);
+				}
 			}
 		}
+	}
+	
+	
+	/**
+	 * NOTE: Subclasses the represent model object not stored in the modelStore should override this method
+	 * and set it to true
+	 * @return true if this model object is external to the store
+	 */
+	public boolean isExternal() {
+		return false;
 	}
 
 	/**
@@ -281,7 +294,11 @@ public abstract class CoreModelObject {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public List<PropertyDescriptor> getPropertyValueDescriptors() throws InvalidSPDXAnalysisException {
-		return modelStore.getPropertyValueDescriptors(this.objectUri);
+		if (isExternal()) {
+			return Collections.unmodifiableList(new ArrayList<>());
+		} else {
+			return modelStore.getPropertyValueDescriptors(this.objectUri);
+		}
 	}
 	
 	/**
@@ -301,6 +318,9 @@ public abstract class CoreModelObject {
 	 */
 	public Optional<Object> getObjectPropertyValue(PropertyDescriptor propertyDescriptor,
 			@Nullable Class<?> type) throws InvalidSPDXAnalysisException {
+		if (isExternal()) {
+			return Optional.empty();
+		}
 		Optional<Object> retval = ModelObjectHelper.getObjectPropertyValue(modelStore, objectUri, 
 				propertyDescriptor, copyManager, specVersion, type, idPrefix);
 		if (retval.isPresent() && retval.get() instanceof CoreModelObject && !strict) {
@@ -318,6 +338,10 @@ public abstract class CoreModelObject {
 	public void setPropertyValue(PropertyDescriptor propertyDescriptor, @Nullable Object value) throws InvalidSPDXAnalysisException {
 		if (this instanceof IndividualUriValue) {
 			throw new InvalidSPDXAnalysisException("Can not set a property for the literal value "+((IndividualUriValue)this).getIndividualURI());
+		}
+		if (isExternal()) {
+			logger.warn("Attempting to set "+propertyDescriptor+" for an external model object");
+			return;
 		}
 		ModelObjectHelper.setPropertyValue(this.modelStore, objectUri, propertyDescriptor, value, 
 				copyManager, idPrefix);
@@ -436,6 +460,10 @@ public abstract class CoreModelObject {
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void removeProperty(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
+		if (isExternal()) {
+			logger.warn("Attempting to set "+propertyDescriptor+" for an external model object");
+			return;
+		}
 		ModelObjectHelper.removeProperty(modelStore, objectUri, propertyDescriptor);
 	}
 	
@@ -455,6 +483,10 @@ public abstract class CoreModelObject {
 	 * @param propertyDescriptor Descriptor for the property
 	 */
 	public void clearValueCollection(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
+		if (isExternal()) {
+			logger.warn("Attempting to set "+propertyDescriptor+" for an external model object");
+			return;
+		}
 		ModelObjectHelper.clearValueCollection(modelStore, objectUri, propertyDescriptor);
 	}
 	
@@ -477,6 +509,10 @@ public abstract class CoreModelObject {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public void addPropertyValueToCollection(PropertyDescriptor propertyDescriptor, Object value) throws InvalidSPDXAnalysisException {
+		if (isExternal()) {
+			logger.warn("Attempting to set "+propertyDescriptor+" for an external model object");
+			return;
+		}
 		ModelObjectHelper.addValueToCollection(modelStore, objectUri, propertyDescriptor, value, 
 				copyManager, idPrefix);
 	}
@@ -502,6 +538,10 @@ public abstract class CoreModelObject {
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	public void removePropertyValueFromCollection(PropertyDescriptor propertyDescriptor, Object value) throws InvalidSPDXAnalysisException {
+		if (isExternal()) {
+			logger.warn("Attempting to set "+propertyDescriptor+" for an external model object");
+			return;
+		}
 		ModelObjectHelper.removePropertyValueFromCollection(modelStore, objectUri, propertyDescriptor, value);
 	}
 	
@@ -807,7 +847,7 @@ public abstract class CoreModelObject {
 		try {
 			CoreModelObject retval = ModelRegistry.getModelRegistry().inflateModelObject(
 					modelStore, objectUri, this.getType(), 
-					this.copyManager, this.specVersion, true);
+					this.copyManager, this.specVersion, true, getIdPrefix());
 			retval.copyFrom(this);
 			return retval;
 		} catch (InvalidSPDXAnalysisException e) {
@@ -821,6 +861,10 @@ public abstract class CoreModelObject {
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public void copyFrom(CoreModelObject source) throws InvalidSPDXAnalysisException {
+		if (isExternal()) {
+			logger.warn("Attempting to copy from a source to an external model object");
+			return;
+		}
 		if (Objects.isNull(copyManager)) {
 			throw new InvalidSPDXAnalysisException("Copying is not enabled for "+objectUri);
 		}

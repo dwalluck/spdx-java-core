@@ -57,7 +57,7 @@ public class MockModelInfo implements ISpdxModelInfo {
 	@Override
 	public CoreModelObject createModelObject(IModelStore modelStore,
 			String objectUri, String type, IModelCopyManager copyManager,
-			String specVersion, boolean create)
+			String specVersion, boolean create, String idPrefix)
 			throws InvalidSPDXAnalysisException {
 		if (type.equals(MockModelType.TYPE)) {
 			return new MockModelType(modelStore, objectUri, copyManager, create, specVersion);

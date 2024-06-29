@@ -100,7 +100,8 @@ public class SimpleUriValue implements IndividualUriValue {
 		}
 		Optional<TypedValue> typedValue = store.getTypedValue(uri);
 		if (typedValue.isPresent()) {
-			return ModelRegistry.getModelRegistry().inflateModelObject(store, uri, typedValue.get().type, copyManager, specVersion, false);
+			return ModelRegistry.getModelRegistry().inflateModelObject(store, uri, typedValue.get().type, 
+					copyManager, specVersion, false, null); // note that idPrefix would not be used since any any of the inflated model objects
 		} else {
 			retval = ModelRegistry.getModelRegistry().getExternalElement(store, uri, copyManager, specVersion);
 			if (Objects.isNull(retval)) {

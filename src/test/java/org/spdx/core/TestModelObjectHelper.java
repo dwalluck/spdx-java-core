@@ -243,26 +243,26 @@ public class TestModelObjectHelper {
 	public void testOptionalStoredObjectToModelObject() throws InvalidSPDXAnalysisException {
 		// TypedValue
 		Optional<Object> tv = Optional.of(new TypedValue(OBJECT_URI, MockModelType.TYPE, "3.0.0"));
-		Optional<Object> result = ModelObjectHelper.optionalStoredObjectToModelObject(tv, modelStore, copyManager, "3.0.0", null);
+		Optional<Object> result = ModelObjectHelper.optionalStoredObjectToModelObject(tv, modelStore, copyManager, "3.0.0", null, null);
 		assertTrue(result.isPresent());
 		assertTrue(result.get() instanceof MockModelType);
 		assertEquals(OBJECT_URI, ((MockModelType)result.get()).getObjectUri());
 		// Enum
-		result = ModelObjectHelper.optionalStoredObjectToModelObject(Optional.of(MockEnum.ENUM1), modelStore, copyManager, "3.0.0", null);
+		result = ModelObjectHelper.optionalStoredObjectToModelObject(Optional.of(MockEnum.ENUM1), modelStore, copyManager, "3.0.0", null, null);
 		assertTrue(result.isPresent());
 		assertEquals(MockEnum.ENUM1, result.get());
 		// Individual URI
-		result = ModelObjectHelper.optionalStoredObjectToModelObject(Optional.of(new MockIndividual()), modelStore, copyManager, "3.0.0", null);
+		result = ModelObjectHelper.optionalStoredObjectToModelObject(Optional.of(new MockIndividual()), modelStore, copyManager, "3.0.0", null, null);
 		assertTrue(result.isPresent());
 		assertTrue(result.get() instanceof MockIndividual);
 		assertEquals(MockIndividual.INDIVIDUAL_URI, ((MockIndividual)result.get()).getIndividualURI());
 		// String
 		String s = "string";
-		result = ModelObjectHelper.optionalStoredObjectToModelObject(Optional.of(s), modelStore, copyManager, "3.0.0", null);
+		result = ModelObjectHelper.optionalStoredObjectToModelObject(Optional.of(s), modelStore, copyManager, "3.0.0", null, null);
 		assertTrue(result.isPresent());
 		assertEquals(s, result.get());
 		// empty
-		result = ModelObjectHelper.optionalStoredObjectToModelObject(Optional.empty(), modelStore, copyManager, "3.0.0", null);
+		result = ModelObjectHelper.optionalStoredObjectToModelObject(Optional.empty(), modelStore, copyManager, "3.0.0", null, null);
 		assertFalse(result.isPresent());
 	}
 
@@ -305,19 +305,19 @@ public class TestModelObjectHelper {
 	public void testStoredObjectToModelObject() throws InvalidSPDXAnalysisException {
 		// TypedValue
 		String valueObjectUri = "https://value/object/uri";
-		Object result = ModelObjectHelper.storedObjectToModelObject(new TypedValue(valueObjectUri, MockModelType.TYPE, "3.0.0"), modelStore, copyManager, "3.0.0", null);
+		Object result = ModelObjectHelper.storedObjectToModelObject(new TypedValue(valueObjectUri, MockModelType.TYPE, "3.0.0"), modelStore, copyManager, "3.0.0", null, null);
 		assertTrue(result instanceof MockModelType);
 		assertEquals(valueObjectUri, ((MockModelType)result).getObjectUri());
 		// Enum
-		result = ModelObjectHelper.storedObjectToModelObject(MockEnum.ENUM1, modelStore, copyManager, "3.0.0", null);
+		result = ModelObjectHelper.storedObjectToModelObject(MockEnum.ENUM1, modelStore, copyManager, "3.0.0", null, null);
 		assertEquals(MockEnum.ENUM1, result);
 		// Individual URI
-		result = ModelObjectHelper.storedObjectToModelObject(new MockIndividual(), modelStore, copyManager, "3.0.0", null);
+		result = ModelObjectHelper.storedObjectToModelObject(new MockIndividual(), modelStore, copyManager, "3.0.0", null, null);
 		assertTrue(result instanceof MockIndividual);
 		assertEquals(MockIndividual.INDIVIDUAL_URI, ((MockIndividual)result).getIndividualURI());
 		// String
 		String s = "string";
-		result = ModelObjectHelper.storedObjectToModelObject(s, modelStore, copyManager, "3.0.0", null);
+		result = ModelObjectHelper.storedObjectToModelObject(s, modelStore, copyManager, "3.0.0", null, null);
 		assertEquals(s, result);
 	}
 

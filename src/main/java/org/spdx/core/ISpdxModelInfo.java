@@ -57,11 +57,12 @@ public interface ISpdxModelInfo {
 	 * @param copyManager if non-null, implicitly copy any referenced properties from other model stores
 	 * @param specVersion version of the SPDX specification used by the model object
 	 * @param create if true, create the model object ONLY if it does not already exist
+	 * @param idPrefix optional prefix used for any new object URI's created in support of this model object
 	 * @return fully inflated model object of type type
 	 */
 	public CoreModelObject createModelObject(IModelStore modelStore,
 			String objectUri, String type, IModelCopyManager copyManager,
-			String specVersion, boolean create) throws InvalidSPDXAnalysisException;
+			String specVersion, boolean create, @Nullable String idPrefix) throws InvalidSPDXAnalysisException;
 
 	/**
 	 * @return a map of string representation of types to classes which implement those types

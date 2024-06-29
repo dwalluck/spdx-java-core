@@ -157,12 +157,13 @@ public class ModelRegistry {
 	 * @param externalMap map of URI's to ExternalMaps for any external elements
 	 * @param specVersion version of the SPDX spec the object complies with
 	 * @param create if true, create the model object ONLY if it does not already exist
+	 * @param idPrefix optional prefix used for any new object URI's created in support of this model object
 	 * @return model object of type type
 	 * @throws InvalidSPDXAnalysisException 
 	 */
 	public CoreModelObject inflateModelObject(IModelStore modelStore, String objectUri, 
 			String type, IModelCopyManager copyManager,
-			String specVersion, boolean create) throws InvalidSPDXAnalysisException {
+			String specVersion, boolean create, String idPrefix) throws InvalidSPDXAnalysisException {
 		Objects.requireNonNull(specVersion, SPEC_VERSION_NULL_MSG);
 		Objects.requireNonNull(objectUri, URI_NULL_MSG);
 		Objects.requireNonNull(modelStore, STORE_NULL_MSG);
@@ -173,7 +174,7 @@ public class ModelRegistry {
 				throw new ModelRegistryException(specVersion + DOES_NOT_EXIST_MSG);
 			}
 			return registeredModels.get(specVersion).createModelObject(modelStore, objectUri, 
-					type, copyManager, specVersion, create);
+					type, copyManager, specVersion, create, idPrefix);
 		} finally {
 			lock.readLock().unlock();
 		}

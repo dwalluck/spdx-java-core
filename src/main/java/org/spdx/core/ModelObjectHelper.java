@@ -68,7 +68,7 @@ public class ModelObjectHelper {
 						null, specVersion, idPrefix));
 			} else {
 				return optionalStoredObjectToModelObject(modelStore.getValue(objectUri,
-						propertyDescriptor), modelStore, copyManager, specVersion, type);
+						propertyDescriptor), modelStore, copyManager, specVersion, type, idPrefix);
 			}
 		} finally {
 			lock.unlock();
@@ -181,26 +181,27 @@ public class ModelObjectHelper {
 	 * Converts any typed value or IndividualValue objects to a ModelObject,
 	 * returning an existing ModelObject if it exists or creates a new ModelObject
 	 * 
-	 * @param value         Value which may be a TypedValue
+	 * @param value Value which may be a TypedValue
 	 * @param modelStore  ModelStore to use in fetching or creating
 	 * @param copyManager   if not null, copy any referenced ID's outside of this
 	 *                      document/model store
 	 * @param specVersion - version of the SPDX spec the object complies with
 	 * @param type optional type hint - used for individuals where the type may be ambiguous
+	 * @param idPrefix Prefix to be used if any new object URI's are generated
 	 * @return the object itself unless it is a TypedValue, in which case a
 	 *         ModelObject is returned
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	public static Optional<Object> optionalStoredObjectToModelObject(Optional<Object> value, 
 			IModelStore modelStore, IModelCopyManager copyManager, String specVersion,
-			@Nullable Class<?> type) throws InvalidSPDXAnalysisException {
+			@Nullable Class<?> type, String idPrefix) throws InvalidSPDXAnalysisException {
 		if (value.isPresent() && value.get() instanceof IndividualUriValue) {
 			return Optional.ofNullable(new SimpleUriValue((IndividualUriValue)value.get()).toModelObject(modelStore, copyManager, 
 					specVersion, type));
 		} else if (value.isPresent() && value.get() instanceof TypedValue) {
 			TypedValue tv = (TypedValue)value.get();
 			return Optional.of(ModelRegistry.getModelRegistry().inflateModelObject(modelStore, 
-					tv.getObjectUri(), tv.getType(), copyManager, specVersion, false));
+					tv.getObjectUri(), tv.getType(), copyManager, specVersion, false, idPrefix));
 		} else {
 			return value;
 		}
@@ -208,11 +209,10 @@ public class ModelObjectHelper {
 	
 	/**
 	 * Converts a model object to the object to be stored
-	 * @param value
-	 * @param modelStore
-	 * @param idPrefix Prefix to be used if any new object URI's are generated
+	 * @param value Value which may be a TypedValue
+	 * @param modelStore ModelStore to use in fetching or creating
 	 * @param copyManager if not null, copy any referenced ID's outside of this document/model store
-	 * 
+	 * @param idPrefix Prefix to be used if any new object URI's are generated
 	 * @return Model Object appropriate type
 	 * @throws InvalidSPDXAnalysisException 
 	 */
@@ -252,19 +252,21 @@ public class ModelObjectHelper {
 	 *                    document/model store
 	 * @param specVersion - version of the SPDX spec the object complies with
 	 * @param type optional type hint - used for individuals where the type may be ambiguous
+	 * @param idPrefix Prefix to be used if any new object URI's are generated
 	 * @return the object itself unless it is a TypedValue, in which case a
 	 *         ModelObject is returned
 	 * @throws InvalidSPDXAnalysisException
 	 */
 	public static Object storedObjectToModelObject(Object value, IModelStore modelStore,
-			IModelCopyManager copyManager, String specVersion, @Nullable Class<?> type) throws InvalidSPDXAnalysisException {
+			IModelCopyManager copyManager, String specVersion, @Nullable Class<?> type,
+			String idPrefix) throws InvalidSPDXAnalysisException {
 		if (value instanceof IndividualUriValue) {	// Note: this must be before the check for TypedValue
 			SimpleUriValue suv = new SimpleUriValue((IndividualUriValue)value);
 			return suv.toModelObject(modelStore, copyManager, specVersion, type);
 		} else if (value instanceof TypedValue) {
 			TypedValue tv = (TypedValue)value;
 			return ModelRegistry.getModelRegistry().inflateModelObject(modelStore, tv.getObjectUri(),
-					tv.getType(), copyManager, specVersion, true);
+					tv.getType(), copyManager, specVersion, true, idPrefix);
 		} else {
 			return value;
 		}
