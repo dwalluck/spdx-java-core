@@ -23,36 +23,20 @@ package org.spdx.licenseTemplate;
  */
 public class InvalidLicenseTemplateException extends Exception {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * 
-	 */
 	public InvalidLicenseTemplateException() {
 		super();
 	}
 
-	/**
-	 * @param message
-	 */
 	public InvalidLicenseTemplateException(String message) {
 		super(message);
 	}
 
-	/**
-	 * @param cause
-	 */
 	public InvalidLicenseTemplateException(Throwable cause) {
 		super(cause);
 	}
 
-	/**
-	 * @param message
-	 * @param cause
-	 */
 	public InvalidLicenseTemplateException(String message, Throwable cause) {
 		super(message, cause);
 	}

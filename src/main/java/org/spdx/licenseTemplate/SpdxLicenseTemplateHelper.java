@@ -50,8 +50,8 @@ public class SpdxLicenseTemplateHelper {
 	 * @param licenseTemplate       License template to be parsed
 	 * @param templateOutputHandler Handles the text, optional text, and variable
 	 *                              rules text found
-	 * @throws LicenseTemplateRuleException
-	 * @throws LicenseParserException
+	 * @throws LicenseTemplateRuleException if the rule can not be parsed
+	 * @throws LicenseParserException if the license can not be parsed
 	 */
 	public static void parseTemplate(String licenseTemplate, ILicenseTemplateOutputHandler templateOutputHandler)
 			throws LicenseTemplateRuleException, LicenseParserException {
@@ -105,10 +105,9 @@ public class SpdxLicenseTemplateHelper {
 	/**
 	 * Converts a license template string to formatted HTML which highlights any
 	 * rules or tags
-	 * 
-	 * @param licenseTemplate
-	 * @return
-	 * @throws LicenseTemplateRuleException
+	 * @param licenseTemplate standard license template
+	 * @return an HTML representation of the license template
+	 * @throws LicenseTemplateRuleException on an rule parsing errors
 	 */
 	public static String templateTextToHtml(String licenseTemplate) throws LicenseTemplateRuleException {
 		HtmlTemplateOutputHandler htmlOutput = new HtmlTemplateOutputHandler();
@@ -124,9 +123,9 @@ public class SpdxLicenseTemplateHelper {
 	 * Converts template text to standard default text using any default parameters
 	 * in the rules
 	 * 
-	 * @param template
-	 * @return
-	 * @throws LicenseTemplateRuleException
+	 * @param template standard license template
+	 * @return text representation of the license
+	 * @throws LicenseTemplateRuleException on any rule parsing errors
 	 */
 	public static String templateToText(String template) throws LicenseTemplateRuleException {
 		TextTemplateOutputHandler textOutput = new TextTemplateOutputHandler();
@@ -142,7 +141,7 @@ public class SpdxLicenseTemplateHelper {
 	 * Escapes and formats text
 	 * 
 	 * @param text unformatted text
-	 * @return
+	 * @return text suitable for inclusion in HTML
 	 */
 	public static String formatEscapeHTML(String text) {
 		return formatEscapeHTML(text, false);
@@ -151,9 +150,9 @@ public class SpdxLicenseTemplateHelper {
 	/**
 	 * Escapes and formats text
 	 * 
-	 * @param text        unformatted text
+	 * @param text unformatted text
 	 * @param inParagraph true if inside a paragraph tag
-	 * @return
+	 * @return text escapted and formatted for inclusion in HTML
 	 */
 	public static String formatEscapeHTML(String text, boolean inParagraph) {
 		String retval = StringEscapeUtils.escapeXml11(text);
@@ -167,7 +166,7 @@ public class SpdxLicenseTemplateHelper {
 	 * }
 	 * 
 	 * @param text unformatted text
-	 * @return
+	 * @return HTML formatted text
 	 */
 	public static String addHtmlFormatting(String text) {
 		return addHtmlFormatting(text, false);
@@ -181,7 +180,7 @@ public class SpdxLicenseTemplateHelper {
 	 * 
 	 * @param text        unformatted text
 	 * @param inParagraph true if inside a paragraph tag
-	 * @return
+	 * @return HTML formatted text
 	 */
 	public static String addHtmlFormatting(String text, boolean inParagraph) {
 		String[] lines = text.split("\n");
@@ -223,8 +222,8 @@ public class SpdxLicenseTemplateHelper {
 	 * Creating a paragraph tag and add the correct margin considering the number of
 	 * spaces or tabs
 	 * 
-	 * @param string
-	 * @return
+	 * @param line line of license text
+	 * @return text incluing any paragraph tags
 	 */
 	private static String getParagraphTagConsideringTags(String line) {
 		int numSpaces = countLeadingSpaces(line);
@@ -248,8 +247,8 @@ public class SpdxLicenseTemplateHelper {
 	/**
 	 * Counts the number of leading spaces in a given line
 	 * 
-	 * @param string
-	 * @return
+	 * @param string input string
+	 * @return number of leading spaces
 	 */
 	private static int countLeadingSpaces(String string) {
 		char[] charArray = string.toCharArray();
@@ -264,8 +263,8 @@ public class SpdxLicenseTemplateHelper {
 	 * Converts an HTML string to text preserving line breaks for {@code <br/>
 	 * } tags
 	 * 
-	 * @param html
-	 * @return
+	 * @param html string of HTML formatted text
+	 * @return text representation of the HTML
 	 */
 	public static String htmlToText(String html) {
 		String newlineString = "NewLineGoesHere";

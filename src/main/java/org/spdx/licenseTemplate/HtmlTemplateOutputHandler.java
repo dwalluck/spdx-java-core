@@ -74,6 +74,9 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 		}
 	}
 
+	/**
+	 * @return true if the htmlString ends in a paragraph tag
+	 */
 	private boolean endsInEndParagraph() {
 		int lastEndParagraph = this.htmlString.lastIndexOf(END_PARAGRAPH_TAG);
 		return (lastEndParagraph == this.htmlString.length()-END_PARAGRAPH_TAG.length()) ;
@@ -94,7 +97,7 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 	 * Format HTML for a replaceable string
 	 * @param text text for the optional license string
 	 * @param objectUri ID used for the div 
-	 * @return
+	 * @return a replaceable string
 	 */
 	public static String formatReplaceabledHTML(String text, String id) {
 		StringBuilder sb = new StringBuilder();
@@ -115,8 +118,8 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 
 	/**
 	 * Escape the ID string to conform to the legal characters for an HTML ID string
-	 * @param objectUri
-	 * @return
+	 * @param id an SPDX ID string
+	 * @return the id escaped for HTML
 	 */
 	public static String escapeIdString(String id) {
 		String retval = id;
@@ -134,7 +137,7 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 	}
 
 	/**
-	 * @param c
+	 * @param c character
 	 * @return true if c is a valid character for an ID string
 	 */
 	private static boolean validIdChar(char c) {
@@ -168,7 +171,7 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 	/**
 	 * Format HTML for an optional string
 	 * @param objectUri ID used for the div 
-	 * @return
+	 * @return a formated id for use in the div
 	 */
 	public static String formatStartOptionalHTML(String id) {
 		StringBuilder sb = new StringBuilder();
@@ -184,6 +187,10 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 		return sb.toString();
 	}
 
+	/**
+	 * @param inParagraph true if in a paragraph
+	 * @return a string for formatting the end of an Optional HTML element
+	 */
 	public static String formatEndOptionalHTML(boolean inParagraph) {
 		if (inParagraph) {
 			return "</div>\n</p>\n";

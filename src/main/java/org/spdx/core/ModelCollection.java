@@ -57,6 +57,12 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 	//TODO: See if this boolean is needed before deleting the comments
 //	private boolean licensePrimitiveAssignable;  // If true, NONE and NOASSERTION should be converted to NoneLicense and NoAssertionLicense
 	
+	/**
+	 * @author Gary O'Neall
+	 * 
+	 * Iterator over the model collection
+	 *
+	 */
 	class ModelCollectionIterator implements Iterator<Object> {
 		
 		private Iterator<Object> storageIterator;
@@ -149,6 +155,11 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 		}
 	}
 	
+	/**
+	 * Converts a typedValue to a model object checking for type compatibility
+	 * @param value value to convert
+	 * @return model object
+	 */
 	private Object checkConvertTypedValue(Object value) {
 		try {
 			Object retval = ModelObjectHelper.storedObjectToModelObject(value, modelStore, copyManager, 
@@ -175,6 +186,9 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 		return checkConvertTypedValue(value);
 	};
 	
+	/**
+	 * @return a list of objects for the model collection
+	 */
 	public List<Object> toImmutableList() {
 		return Collections.unmodifiableList(StreamSupport.stream(
 				Spliterators.spliteratorUnknownSize(this.iterator(), Spliterator.ORDERED), false).map(checkConvertTypedValue)

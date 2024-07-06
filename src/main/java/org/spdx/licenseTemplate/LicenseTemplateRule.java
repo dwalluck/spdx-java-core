@@ -51,7 +51,7 @@ public class LicenseTemplateRule {
 	 * @param type - type of rule
 	 * @param original - Original text - must not be null
 	 * @param example - Example text - may be null
-	 * @throws LicenseTemplateRuleException 
+	 * @throws LicenseTemplateRuleException if the license template could not be parsed
 	 */
 	public LicenseTemplateRule(String name, RuleType type, String original, String match, String example) throws LicenseTemplateRuleException {
 		this.type = type;
@@ -81,7 +81,7 @@ public class LicenseTemplateRule {
 	
 	/**
 	 * Validates that the LicenseTemplateRule is properly initialized
-	 * @throws LicenseTemplateRuleException 
+	 * @throws LicenseTemplateRuleException if the license template could not be parsed
 	 */
 	public void validate() throws LicenseTemplateRuleException {
 		if (this.type == null) {
@@ -101,8 +101,8 @@ public class LicenseTemplateRule {
 	/**
 	 * Create a new License Template Rule by parsing a rule string compliant with the SPDX
 	 * License Template text
-	 * @param parseableLicenseTemplateRule
-	 * @throws LicenseTemplateRuleException 
+	 * @param parseableLicenseTemplateRule license template rule string
+	 * @throws LicenseTemplateRuleException if the license template could not be parsed
 	 */
 	public LicenseTemplateRule(String parseableLicenseTemplateRule) throws LicenseTemplateRuleException {
 		parseLicenseTemplateRule(parseableLicenseTemplateRule);
@@ -110,9 +110,9 @@ public class LicenseTemplateRule {
 	}
 
 	/**
-	 * @param ruleName
-	 * @param ruleType
-	 * @throws LicenseTemplateRuleException 
+	 * @param ruleName rule name
+	 * @param ruleType rule type
+	 * @throws LicenseTemplateRuleException if the license template could not be parsed
 	 */
 	public LicenseTemplateRule(String ruleName, RuleType ruleType) throws LicenseTemplateRuleException {
 		this.name = ruleName;
@@ -123,8 +123,8 @@ public class LicenseTemplateRule {
 	/**
 	 * Parse a license template rule string compliant with the SPDX license template text and
 	 * replace all properties with the parsed values
-	 * @param parseableLicenseTemplateRule
-	 * @throws LicenseTemplateRuleException 
+	 * @param parseableLicenseTemplateRule String representation of a license template rule
+	 * @throws LicenseTemplateRuleException if the license template could not be parsed
 	 */
 	public void parseLicenseTemplateRule(String parseableLicenseTemplateRule) throws LicenseTemplateRuleException {
 		//TODO: Check for repeated keywords
@@ -160,9 +160,9 @@ public class LicenseTemplateRule {
 	}
 
 	/**
-	 * @param typeStr
-	 * @return
-	 * @throws LicenseTemplateRuleException 
+	 * @param typeStr string representing the type of rule
+	 * @return reule type
+	 * @throws LicenseTemplateRuleException if the license template could not be parsed
 	 */
 	private RuleType typeStringToType(String typeStr) throws LicenseTemplateRuleException {
 		if (typeStr.equals(VARIABLE_RULE_TYPE_STR)) {
@@ -176,6 +176,9 @@ public class LicenseTemplateRule {
 		}
 	}
 	
+	/**
+	 * @return rule type
+	 */
 	public RuleType getType() {
 		return type;
 	}
@@ -245,8 +248,8 @@ public class LicenseTemplateRule {
 
 	/**
 	 * Parse the part of a rule and stores the result as a property
-	 * @param rulePart
-	 * @throws LicenseTemplateRuleException 
+	 * @param rulePart string representation of the license rule
+	 * @throws LicenseTemplateRuleException if the license template could not be parsed
 	 */
 	private void parseRulePart(String rulePart) throws LicenseTemplateRuleException {
 		if (rulePart.startsWith(EXAMPLE_KEYWORD)) {
@@ -266,8 +269,8 @@ public class LicenseTemplateRule {
 
 	/**
 	 * Formats the string interpreting escape characters
-	 * @param value
-	 * @return
+	 * @param value string to format
+	 * @return formatted string
 	 */
 	private String formatValue(String value) {
 		String retval = value.replace("\\n", "\n");
@@ -277,10 +280,10 @@ public class LicenseTemplateRule {
 
 	/**
 	 * Retrieve the value portion of a rule part
-	 * @param rulePart
-	 * @param keyword
-	 * @return
-	 * @throws LicenseTemplateRuleException 
+	 * @param rulePart the rule part in string format
+	 * @param keyword keyword
+	 * @return the value portion of a rule part
+	 * @throws LicenseTemplateRuleException if the license template could not be parsed
 	 */
 	private String getValue(String rulePart, String keyword) throws LicenseTemplateRuleException {
 		String retval = rulePart.substring(keyword.length());

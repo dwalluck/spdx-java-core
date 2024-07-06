@@ -148,9 +148,9 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 	 * @param anonymous true of this is an anonymous ID
 	 * @param type SPDX type
 	 * @return TypedValue with the proper Object URI formed by the documentUri and ID
-	 * @throws SpdxInvalidIdException
-	 * @throws SpdxInvalidTypeException
-	 * @throws ModelRegistryException 
+	 * @throws SpdxInvalidIdException if the ID is not valid
+	 * @throws SpdxInvalidTypeException if the type is not valid
+	 * @throws ModelRegistryException if there is no model registered for the spec version
 	 */
 	public static TypedValue typedValueFromDocUri(String documentUri, String id, boolean anonymous, String type) throws SpdxInvalidIdException, SpdxInvalidTypeException, ModelRegistryException {
 		return new TypedValue(documentUriIdToUri(documentUri, id, anonymous), type, LATEST_SPDX_2X_VERSION);
@@ -163,9 +163,9 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 	 * @param modelStore store used
 	 * @param type SPDX type
 	 * @return TypedValue with the proper Object URI formed by the documentUri and ID
-	 * @throws SpdxInvalidIdException
-	 * @throws SpdxInvalidTypeException
-	 * @throws ModelRegistryException 
+	 * @throws SpdxInvalidIdException if the ID is not valid
+	 * @throws SpdxInvalidTypeException if the type is not valid
+	 * @throws ModelRegistryException if there is no model registered for the spec version
 	 */
 	public static TypedValue typedValueFromDocUri(String documentUri, String id, IModelStore store, String type) throws SpdxInvalidIdException, SpdxInvalidTypeException, ModelRegistryException {
 		return new TypedValue(documentUriIdToUri(documentUri, id, store), type, LATEST_SPDX_2X_VERSION);
@@ -187,7 +187,7 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 	 * @param objectUri Object URI
 	 * @param documentUri SPDX 2 document URI for the ID
 	 * @return the SPDX 2 compatible ID
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException on any SPDX exception
 	 */
 	public static String objectUriToId(boolean anon, String objectUri, String documentUri) throws InvalidSPDXAnalysisException {
 		Objects.requireNonNull(objectUri, "Object URI can not be null");
@@ -224,7 +224,7 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 	 * @param documentUri SPDX v2 spec document URI
 	 * @param objectUri SPDX ID
 	 * @param type type
-	 * @throws InvalidSPDXAnalysisException
+	 * @throws InvalidSPDXAnalysisException on any SPDX exception
 	 */
 	public void create(String documentUri, String id, String type)
 			throws InvalidSPDXAnalysisException {
@@ -251,7 +251,7 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 	/**
 	 * @param objectUri URI for the item
 	 * @return all property names stored for the Object URI
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException on any SPDX exception
 	 */
 	public Collection<? extends String> getPropertyValueNames(
 			String objectUri) throws InvalidSPDXAnalysisException {
@@ -264,7 +264,7 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 	 * @param documentUri document URI
 	 * @param id ID for the item
 	 * @return all property names stored for the documentUri#id
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException on any SPDX exception
 	 */
 	public Collection<? extends String> getPropertyValueNames(
 			String documentUri, String id) throws InvalidSPDXAnalysisException {

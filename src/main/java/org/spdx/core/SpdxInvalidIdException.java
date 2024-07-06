@@ -31,14 +31,14 @@ public class SpdxInvalidIdException extends InvalidSPDXAnalysisException {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 
+	 * Invalid ID
 	 */
 	public SpdxInvalidIdException() {
 		super();
 	}
 
 	/**
-	 * @param message
+	 * @param message message
 	 */
 	public SpdxInvalidIdException(String message) {
 		super(message);
@@ -60,10 +60,10 @@ public class SpdxInvalidIdException extends InvalidSPDXAnalysisException {
 	}
 
 	/**
-	 * @param message
-	 * @param cause
-	 * @param enableSuppression
-	 * @param writableStackTrace
+	 * @param message message
+	 * @param cause cause
+	 * @param enableSuppression if true, enable suppression
+	 * @param writableStackTrace stack trace
 	 */
 	public SpdxInvalidIdException(String message, Throwable cause, boolean enableSuppression,
 			boolean writableStackTrace) {

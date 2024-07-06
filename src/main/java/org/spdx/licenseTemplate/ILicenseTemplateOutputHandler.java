@@ -27,31 +27,31 @@ public interface ILicenseTemplateOutputHandler {
 
 	/**
 	 * Text for processing
-	 * @param text
+	 * @param text text to be processed
 	 */
 	void text(String text);
 
 	/**
 	 * Variable rule found within the template
-	 * @param rule
+	 * @param rule license template rule
 	 */
 	void variableRule(LicenseTemplateRule rule);
 
 	/**
 	 * Begin optional rule found
-	 * @param rule
+	 * @param rule optional rule
 	 */
 	void beginOptional(LicenseTemplateRule rule);
 
 	/**
 	 * End optional rule found
-	 * @param rule
+	 * @param rule end optional rule
 	 */
 	void endOptional(LicenseTemplateRule rule);
 	
 	/**
 	 * Signals all text has been added and parsing can be completed.
-	 * @throws LicenseParserException 
+	 * @throws LicenseParserException if the license template could not be parsed
 	 */
 	void completeParsing() throws LicenseParserException;
 

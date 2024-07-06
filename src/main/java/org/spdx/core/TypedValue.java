@@ -10,6 +10,14 @@ public class TypedValue {
 	String type;
 	String specVersion;
 	
+	/**
+	 * @param objectUri URI or anon ID for the object
+	 * @param type a string representation of the type of the object
+	 * @param specVersion version of the spec
+	 * @throws SpdxInvalidIdException if the ID is not valid
+	 * @throws SpdxInvalidTypeException if the type is not valid
+	 * @throws ModelRegistryException if there is an error in the model registry
+	 */
 	public TypedValue(String objectUri, String type, String specVersion) throws SpdxInvalidIdException, SpdxInvalidTypeException, ModelRegistryException {
 		if (objectUri == null) {
 			throw new SpdxInvalidIdException("Null value Id");

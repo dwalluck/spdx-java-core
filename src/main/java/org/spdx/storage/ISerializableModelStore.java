@@ -33,8 +33,8 @@ public interface ISerializableModelStore extends IModelStore {
 	/**
 	 * Serialize the items stored in the model store.  The specific format for serialization depends on the document store.
 	 * @param stream output stream to serialize to
-	 * @throws InvalidSPDXAnalysisException
-	 * @throws IOException
+	 * @throws InvalidSPDXAnalysisException on any SPDX error
+	 * @throws IOException on IO error
 	 */
 	public void serialize(OutputStream stream)  throws InvalidSPDXAnalysisException, IOException;
 	
@@ -42,8 +42,8 @@ public interface ISerializableModelStore extends IModelStore {
 	 * Deserialize / read an SPDX document from a stream
 	 * @param stream input stream to deserialize from
 	 * @param overwrite if true, allow any existing documents with the same documentUri to be overwritten
-	 * @throws InvalidSPDXAnalysisException
-	 * @throws IOException
+	 * @throws InvalidSPDXAnalysisException on any SPDX error
+	 * @throws IOException on IO error
 	 */
 	public void deSerialize(InputStream stream, boolean overwrite) throws InvalidSPDXAnalysisException, IOException;
 }

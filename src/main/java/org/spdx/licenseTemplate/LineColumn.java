@@ -33,22 +33,37 @@ public class LineColumn {
 		this.len = len;
 	}
 
+	/**
+	 * @return line number
+	 */
 	public int getLine() {
 		return line;
 	}
 
+	/**
+	 * @param line line number
+	 */
 	public void setLine(int line) {
 		this.line = line;
 	}
 
+	/**
+	 * @return column
+	 */
 	public int getColumn() {
 		return column;
 	}
 
+	/**
+	 * @param column column
+	 */
 	public void setColumn(int column) {
 		this.column = column;
 	}
 
+	/**
+	 * @return lenght of the line
+	 */
 	public int getLen() {
 		return len;
 	}

@@ -107,9 +107,9 @@ public class LicenseTextHelper {
 	 * Returns true if two sets of license text is considered a match per
 	 * the SPDX License matching guidelines documented at spdx.org (currently http://spdx.org/wiki/spdx-license-list-match-guidelines)
 	 * There are 2 unimplemented features - bullets/numbering is not considered and comments with no whitespace between text is not skipped
-	 * @param licenseTextA
-	 * @param licenseTextB
-	 * @return
+	 * @param licenseTextA text to compare
+	 * @param licenseTextB text to compare
+	 * @return true if the license text is equivalent
 	 */
 	public static boolean isLicenseTextEquivalent(String licenseTextA, String licenseTextB) {
 		//TODO: Handle comment characters without white space before text
@@ -176,8 +176,8 @@ public class LicenseTextHelper {
 	 * multi-words for better equiv. comparisons
 	 * 
 	 * @param tokenToLocation location for all of the tokens
-	 * @param licenseText
-	 * @return tokens
+	 * @param licenseText text to tokenize
+	 * @return tokens array of tokens from the licenseText
 	 */
 	public static String[] tokenizeLicenseText(String licenseText, Map<Integer, LineColumn> tokenToLocation) {
 		String textToTokenize = normalizeText(replaceMultWord(replaceSpaceComma(licenseText))).toLowerCase();
@@ -236,9 +236,9 @@ public class LicenseTextHelper {
 
 	/**
 	 * Just fetches the string at the index checking for range.  Returns null if index is out of range.
-	 * @param tokens
-	 * @param tokenIndex
-	 * @return
+	 * @param tokens array of tokens
+	 * @param tokenIndex index of token to retrieve
+	 * @return the token at the index or null if the token does not exist
 	 */
 	public static String getTokenAt(String[] tokens, int tokenIndex) {
 		if (tokenIndex >= tokens.length) {
@@ -250,8 +250,8 @@ public class LicenseTextHelper {
 	
 	/**
 	 * Returns true if the token can be ignored per the rules
-	 * @param token
-	 * @return
+	 * @param token token to check
+	 * @return true if the token can be ignored per the rules
 	 */
 	public static boolean canSkip(String token) {
 		if (token == null) {
@@ -264,10 +264,10 @@ public class LicenseTextHelper {
 	}
 	
 	/**
-	 * Returns true if the two tokens can be considered equlivalent per the SPDX license matching rules
-	 * @param tokenA
-	 * @param tokenB
-	 * @return
+	 * Returns true if the two tokens can be considered equivalent per the SPDX license matching rules
+	 * @param tokenA token to compare
+	 * @param tokenB token to compare
+	 * @return true if tokenA is equivalent to tokenB
 	 */
 	public static boolean tokensEquivalent(String tokenA, String tokenB) {
 		if (tokenA == null) {
@@ -300,8 +300,8 @@ public class LicenseTextHelper {
 	
 	/**
 	 * Replace different forms of space with a normalized space and different forms of commas with a normalized comma
-	 * @param s
-	 * @return
+	 * @param s input string
+	 * @return input string replacing all UTF-8 spaces with " " and all UTF-8 commas with ","
 	 */
 	public static String replaceSpaceComma(String s) {
 		Matcher spaceMatcher = SPACE_PATTERN.matcher(s);
@@ -310,9 +310,9 @@ public class LicenseTextHelper {
 	}
 	
 	/**
-	 * replaces all mult-words with a single token using a dash to separate
-	 * @param s
-	 * @return
+	 * replaces all multi-words with a single token using a dash to separate
+	 * @param s input string
+	 * @return input string with all multi-words with a single token using a dash to separate
 	 */
 	public static String replaceMultWord(String s) {
 		//TODO: There is certainly some room for optimization - perhaps a single regex in a find loop

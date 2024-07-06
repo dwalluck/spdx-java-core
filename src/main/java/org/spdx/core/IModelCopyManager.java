@@ -31,7 +31,7 @@ public interface IModelCopyManager {
 		 * @param toSpecVersion version of the spec the to value should comply with
 		 * @param toNamespace optional namespace of the to property
 		 * @return Object URI for the copied object
-		 * @throws InvalidSPDXAnalysisException
+		 * @throws InvalidSPDXAnalysisException on any SPDX related error
 		 */
 		public TypedValue copy(IModelStore toStore, IModelStore fromStore, 
 				String sourceUri, String type, String toSpecVersion, @Nullable String toNamespace) throws InvalidSPDXAnalysisException;
@@ -45,7 +45,7 @@ public interface IModelCopyManager {
 			 * @param type Type to copy
 			 * @param toSpecVersion version of the spec the to value should comply with
 			 * @param toNamespace optional namespace of the to property
-			 * @throws InvalidSPDXAnalysisException
+			 * @throws InvalidSPDXAnalysisException on any SPDX related error
 			 */
 			public void copy(IModelStore toStore, String toObjectUri, IModelStore fromStore, String fromObjectUri, String type,
 					String toSpecVersion, @Nullable String toNamespace) throws InvalidSPDXAnalysisException;

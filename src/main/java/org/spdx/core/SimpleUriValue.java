@@ -60,10 +60,16 @@ public class SimpleUriValue implements IndividualUriValue {
 		return Objects.equals(individualUri.getIndividualURI(), ((IndividualUriValue)comp).getIndividualURI());
 	}
 
+	/**
+	 * @param fromIndividualValue individual value to copy the URI from
+	 */
 	public SimpleUriValue(IndividualUriValue fromIndividualValue) {
 		this(fromIndividualValue.getIndividualURI());
 	}
 	
+	/**
+	 * @param uri URI for the value
+	 */
 	public SimpleUriValue(String uri) {
 		Objects.requireNonNull(uri, "URI can not be null");
 		this.uri = uri;

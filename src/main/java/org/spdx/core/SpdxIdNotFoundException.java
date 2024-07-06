@@ -25,46 +25,37 @@ package org.spdx.core;
  */
 public class SpdxIdNotFoundException extends InvalidSPDXAnalysisException {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 
 	/**
-	 * 
+	 * General SPDX ID not found exception
 	 */
 	public SpdxIdNotFoundException() {
 	}
 
 	/**
-	 * @param arg0
+	 * @param arg0 message
 	 */
 	public SpdxIdNotFoundException(String arg0) {
 		super(arg0);
 	}
 
 	/**
-	 * @param arg0
+	 * @param arg0 cause exception
 	 */
 	public SpdxIdNotFoundException(Throwable arg0) {
 		super(arg0);
 	}
 
 	/**
-	 * @param arg0
-	 * @param arg1
+	 * @param arg0 message
+	 * @param arg1 cause
 	 */
 	public SpdxIdNotFoundException(String arg0, Throwable arg1) {
 		super(arg0, arg1);
 	}
 
-	/**
-	 * @param arg0
-	 * @param arg1
-	 * @param arg2
-	 * @param arg3
-	 */
 	public SpdxIdNotFoundException(String arg0, Throwable arg1, boolean arg2, boolean arg3) {
 		super(arg0, arg1, arg2, arg3);
 	}

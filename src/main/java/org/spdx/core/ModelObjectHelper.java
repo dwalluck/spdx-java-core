@@ -53,7 +53,7 @@ public class ModelObjectHelper {
 	 * @param type optional type hint - used for individuals where the type may be ambiguous
 	 * @param idPrefix prefix to be used when generating new SPDX IDs
 	 * @return value associated with a property
-	 * @throws InvalidSPDXAnalysisException
+	 * @throws InvalidSPDXAnalysisException on any SPDX related error
 	 */
 	public static Optional<Object> getObjectPropertyValue(IModelStore modelStore, String objectUri,
 			PropertyDescriptor propertyDescriptor, IModelCopyManager copyManager,
@@ -82,7 +82,7 @@ public class ModelObjectHelper {
 	 * @param propertyDescriptor Descriptor for the property associated with this object
 	 * @param value Value to associate with the property
 	 * @param copyManager if non null, any ModelObject property value not stored in the modelStore under the stDocumentUri will be copied to make it available
-	 * @throws InvalidSPDXAnalysisException
+	 * @throws InvalidSPDXAnalysisException on any SPDX related error
 	 */
 	public static void setPropertyValue(IModelStore modelStore, String objectUri, 
 			PropertyDescriptor propertyDescriptor, @Nullable Object value, 
@@ -107,7 +107,7 @@ public class ModelObjectHelper {
 	 * @param modelStore Model store for the properties
 	 * @param objectUri URI or anonymous ID for the object
 	 * @param propertyDescriptor Descriptor for the property associated with this object to be removed
-	 * @throws InvalidSPDXAnalysisException
+	 * @throws InvalidSPDXAnalysisException on any SPDX related error
 	 */
 	public static void removeProperty(IModelStore modelStore, String objectUri, PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
 		modelStore.removeProperty(objectUri, propertyDescriptor);
@@ -118,7 +118,7 @@ public class ModelObjectHelper {
 	 * @param modelStore Model store for the properties
 	 * @param objectUri URI or anonymous ID for the object
 	 * @param propertyDescriptor Descriptor for the property
-	 * @throws InvalidSPDXAnalysisException
+	 * @throws InvalidSPDXAnalysisException on any SPDX related error
 	 */
 	public static void clearValueCollection(IModelStore modelStore, String objectUri, PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
 		modelStore.clearValueCollection(objectUri, propertyDescriptor);
@@ -133,8 +133,8 @@ public class ModelObjectHelper {
 	 * @param objectUri URI or anonymous ID for the object
 	 * @param propertyDescriptor  Descriptor for the property
 	 * @param value to add
-	 * @param copyManager
-	 * @throws InvalidSPDXAnalysisException
+	 * @param copyManager copyManager for any copying of properties
+	 * @throws InvalidSPDXAnalysisException on any SPDX related error
 	 */
 	public static void addValueToCollection(IModelStore modelStore, String objectUri, 
 			PropertyDescriptor propertyDescriptor, Object value, IModelCopyManager copyManager,
@@ -152,7 +152,7 @@ public class ModelObjectHelper {
 	 * @param propertyDescriptor Descriptor for the property
 	 * @param values collection of new properties
 	 * @param copyManager if non-null, any ModelObject property value not stored in the modelStore under the stDocumentUri will be copied to make it available
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException on any SPDX related error
 	 */
 	public static void replacePropertyValueCollection(IModelStore modelStore, String objectUri, 
 			PropertyDescriptor propertyDescriptor, Collection<?> values, IModelCopyManager copyManager,
@@ -169,7 +169,7 @@ public class ModelObjectHelper {
 	 * @param objectUri URI or anonymous ID for the object
 	 * @param propertyDescriptor descriptor for the property
 	 * @param value Value to be removed
-	 * @throws InvalidSPDXAnalysisException
+	 * @throws InvalidSPDXAnalysisException on any SPDX related error
 	 */
 	public static void removePropertyValueFromCollection(IModelStore modelStore, String objectUri, 
 			PropertyDescriptor propertyDescriptor, Object value) throws InvalidSPDXAnalysisException {
@@ -190,7 +190,7 @@ public class ModelObjectHelper {
 	 * @param idPrefix Prefix to be used if any new object URI's are generated
 	 * @return the object itself unless it is a TypedValue, in which case a
 	 *         ModelObject is returned
-	 * @throws InvalidSPDXAnalysisException
+	 * @throws InvalidSPDXAnalysisException on any SPDX related error
 	 */
 	public static Optional<Object> optionalStoredObjectToModelObject(Optional<Object> value, 
 			IModelStore modelStore, IModelCopyManager copyManager, String specVersion,
@@ -214,7 +214,7 @@ public class ModelObjectHelper {
 	 * @param copyManager if not null, copy any referenced ID's outside of this document/model store
 	 * @param idPrefix Prefix to be used if any new object URI's are generated
 	 * @return Model Object appropriate type
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException on any SPDX related error
 	 */
 	public static Object modelObjectToStoredObject(Object value, IModelStore modelStore, 
 			IModelCopyManager copyManager, String idPrefix) throws InvalidSPDXAnalysisException {
@@ -255,7 +255,7 @@ public class ModelObjectHelper {
 	 * @param idPrefix Prefix to be used if any new object URI's are generated
 	 * @return the object itself unless it is a TypedValue, in which case a
 	 *         ModelObject is returned
-	 * @throws InvalidSPDXAnalysisException
+	 * @throws InvalidSPDXAnalysisException on any SPDX related error
 	 */
 	public static Object storedObjectToModelObject(Object value, IModelStore modelStore,
 			IModelCopyManager copyManager, String specVersion, @Nullable Class<?> type,
@@ -288,7 +288,7 @@ public class ModelObjectHelper {
 	}
 	
 	/**
-	 * @param clazz
+	 * @param clazz class to check
 	 * @return true if the clazz implements the IndividualUriValue interface
 	 */
 	public static boolean implementsIndividualUriValue(Class<?> clazz) {

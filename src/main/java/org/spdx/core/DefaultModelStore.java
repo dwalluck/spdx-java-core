@@ -43,6 +43,10 @@ public class DefaultModelStore {
 		// prevent instantiating class
 	}
 	
+	/**
+	 * @return the default model store
+	 * @throws DefaultStoreNotInitialized if the <code>initialize(...)</code> was not called prior
+	 */
 	public static IModelStore getDefaultModelStore() throws DefaultStoreNotInitialized {
 		lock.readLock().lock();
 		try {
@@ -55,6 +59,10 @@ public class DefaultModelStore {
 		}
 	}
 	
+	/**
+	 * @return the default SPDX 2.X document URi
+	 * @throws DefaultStoreNotInitialized if the <code>initialize(...)</code> was not called prior
+	 */
 	public static String getDefaultDocumentUri() throws DefaultStoreNotInitialized {
 		lock.readLock().lock();
 		try {
@@ -69,6 +77,9 @@ public class DefaultModelStore {
 	
 	/**
 	 * Initialize the default model store.  This must be done prior to any use
+	 * @param newModelStore new default model store
+	 * @param newDefaultDocumentUri new SPDX 2.X document URI
+	 * @param newDefaultCopyManager new default copy manager
 	 */
 	public static final void initialize(IModelStore newModelStore, String newDefaultDocumentUri, 
 			IModelCopyManager newDefaultCopyManager) {
@@ -85,6 +96,10 @@ public class DefaultModelStore {
 		}
 	}
 
+	/**
+	 * @return the default copy manager
+	 * @throws DefaultStoreNotInitialized if the <code>initialize(...)</code> was not called prior
+	 */
 	public static IModelCopyManager getDefaultCopyManager() throws DefaultStoreNotInitialized {
 		lock.readLock().lock();
 		try {

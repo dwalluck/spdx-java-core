@@ -50,6 +50,9 @@ public class ModelRegistry {
 		return _instance;
 	}
 	
+	/**
+	 * @param modelInfo model info to register
+	 */
 	public void registerModel(ISpdxModelInfo modelInfo) {
 		lock.writeLock().lock();
 		try {
@@ -62,8 +65,8 @@ public class ModelRegistry {
 	}
 
 	/**
-	 * @param specVersion
-	 * @return
+	 * @param specVersion version of the spc
+	 * @return true if the specVersion is supported in one of the registered model infos
 	 */
 	public boolean containsSpecVersion(String specVersion) {
 		lock.readLock().lock();
@@ -104,7 +107,7 @@ public class ModelRegistry {
 	 * @param externalMap Map of URI's of elements referenced but not present in the store
 	 * @param specVersion version of the SPDX spec the object complies with
 	 * @return a java object representing an SPDX element external to model store, collection or document
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException on any SPDX related error
 	 */
 	public Object getExternalElement(IModelStore store, String uri,
 			@Nullable IModelCopyManager copyManager,
@@ -129,7 +132,7 @@ public class ModelRegistry {
 	 * @param specVersion version of the SPDX spec the object complies with
 	 * @param type optional type hint - used for individuals where the type may be ambiguous
 	 * @return Individual represented by the URI
-	 * @throws ModelRegistryException 
+	 * @throws ModelRegistryException if the registry does not support the specVersion
 	 */
 	public Object uriToIndividual(String individualUri, String specVersion, @Nullable Class<?> type) throws ModelRegistryException {
 		Objects.requireNonNull(specVersion, SPEC_VERSION_NULL_MSG);
@@ -159,7 +162,7 @@ public class ModelRegistry {
 	 * @param create if true, create the model object ONLY if it does not already exist
 	 * @param idPrefix optional prefix used for any new object URI's created in support of this model object
 	 * @return model object of type type
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException on any SPDX related exception
 	 */
 	public CoreModelObject inflateModelObject(IModelStore modelStore, String objectUri, 
 			String type, IModelCopyManager copyManager,
