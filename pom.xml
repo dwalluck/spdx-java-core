@@ -48,7 +48,16 @@
     <sonar.organization>spdx</sonar.organization>
     <sonar.projectKey>spdx-java-core</sonar.projectKey>
   </properties>
-  <profiles>
+  <profiles>  
+	<profile>
+		<id>doclint-java8-disable</id>
+		<activation>
+			<jdk>[1.8,)</jdk>
+		</activation>
+		<properties>
+			<javadoc.opts>-Xdoclint:none</javadoc.opts>
+		</properties>
+	</profile>
     <profile>
       <id>test</id>
       <dependencies>
@@ -211,7 +220,7 @@
         <configuration>
           <quiet>true</quiet>
           <notimestamp>true</notimestamp>
-          <additionalparam>-Xdoclint:none</additionalparam>
+          <additionalOptions>-Xdoclint:none</additionalOptions>
         </configuration>
         <executions>
           <execution>
