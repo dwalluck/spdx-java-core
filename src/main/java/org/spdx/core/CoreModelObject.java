@@ -106,7 +106,7 @@ public abstract class CoreModelObject {
 	 * Open or create a model object with the default store
 	 * @param objectUri Anonymous ID or URI for the model object
 	 * @param specVersion - version of the SPDX spec the object complies with
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException on any SPDX related exception
 	 */
 	protected CoreModelObject(String objectUri, String specVersion) throws InvalidSPDXAnalysisException {
 		this(DefaultModelStore.getDefaultModelStore(), objectUri, 
@@ -179,7 +179,7 @@ public abstract class CoreModelObject {
 	/**
 	 * @param builder base builder to create the CoreModelObject from
 	 * @param specVersion - version of the SPDX spec the object complies with
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException on any SPDX related exception
 	 */
 	protected CoreModelObject(CoreModelObjectBuilder builder, String specVersion) throws InvalidSPDXAnalysisException {
 		this(builder.modelStore, builder.objectUri, builder.copyManager, true, specVersion, builder.idPrefix);
@@ -195,7 +195,7 @@ public abstract class CoreModelObject {
 	/**
 	 * Enter a critical section. leaveCriticialSection must be called.
 	 * @param readLockRequested true implies a read lock, false implies write lock.
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException on any SPDX related exception
 	 */
 	public IModelStoreLock enterCriticalSection(boolean readLockRequested) throws InvalidSPDXAnalysisException {
 		return modelStore.enterCriticalSection(readLockRequested);
@@ -291,7 +291,7 @@ public abstract class CoreModelObject {
 	//The following methods are to manage the properties associated with the model object
 	/**
 	 * @return all names of property descriptors currently associated with this object
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException on any SPDX related exception
 	 */
 	public List<PropertyDescriptor> getPropertyValueDescriptors() throws InvalidSPDXAnalysisException {
 		if (isExternal()) {
@@ -333,7 +333,7 @@ public abstract class CoreModelObject {
 	 * Set a property value for a property descriptor, creating the property if necessary
 	 * @param propertyDescriptor Descriptor for the property associated with this object
 	 * @param value Value to associate with the property
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException on any SPDX related exception
 	 */
 	public void setPropertyValue(PropertyDescriptor propertyDescriptor, @Nullable Object value) throws InvalidSPDXAnalysisException {
 		if (this instanceof IndividualUriValue) {
@@ -363,7 +363,7 @@ public abstract class CoreModelObject {
 	/**
 	 * @param propertyDescriptor Descriptor for a property
 	 * @return the Optional String value associated with a property, null if no value is present
-	 * @throws SpdxInvalidTypeException
+	 * @throws SpdxInvalidTypeException on any SPDX related exception
 	 */
 	public Optional<String> getStringPropertyValue(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
 		Optional<Object> result = getObjectPropertyValue(propertyDescriptor, String.class);
@@ -383,7 +383,7 @@ public abstract class CoreModelObject {
 	/**
 	 * @param propertyDescriptor Descriptor for a property
 	 * @return the Optional Integer value associated with a property, null if no value is present
-	 * @throws InvalidSPDXAnalysisException
+	 * @throws InvalidSPDXAnalysisException on any SPDX related exception
 	 */
 	public Optional<Integer> getIntegerPropertyValue(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
 		Optional<Object> result = getObjectPropertyValue(propertyDescriptor, Integer.class);
@@ -402,7 +402,7 @@ public abstract class CoreModelObject {
 	/**
 	 * @param propertyDescriptor descriptor for the property
 	 * @return an enumeration value for the property
-	 * @throws InvalidSPDXAnalysisException
+	 * @throws InvalidSPDXAnalysisException on any SPDX related exception
 	 */
 	@SuppressWarnings("unchecked")
 	public Optional<Enum<?>> getEnumPropertyValue(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
@@ -429,7 +429,7 @@ public abstract class CoreModelObject {
 	/**
 	 * @param propertyDescriptor Descriptor for the property
 	 * @return the Optional Boolean value for a property
-	 * @throws SpdxInvalidTypeException
+	 * @throws SpdxInvalidTypeException if the stored object is not a Boolean type
 	 */
 	public Optional<Boolean> getBooleanPropertyValue(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
 		Optional<Object> result = getObjectPropertyValue(propertyDescriptor, Boolean.class);
@@ -457,7 +457,7 @@ public abstract class CoreModelObject {
 	/**
 	 * Removes a property and its value from the model store if it exists
 	 * @param propertyDescriptor Descriptor for the property associated with this object to be removed
-	 * @throws InvalidSPDXAnalysisException
+	 * @throws InvalidSPDXAnalysisException on any SPDX related exception
 	 */
 	public void removeProperty(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
 		if (isExternal()) {
@@ -506,7 +506,7 @@ public abstract class CoreModelObject {
 	 * belong to the document, it will be copied into the object store
 	 * @param propertyDescriptor  Descriptor for the property
 	 * @param value to add
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException on any SPDX related exception
 	 */
 	public void addPropertyValueToCollection(PropertyDescriptor propertyDescriptor, Object value) throws InvalidSPDXAnalysisException {
 		if (isExternal()) {
@@ -535,7 +535,7 @@ public abstract class CoreModelObject {
 	 * Remove a property value from a collection
 	 * @param propertyDescriptor Descriptor for the property
 	 * @param value Value to be removed
-	 * @throws InvalidSPDXAnalysisException
+	 * @throws InvalidSPDXAnalysisException on any SPDX related exception
 	 */
 	public void removePropertyValueFromCollection(PropertyDescriptor propertyDescriptor, Object value) throws InvalidSPDXAnalysisException {
 		if (isExternal()) {
@@ -578,7 +578,7 @@ public abstract class CoreModelObject {
 	/**
 	 * @param propertyDescriptor Descriptor for property
 	 * @return Collection of Strings associated with the property
-	 * @throws SpdxInvalidTypeException
+	 * @throws SpdxInvalidTypeException on any SPDX related exception
 	 */
 	@SuppressWarnings("unchecked")
 	public Collection<String> getStringCollection(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
@@ -594,7 +594,7 @@ public abstract class CoreModelObject {
 	}
 	
 	/**
-	 * @param compare
+	 * @param compare model object to compare this model object to
 	 * @return true if all the properties have the same or equivalent values
 	 */
 	public boolean equivalent(CoreModelObject compare) throws InvalidSPDXAnalysisException {
@@ -602,7 +602,7 @@ public abstract class CoreModelObject {
 	}
 	
 	/**
-	 * @param compare
+	 * @param compare model object to compare this model object to
 	 * @param ignoreRelatedElements if true, do not compare properties relatedSpdxElement - used to prevent infinite recursion
 	 * @return true if all the properties have the same or equivalent values
 	 */
@@ -625,7 +625,7 @@ public abstract class CoreModelObject {
 				    return false;
 				}
 				comparePropertyValueDescriptors.remove(propertyDescriptor);
-			} else if (!isEquivalentToNull(this.getObjectPropertyValue(propertyDescriptor))) {
+			} else if (!isEquivalentToNull(this.getObjectPropertyValue(propertyDescriptor), propertyDescriptor)) {
 				// No property value
 					lastNotEquivalentReason = new NotEquivalentReason(
 							NotEquivalent.COMPARE_PROPERTY_MISSING, propertyDescriptor);
@@ -636,7 +636,7 @@ public abstract class CoreModelObject {
 			if (ignoreRelatedElements && isRelatedElement(propertyDescriptor)) {
 				continue;
 			}
-			if (!isEquivalentToNull(compare.getObjectPropertyValue(propertyDescriptor))) {
+			if (!isEquivalentToNull(compare.getObjectPropertyValue(propertyDescriptor), propertyDescriptor)) {
 				lastNotEquivalentReason = new NotEquivalentReason(
 						NotEquivalent.MISSING_PROPERTY, propertyDescriptor);
 				return false;
@@ -647,12 +647,16 @@ public abstract class CoreModelObject {
 	
 	// Some values are treated like null in comparisons - in particular empty model collections and 
 	// "no assertion" values and a filesAnalyzed filed with a value of true
-	private boolean isEquivalentToNull(Object propertyValue) {
+	/**
+	 * @param propertyValue value to check
+	 * @return true if the value is equivalent to null
+	 */
+	protected boolean isEquivalentToNull(Object propertyValue, PropertyDescriptor descriptor) {
 		if (propertyValue instanceof ModelCollection) {
 			return isEmptyModelCollection(propertyValue);
 		} else if (propertyValue instanceof Optional) {
 			if (((Optional<?>)propertyValue).isPresent()) {
-				return isEquivalentToNull(((Optional<?>)propertyValue).get());
+				return isEquivalentToNull(((Optional<?>)propertyValue).get(), descriptor);
 			} else {
 				return true;
 			}
@@ -676,6 +680,10 @@ public abstract class CoreModelObject {
 				&& (((ModelCollection<?>) value).isEmpty());
 	}
 	
+	/**
+	 * @param propertyValue value to check
+	 * @return true if the propertyValue is a no assertion value
+	 */
 	protected abstract boolean isNoAssertion(Object propertyValue);
 	
 	/**
@@ -684,14 +692,14 @@ public abstract class CoreModelObject {
 	 * @param valueB value to compare
 	 * @param ignoreRelatedElements if true, do not compare properties relatedSpdxElement - used to prevent infinite recursion
 	 * @return true if the property values are equivalent
-	 * @throws InvalidSPDXAnalysisException
+	 * @throws InvalidSPDXAnalysisException on any SPDX related exception
 	 */
 	private boolean propertyValuesEquivalent(PropertyDescriptor propertyDescriptor, Optional<Object> valueA,
             Optional<Object> valueB, boolean ignoreRelatedElements) throws InvalidSPDXAnalysisException {
 	    if (!valueA.isPresent()) {
-	    	return isEquivalentToNull(valueB);
+	    	return isEquivalentToNull(valueB, propertyDescriptor);
         } else if (!valueB.isPresent()) {
-            return isEquivalentToNull(valueA);
+            return isEquivalentToNull(valueA, propertyDescriptor);
         } else if (valueA.get() instanceof ModelCollection && valueB.get() instanceof ModelCollection) {
             return areEquivalent(((ModelCollection<?>)valueA.get()).toImmutableList(),
             		((ModelCollection<?>)valueB.get()).toImmutableList(), ignoreRelatedElements);
@@ -712,7 +720,7 @@ public abstract class CoreModelObject {
 	 * Compares 2 simple optional objects considering NONE and NOASSERTION values which are equivalent to their strings
 	 * @param valueA
 	 * @param valueB
-	 * @return
+	 * @return if the 2 values are equivalent
 	 */
 	private boolean optionalObjectsEquivalent(Optional<Object> valueA, Optional<Object> valueB) {
 		if (Objects.equals(valueA, valueB)) {
@@ -739,7 +747,7 @@ public abstract class CoreModelObject {
 
 	/**
 	 * Normalize a string for dos and linux linefeeds
-	 * @param s
+	 * @param s string to normalize
 	 * @return DOS style only linefeeds
 	 */
 	private Object normalizeString(String s) {
@@ -774,7 +782,7 @@ public abstract class CoreModelObject {
 	 * @param itemToFind  the item we're looking for
 	 * @param ignoreRelatedElements if true, don't follow the to parts of relationships
 	 * @return true if the list contains an equal or equivalent item
-	 * @throws InvalidSPDXAnalysisException
+	 * @throws InvalidSPDXAnalysisException on any SPDX related exception
 	 */
 	private boolean containsEqualOrEquivalentItem(List<?> list, Object itemToFind,
 			  boolean ignoreRelatedElements) throws InvalidSPDXAnalysisException {
@@ -830,8 +838,8 @@ public abstract class CoreModelObject {
 	
 	/**
 	 * Clone a new object using a different model store
-	 * @param modelStore
-	 * @return
+	 * @param modelStore model store to store the copy in
+	 * @return a copy of this model object
 	 */
 	public CoreModelObject clone(IModelStore modelStore) {
 		if (Objects.isNull(this.copyManager)) {
@@ -857,8 +865,8 @@ public abstract class CoreModelObject {
 	
 	/**
 	 * Copy all the properties from the source object
-	 * @param source
-	 * @throws InvalidSPDXAnalysisException 
+	 * @param source source model object
+	 * @throws InvalidSPDXAnalysisException on any SPDX related exception
 	 */
 	public void copyFrom(CoreModelObject source) throws InvalidSPDXAnalysisException {
 		if (isExternal()) {
@@ -890,7 +898,7 @@ public abstract class CoreModelObject {
 	
 	/**
 	 * @return a typed value representation of this object suitable for storage in the model store
-	 * @throws InvalidSPDXAnalysisException
+	 * @throws InvalidSPDXAnalysisException on any SPDX related exception
 	 */
 	public TypedValue toTypedValue() throws InvalidSPDXAnalysisException {
 		return new TypedValue(objectUri, getType(), specVersion);
