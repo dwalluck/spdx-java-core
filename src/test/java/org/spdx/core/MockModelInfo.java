@@ -43,7 +43,7 @@ public class MockModelInfo implements ISpdxModelInfo {
 
 	@Override
 	public CoreModelObject createExternalElement(IModelStore store, String uri,
-			IModelCopyManager copyManager, String specVersion)
+			IModelCopyManager copyManager, Class<?> type, String specVersion)
 			throws InvalidSPDXAnalysisException {
 		// Mock - not implemented
 		return null;
@@ -69,6 +69,11 @@ public class MockModelInfo implements ISpdxModelInfo {
 	@Override
 	public Map<String, Class<?>> getTypeToClassMap() {
 		return TYPE_TO_CLASS_MAP;
+	}
+
+	@Override
+	public boolean canBeExternal(Class<?> clazz) {
+		return false;
 	}
 
 }

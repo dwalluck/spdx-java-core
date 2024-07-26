@@ -103,15 +103,14 @@ public class ModelRegistry {
 	 * @param store store to use for the inflated object
 	 * @param uri URI of the external element
 	 * @param copyManager if non-null, implicitly copy any referenced properties from other model stores
-	 * @param documentUri URI for the SPDX document to store the external element reference - used for compatibility with SPDX 2.X model stores
-	 * @param externalMap Map of URI's of elements referenced but not present in the store
+	 * @param type type hint to create the appropriate external element type
 	 * @param specVersion version of the SPDX spec the object complies with
 	 * @return a java object representing an SPDX element external to model store, collection or document
 	 * @throws InvalidSPDXAnalysisException on any SPDX related error
 	 */
 	public Object getExternalElement(IModelStore store, String uri,
 			@Nullable IModelCopyManager copyManager,
-			String specVersion) throws InvalidSPDXAnalysisException {
+			Class<?> type, String specVersion) throws InvalidSPDXAnalysisException {
 		Objects.requireNonNull(specVersion, SPEC_VERSION_NULL_MSG);
 		Objects.requireNonNull(uri, URI_NULL_MSG);
 		Objects.requireNonNull(store, STORE_NULL_MSG);
@@ -121,7 +120,7 @@ public class ModelRegistry {
 				throw new ModelRegistryException(specVersion + DOES_NOT_EXIST_MSG);
 			}
 			return registeredModels.get(specVersion).createExternalElement(store, uri, copyManager, 
-					specVersion);
+					type, specVersion);
 		} finally {
 			lock.readLock().unlock();
 		}
@@ -154,10 +153,8 @@ public class ModelRegistry {
 	 * its inflated form will be returned
 	 * @param modelStore store to use for the inflated object
 	 * @param objectUri URI of the external element
-	 * @param documentUri URI for the SPDX document to store the external element reference - used for compatibility with SPDX 2.X model stores
 	 * @param type Type of the object to create
 	 * @param copyManager if non-null, implicitly copy any referenced properties from other model stores
-	 * @param externalMap map of URI's to ExternalMaps for any external elements
 	 * @param specVersion version of the SPDX spec the object complies with
 	 * @param create if true, create the model object ONLY if it does not already exist
 	 * @param idPrefix optional prefix used for any new object URI's created in support of this model object
@@ -220,5 +217,27 @@ public class ModelRegistry {
 	 */
 	public List<String> getSupportedVersions() {
 		return Collections.unmodifiableList(new ArrayList<>(registeredModels.keySet()));
+	}
+
+	/**
+	 * @param clazz model class
+	 * @param specVersion version of the spec
+	 * @return true if clazz can be represented as external to the store
+	 * @throws ModelRegistryException on unitialized registry
+	 */
+	public boolean canBeExternal(Class<?> clazz, String specVersion) throws ModelRegistryException {
+		Objects.requireNonNull(specVersion, SPEC_VERSION_NULL_MSG);
+		if (Objects.isNull(clazz)) {
+			return false;
+		}
+		lock.readLock().lock();
+		try {
+			if (!containsSpecVersion(specVersion)) {
+				throw new ModelRegistryException(specVersion + DOES_NOT_EXIST_MSG);
+			}
+			return registeredModels.get(specVersion).canBeExternal(clazz);
+		} finally {
+			lock.readLock().unlock();
+		}
 	}
 }

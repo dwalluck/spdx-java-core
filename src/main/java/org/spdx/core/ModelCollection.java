@@ -166,7 +166,7 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 					this.specVersion, this.type, this.idPrefix);
 			if (Objects.nonNull(this.type) && !this.type.isAssignableFrom(retval.getClass())) {
 				if (retval instanceof IndividualUriValue) {
-					throw new SpdxInvalidTypeException("No enumeration or individual of the proper type was found for URI "+((IndividualUriValue)retval).getIndividualURI()+
+					throw new SpdxInvalidTypeException("No enumeration, external or individual of the proper type was found for URI "+((IndividualUriValue)retval).getIndividualURI()+
 							" for type "+type.toString());
 				} else {
 					throw new SpdxInvalidTypeException("A collection element of type "+retval.getClass().toString()+

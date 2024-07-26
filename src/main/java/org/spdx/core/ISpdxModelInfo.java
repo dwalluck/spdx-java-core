@@ -35,12 +35,13 @@ public interface ISpdxModelInfo {
 	 * @param copyManager if non-null, implicitly copy any referenced properties from other model stores
 	 * @param documentUri URI for the SPDX document to store the external element reference - used for compatibility with SPDX 2.X model stores
 	 * @param copyManager if non-null, create the external Doc ref if it is not a property of the SPDX Document
+	 * @param type type hint to create the appropriate external element type
 	 * @param externalMap Map of URI's of elements referenced but not present in the store
 	 * @param specVersion version of the SPDX specification used by the external element
 	 * @return model object of type type
 	 */
 	public CoreModelObject createExternalElement(IModelStore store, String uri,
-			@Nullable IModelCopyManager copyManager,String specVersion) throws InvalidSPDXAnalysisException;
+			@Nullable IModelCopyManager copyManager,Class<?> type, String specVersion) throws InvalidSPDXAnalysisException;
 
 	/**
 	 * @param uri URI for the individual
@@ -68,5 +69,11 @@ public interface ISpdxModelInfo {
 	 * @return a map of string representation of types to classes which implement those types
 	 */
 	public Map<String, Class<?>> getTypeToClassMap();
+
+	/**
+	 * @param clazz model class
+	 * @return true if clazz can be represented as external to the store
+	 */
+	public boolean canBeExternal(Class<?> clazz);
 
 }

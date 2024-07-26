@@ -67,7 +67,7 @@ public class TestModelRegistry {
 
 			@Override
 			public CoreModelObject createExternalElement(IModelStore store,
-					String uri, IModelCopyManager copyManager,
+					String uri, IModelCopyManager copyManager, Class<?> type,
 					String specVersion) throws InvalidSPDXAnalysisException {
 				return new MockModelType(store, uri, copyManager, true, specVersion);
 			}
@@ -89,13 +89,18 @@ public class TestModelRegistry {
 			public Object uriToIndividual(String uri, @Nullable Class<?> type) {
 				return uriToIndividual.get(uri);
 			}
+
+			@Override
+			public boolean canBeExternal(Class<?> clazz) {
+				return false;
+			}
 			
 		});
 		assertTrue(ModelRegistry.getModelRegistry().containsSpecVersion("3.0.0"));
 		CoreModelObject result = ModelRegistry.getModelRegistry().inflateModelObject(modelStore, OBJECT_URI, MockModelType.TYPE,
 				copyManager, "3.0.0", true, null);
 		assertEquals(OBJECT_URI, result.getObjectUri());
-		Object oResult = ModelRegistry.getModelRegistry().getExternalElement(modelStore, OBJECT_URI, copyManager, "3.0.0");
+		Object oResult = ModelRegistry.getModelRegistry().getExternalElement(modelStore, OBJECT_URI, copyManager, null, "3.0.0");
 		assertTrue(oResult instanceof MockModelType);
 		assertEquals(OBJECT_URI, ((MockModelType)oResult).getObjectUri());
 		Class<?> cResult = ModelRegistry.getModelRegistry().typeToClass(MockModelType.TYPE, "3.0.0");

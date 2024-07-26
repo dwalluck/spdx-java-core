@@ -20,6 +20,8 @@ package org.spdx.core;
 import java.util.Objects;
 import java.util.Optional;
 
+import javax.annotation.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spdx.storage.IModelStore;
@@ -95,7 +97,7 @@ public class SimpleUriValue implements IndividualUriValue {
 	 * @throws InvalidSPDXAnalysisException on any store or parsing error
 	 */
 	public Object toModelObject(IModelStore store, IModelCopyManager copyManager,
-			String specVersion, Class<?> type) throws InvalidSPDXAnalysisException {
+			String specVersion, @Nullable Class<?> type) throws InvalidSPDXAnalysisException {
 		Object retval = ModelRegistry.getModelRegistry().uriToEnum(uri, specVersion);
 		if (Objects.nonNull(retval)) {
 			return retval;
@@ -109,7 +111,7 @@ public class SimpleUriValue implements IndividualUriValue {
 			return ModelRegistry.getModelRegistry().inflateModelObject(store, uri, typedValue.get().type, 
 					copyManager, specVersion, false, null); // note that idPrefix would not be used since any any of the inflated model objects
 		} else {
-			retval = ModelRegistry.getModelRegistry().getExternalElement(store, uri, copyManager, specVersion);
+			retval = ModelRegistry.getModelRegistry().getExternalElement(store, uri, copyManager, type, specVersion);
 			if (Objects.isNull(retval)) {
 				logger.warn(this.getIndividualURI() + " does not match an enum, individual, or external pattern");
 				retval = this;
