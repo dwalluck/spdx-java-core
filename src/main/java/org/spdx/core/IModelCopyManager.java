@@ -27,14 +27,13 @@ public interface IModelCopyManager {
 		 * @param toStore Model Store to copy to
 		 * @param fromStore Model Store containing the source item
 		 * @param sourceUri URI for the Source object
-		 * @param type Type to copy
 		 * @param toSpecVersion version of the spec the to value should comply with
 		 * @param toNamespace optional namespace of the to property
 		 * @return Object URI for the copied object
 		 * @throws InvalidSPDXAnalysisException on any SPDX related error
 		 */
 		public TypedValue copy(IModelStore toStore, IModelStore fromStore, 
-				String sourceUri, String type, String toSpecVersion, @Nullable String toNamespace) throws InvalidSPDXAnalysisException;
+				String sourceUri, String toSpecVersion, @Nullable String toNamespace) throws InvalidSPDXAnalysisException;
 
 			/**
 			 * Copy an item from one Model Object Store to another
@@ -42,12 +41,11 @@ public interface IModelCopyManager {
 			 * @param toObjectUri URI for the destination object
 			 * @param fromStore Model Store containing the source item
 			 * @param fromObjectUri Object URI for the source item
-			 * @param type Type to copy
 			 * @param toSpecVersion version of the spec the to value should comply with
 			 * @param toNamespace optional namespace of the to property
 			 * @throws InvalidSPDXAnalysisException on any SPDX related error
 			 */
-			public void copy(IModelStore toStore, String toObjectUri, IModelStore fromStore, String fromObjectUri, String type,
+			public void copy(IModelStore toStore, String toObjectUri, IModelStore fromStore, String fromObjectUri,
 					String toSpecVersion, @Nullable String toNamespace) throws InvalidSPDXAnalysisException;
 			
 			/**

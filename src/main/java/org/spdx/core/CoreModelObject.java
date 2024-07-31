@@ -877,8 +877,7 @@ public abstract class CoreModelObject {
 			throw new InvalidSPDXAnalysisException("Copying is not enabled for "+objectUri);
 		}
 		copyManager.copy(this.modelStore, objectUri, 
-				source.getModelStore(), source.getObjectUri(), this.getType(),
-				specVersion, null);
+				source.getModelStore(), source.getObjectUri(), specVersion, null);
 	}
 	
 	/**

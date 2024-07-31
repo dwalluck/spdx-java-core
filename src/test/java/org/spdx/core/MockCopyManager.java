@@ -16,7 +16,7 @@ public class MockCopyManager implements IModelCopyManager {
 
 	@Override
 	public TypedValue copy(IModelStore toStore, IModelStore fromStore,
-			String sourceUri, String type, String toSpecVersion,
+			String sourceUri, String toSpecVersion,
 			String toNamespace) throws InvalidSPDXAnalysisException {
 		// Mock - not implemented
 		return null;
@@ -24,7 +24,7 @@ public class MockCopyManager implements IModelCopyManager {
 
 	@Override
 	public void copy(IModelStore toStore, String toObjectUri,
-			IModelStore fromStore, String fromObjectUri, String type,
+			IModelStore fromStore, String fromObjectUri,
 			String toSpecVersion, String toNamespace)
 			throws InvalidSPDXAnalysisException {
 		// Mock - not implemented
