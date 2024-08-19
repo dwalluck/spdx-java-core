@@ -21,6 +21,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import javax.annotation.Nullable;
+
+import org.spdx.core.CoreModelObject;
 import org.spdx.core.InvalidSPDXAnalysisException;
 
 /**
@@ -31,7 +34,7 @@ import org.spdx.core.InvalidSPDXAnalysisException;
 public interface ISerializableModelStore extends IModelStore {
 
 	/**
-	 * Serialize the items stored in the model store.  The specific format for serialization depends on the document store.
+	 * Serialize all the items stored in the model store.  The specific format for serialization depends on the document store.
 	 * @param stream output stream to serialize to
 	 * @throws InvalidSPDXAnalysisException on any SPDX error
 	 * @throws IOException on IO error
@@ -39,11 +42,22 @@ public interface ISerializableModelStore extends IModelStore {
 	public void serialize(OutputStream stream)  throws InvalidSPDXAnalysisException, IOException;
 	
 	/**
-	 * Deserialize / read an SPDX document from a stream
-	 * @param stream input stream to deserialize from
-	 * @param overwrite if true, allow any existing documents with the same documentUri to be overwritten
+	 * Serialize the items stored in the model store.  The specific format for serialization depends on the document store.
+	 * @param stream output stream to serialize to
+	 * @param objectToSerialize if an SpdxDocument, serialize all elements represented by that document, otherwise
+	 * serialize just the object.  If null, serialize all items in the store.
 	 * @throws InvalidSPDXAnalysisException on any SPDX error
 	 * @throws IOException on IO error
 	 */
-	public void deSerialize(InputStream stream, boolean overwrite) throws InvalidSPDXAnalysisException, IOException;
+	public void serialize(OutputStream stream, @Nullable CoreModelObject objectToSerialize)  throws InvalidSPDXAnalysisException, IOException;
+	
+	/**
+	 * Deserialize / read an SPDX document from a stream
+	 * @param stream input stream to deserialize from
+	 * @param overwrite if true, allow any existing documents with the same documentUri to be overwritten
+	 * @return a model object representing the deserialized SPDX data - commonly an SPDX Document, but depends on version and what was serialized
+	 * @throws InvalidSPDXAnalysisException on any SPDX error
+	 * @throws IOException on IO error
+	 */
+	public CoreModelObject deSerialize(InputStream stream, boolean overwrite) throws InvalidSPDXAnalysisException, IOException;
 }
