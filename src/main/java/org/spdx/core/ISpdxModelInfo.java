@@ -48,7 +48,6 @@ public interface ISpdxModelInfo {
 	/**
 	 * @param modelStore store to use for the inflated object
 	 * @param objectUri URI of the external element
-	 * @param documentUri URI for the SPDX document to store the external element reference - used for compatibility with SPDX 2.X model stores
 	 * @param type Type of the object to create
 	 * @param copyManager if non-null, implicitly copy any referenced properties from other model stores
 	 * @param specVersion version of the SPDX specification used by the model object
