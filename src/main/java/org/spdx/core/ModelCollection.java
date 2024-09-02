@@ -176,9 +176,8 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 	/**
 	 * Converts any typed or individual value objects to a ModelObject
 	 */
-	private UnaryOperator<Object> checkConvertTypedValue = value -> {
-		return checkConvertTypedValue(value);
-	};
+	
+	private UnaryOperator<Object> checkConvertTypedValue = ModelCollection.this::checkConvertTypedValue;
 	
 	/**
 	 * @return a list of objects for the model collection
