@@ -38,7 +38,6 @@ import org.spdx.storage.IModelStore.IdType;
 import org.spdx.storage.IModelStore.ModelUpdate;
 
 /**
- * @author Gary O'Neall
  * 
  * Superclass for all SPDX model objects
  * 
@@ -70,6 +69,8 @@ import org.spdx.storage.IModelStore.ModelUpdate;
  *     
  * This class also handles the conversion of a CoreModelObject to and from a TypeValue for storage in the ModelStore.
  *
+ * @author Gary O'Neall
+ * 
  */
 public abstract class CoreModelObject {
 	

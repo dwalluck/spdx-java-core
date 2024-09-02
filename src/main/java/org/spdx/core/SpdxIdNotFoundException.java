@@ -18,9 +18,9 @@
 package org.spdx.core;
 
 /**
- * @author Gary O'Neall
- * 
  * Exception for no SPDX identifier found
+ * 
+ * @author Gary O'Neall
  *
  */
 public class SpdxIdNotFoundException extends InvalidSPDXAnalysisException {

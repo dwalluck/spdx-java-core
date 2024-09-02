@@ -19,6 +19,7 @@ package org.spdx.core;
 
 /**
  * Exception when an SPDX element is in use (e.g. exception thrown when attempting to delete)
+ * 
  * @author Gary O'Neall
  *
  */

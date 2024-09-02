@@ -19,9 +19,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @author Gary O'Neall
- * 
  * Static helper class for comparing license text
+ * 
+ * @author Gary O'Neall
  *
  */
 public class LicenseTextHelper {

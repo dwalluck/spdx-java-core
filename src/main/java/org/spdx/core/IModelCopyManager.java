@@ -9,8 +9,6 @@ import javax.annotation.Nullable;
 import org.spdx.storage.IModelStore;
 
 /**
- * @author Gary O'Neall
- * 
  * Implementation classes of this interface helps facilitate copying objects from one model to another.
  * 
  * In addition to the copy functions (methods), these objects keeps track of 
@@ -18,7 +16,7 @@ import org.spdx.storage.IModelStore;
  * 
  * These objects can be passed into the constructor for ModelObjects to allow the objects to be copied.
  * 
- *
+ * @author Gary O'Neall
  */
 public interface IModelCopyManager {
 	

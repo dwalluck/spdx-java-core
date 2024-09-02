@@ -19,6 +19,7 @@ package org.spdx.core;
 
 /**
  * Exception when an SDPX ID or object was not found in a model store
+ * 
  * @author Gary O'Neall
  *
  */

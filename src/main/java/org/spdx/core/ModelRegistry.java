@@ -18,13 +18,13 @@ import javax.annotation.Nullable;
 import org.spdx.storage.IModelStore;
 
 /**
- * @author Gary O'Neall
- * 
+
  * Singleton class which contains a registry of SPDX model versions
  * 
  * Each model version implements a model interface <code>ISpdxModelInfo</code> which 
  * supports inflating an SPDX type specific to that version
- * s
+ * 
+ * @author Gary O'Neall
  */
 public class ModelRegistry {
 

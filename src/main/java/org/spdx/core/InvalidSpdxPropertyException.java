@@ -18,9 +18,9 @@
 package org.spdx.core;
 
 /**
- * @author Gary O'Neall
- * 
  * Invalid property name or value for an SPDX item
+ * 
+ * @author Gary O'Neall
  *
  */
 public class InvalidSpdxPropertyException extends InvalidSPDXAnalysisException {

@@ -18,8 +18,9 @@
 package org.spdx.core;
 
 /**
- * @author gary
- *
+ * Exception for duplicate SPDX ID creations
+ * 
+ * @author Gary O'Neall
  */
 public class DuplicateSpdxIdException extends InvalidSPDXAnalysisException {
 

@@ -14,9 +14,9 @@ import org.spdx.core.InvalidSPDXAnalysisException;
 import org.spdx.core.TypedValue;
 
 /**
- * @author Gary O'Neall
- * 
  * Null model store to be used with constants and individuals
+ * 
+ * @author Gary O'Neall
  *
  */
 public class NullModelStore implements IModelStore {

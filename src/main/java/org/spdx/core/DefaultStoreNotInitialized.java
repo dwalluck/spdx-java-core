@@ -5,9 +5,9 @@
 package org.spdx.core;
 
 /**
- * @author Gary O'Neall
- * 
  * Exception where the default store is used before it has been initialized
+ * 
+ * @author Gary O'Neall
  *
  */
 public class DefaultStoreNotInitialized extends InvalidSPDXAnalysisException {

@@ -5,8 +5,9 @@
 package org.spdx.core;
 
 /**
- * @author gary
+ * Exceptions related to a model registry
  *
+ * @author Gary O'Neall
  */
 public class ModelRegistryException extends InvalidSPDXAnalysisException {
 

@@ -20,11 +20,10 @@ package org.spdx.core;
 import org.spdx.storage.PropertyDescriptor;
 
 /**
- * @author Gary O'Neall
- * 
  * Primarily used for debugging.  Records details when two model objects are compared and are determined to not
  * be equivalent
- *
+ * 
+ * @author Gary O'Neall
  */
 public class NotEquivalentReason {
 	
