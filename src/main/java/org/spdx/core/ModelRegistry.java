@@ -43,7 +43,7 @@ public class ModelRegistry {
 	 * Private constructor - singleton class
 	 */
 	private ModelRegistry() {
-		// Nothing really todo here
+		// Nothing really to be done here
 	}
 	
 	public static ModelRegistry getModelRegistry() {

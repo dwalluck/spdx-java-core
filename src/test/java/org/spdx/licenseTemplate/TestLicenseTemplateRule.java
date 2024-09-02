@@ -16,13 +16,8 @@
 */
 package org.spdx.licenseTemplate;
 
-
 import static org.junit.Assert.*;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.spdx.licenseTemplate.LicenseTemplateRule.RuleType;
 
@@ -38,33 +33,6 @@ public class TestLicenseTemplateRule {
 	static final String RULE_ORIGINAL = "Copyright (c) <year> <owner>\nAll rights reserved.";
 	static final String RULE_MATCH = "Copyright \\(c\\) .+All rights reserved.";
 	static final String RULE_EXAMPLE = "Copyright (C) 2013 John Doe\nAll rights reserved.";
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@Before
-	public void setUp() throws Exception {
-	}
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@After
-	public void tearDown() throws Exception {
-	}
 
 	@Test
 	public void testparseLicenseTemplateRule() throws LicenseTemplateRuleException {

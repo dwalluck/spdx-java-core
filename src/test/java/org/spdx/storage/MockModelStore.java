@@ -36,14 +36,14 @@ public class MockModelStore implements IModelStore {
 
 		@Override
 		public void unlock() {
-			
+			// ignore - nothing to do
 		}
 		
 	};
 
 	@Override
 	public void close() throws Exception {
-
+		// ignore - nothing to do
 	}
 
 	@Override
@@ -104,7 +104,7 @@ public class MockModelStore implements IModelStore {
 
 	@Override
 	public void leaveCriticalSection(IModelStoreLock lock) {
-
+		// ignore - nothing to do
 	}
 
 	@Override
@@ -207,7 +207,7 @@ public class MockModelStore implements IModelStore {
 
 	@Override
 	public void delete(String objectUri) throws InvalidSPDXAnalysisException {
-
+		// ignore - nothing to do
 	}
 
 	@Override

@@ -78,7 +78,7 @@ public abstract class CoreModelObject {
 	
 	static final String PROPERTY_MSG = "Property ";
 
-	private static final String ATTEMPTING_EXTERNAL_MSG = "Attempting to set {0} for an external model object";
+	private static final String ATTEMPTING_EXTERNAL_MSG = "Attempting to set {} for an external model object";
 	protected IModelStore modelStore;
 	protected String objectUri;
 	protected String specVersion;
@@ -357,10 +357,9 @@ public abstract class CoreModelObject {
 	 * @return an update which can be applied by invoking the apply method
 	 */
 	public ModelUpdate updatePropertyValue(PropertyDescriptor propertyDescriptor, Object value) {
-		return () ->{
+		return () ->
 			ModelObjectHelper.setPropertyValue(this.modelStore, objectUri, propertyDescriptor, value, 
 					copyManager, idPrefix);
-		};
 	}
 	
 	/**
@@ -476,9 +475,8 @@ public abstract class CoreModelObject {
 	 * @return  an update which can be applied by invoking the apply method
 	 */
 	public ModelUpdate updateRemoveProperty(PropertyDescriptor propertyDescriptor) {
-		return () -> {
+		return () -> 
 			ModelObjectHelper.removeProperty(modelStore, objectUri, propertyDescriptor);
-		};
 	}
 	
 	/**
@@ -499,9 +497,8 @@ public abstract class CoreModelObject {
 	 * @return an update which can be applied by invoking the apply method
 	 */
 	public ModelUpdate updateClearValueCollection(PropertyDescriptor propertyDescriptor) {
-		return () ->{
+		return () ->
 			ModelObjectHelper.clearValueCollection(modelStore, objectUri, propertyDescriptor);
-		};
 	}
 	
 	/**
@@ -528,10 +525,9 @@ public abstract class CoreModelObject {
 	 * @return an update which can be applied by invoking the apply method
 	 */
 	public ModelUpdate updateAddPropertyValueToCollection(PropertyDescriptor propertyDescriptor, Object value) {
-		return () ->{
+		return () ->
 			ModelObjectHelper.addValueToCollection(modelStore, objectUri, propertyDescriptor, value, 
 					copyManager, idPrefix);
-		};
 	}
 	
 	/**
@@ -555,9 +551,8 @@ public abstract class CoreModelObject {
 	 * @return an update which can be applied by invoking the apply method
 	 */
 	public ModelUpdate updateRemovePropertyValueFromCollection(PropertyDescriptor propertyDescriptor, Object value) {
-		return () -> {
+		return () -> 
 			ModelObjectHelper.removePropertyValueFromCollection(modelStore, objectUri, propertyDescriptor, value);
-		};
 	}
 	
 	/**
@@ -565,7 +560,7 @@ public abstract class CoreModelObject {
 	 * @return Set of values associated with a property
 	 */
 	public ModelSet<?> getObjectPropertyValueSet(PropertyDescriptor propertyDescriptor, Class<?> type) throws InvalidSPDXAnalysisException {
-		return new ModelSet<Object>(this.modelStore, this.objectUri, propertyDescriptor, 
+		return new ModelSet<>(this.modelStore, this.objectUri, propertyDescriptor, 
 				this.copyManager, type, specVersion, idPrefix);
 	}
 	
@@ -574,7 +569,7 @@ public abstract class CoreModelObject {
 	 * @return Collection of values associated with a property
 	 */
 	public ModelCollection<?> getObjectPropertyValueCollection(PropertyDescriptor propertyDescriptor, Class<?> type) throws InvalidSPDXAnalysisException {
-		return new ModelCollection<Object>(this.modelStore, this.objectUri, propertyDescriptor, 
+		return new ModelCollection<>(this.modelStore, this.objectUri, propertyDescriptor, 
 				this.copyManager, type, specVersion, idPrefix);
 	}
 	
@@ -615,7 +610,7 @@ public abstract class CoreModelObject {
 			return false;
 		}
 		List<PropertyDescriptor> propertyValueDescriptors = getPropertyValueDescriptors();
-		List<PropertyDescriptor> comparePropertyValueDescriptors = new ArrayList<PropertyDescriptor>(compare.getPropertyValueDescriptors());	// create a copy since we're going to modify it
+		List<PropertyDescriptor> comparePropertyValueDescriptors = new ArrayList<>(compare.getPropertyValueDescriptors());	// create a copy since we're going to modify it
 		for (PropertyDescriptor propertyDescriptor:propertyValueDescriptors) {
 			if (ignoreRelatedElements && isRelatedElement(propertyDescriptor)) {
 				continue;
@@ -862,7 +857,7 @@ public abstract class CoreModelObject {
 			retval.copyFrom(this);
 			return retval;
 		} catch (InvalidSPDXAnalysisException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeSpdxException(e);
 		}
 	}
 	
@@ -991,6 +986,7 @@ public abstract class CoreModelObject {
 
 	/**
 	 * @return the version of the SPDX specification this object complies with
+	 * @throws InvalidSPDXAnalysisException - this is here just for compatibility with overriden methods
 	 */
 	public String getSpecVersion() throws InvalidSPDXAnalysisException {
 		return this.specVersion;

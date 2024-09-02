@@ -120,7 +120,7 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 		try {
 			return this.modelStore.collectionSize(objectUri, this.propertyDescriptor);
 		} catch (InvalidSPDXAnalysisException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeSpdxException(e);
 		}
 	}
 
@@ -129,7 +129,7 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 		try {
 			return this.modelStore.collectionSize(objectUri, this.propertyDescriptor) == 0;
 		} catch (InvalidSPDXAnalysisException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeSpdxException(e);
 		}
 	}
 
@@ -145,7 +145,7 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 			return this.modelStore.collectionContains(
 					objectUri, this.propertyDescriptor, storedObject);
 		} catch (InvalidSPDXAnalysisException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeSpdxException(e);
 		}
 	}
 	
@@ -169,16 +169,15 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 			}
 			return retval;
 		} catch (InvalidSPDXAnalysisException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeSpdxException(e);
 		}
 	}
 	
 	/**
 	 * Converts any typed or individual value objects to a ModelObject
 	 */
-	private UnaryOperator<Object> checkConvertTypedValue = value -> {
-		return checkConvertTypedValue(value);
-	};
+	
+	private UnaryOperator<Object> checkConvertTypedValue = ModelCollection.this::checkConvertTypedValue;
 	
 	/**
 	 * @return a list of objects for the model collection
@@ -195,7 +194,7 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 			return new ModelCollectionIterator(
 					modelStore.listValues(objectUri, propertyDescriptor));
 		} catch (InvalidSPDXAnalysisException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeSpdxException(e);
 		}
 	}
 
@@ -216,7 +215,7 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 					objectUri, propertyDescriptor, 
 					ModelObjectHelper.modelObjectToStoredObject(element, modelStore, copyManager, idPrefix));
 		} catch (InvalidSPDXAnalysisException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeSpdxException(e);
 		}
 	}
 
@@ -226,7 +225,7 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 			return modelStore.removeValueFromCollection(objectUri, propertyDescriptor,
 					ModelObjectHelper.modelObjectToStoredObject(element, modelStore, null, null));
 		} catch (InvalidSPDXAnalysisException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeSpdxException(e);
 		}
 	}
 
@@ -276,7 +275,7 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 		try {
 			modelStore.clearValueCollection(objectUri, propertyDescriptor);
 		} catch (InvalidSPDXAnalysisException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeSpdxException(e);
 		}
 	}
 
