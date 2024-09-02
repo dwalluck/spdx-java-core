@@ -8,7 +8,7 @@ Please refer to the [Spdx-Java-Library](https://github.com/spdx/spdx-java-Librar
 
 Contributions are welcome.  See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-# Code quality badges
+## Code quality badges
 
 |   [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=spdx-java-core&metric=bugs)](https://sonarcloud.io/dashboard?id=spdx-java-core)    | [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=spdx-java-core&metric=security_rating)](https://sonarcloud.io/dashboard?id=spdx-java-core) | [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=spdx-java-core&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=spdx-java-core) | [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=spdx-java-core&metric=sqale_index)](https://sonarcloud.io/dashboard?id=spdx-java-core) |
 
