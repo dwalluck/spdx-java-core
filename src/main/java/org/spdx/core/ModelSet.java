@@ -62,7 +62,7 @@ public class ModelSet<T extends Object> extends ModelCollection<Object> implemen
 		try {
 			lock = this.getModelStore().enterCriticalSection(false);
 		} catch (InvalidSPDXAnalysisException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeSpdxException(e);
 		}
 		try {
 			if (!super.contains(element)) {
@@ -82,7 +82,7 @@ public class ModelSet<T extends Object> extends ModelCollection<Object> implemen
 		try {
 			lock = this.getModelStore().enterCriticalSection(false);
 		} catch (InvalidSPDXAnalysisException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeSpdxException(e);
 		}
 		try {
 			boolean retval = false;

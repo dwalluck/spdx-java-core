@@ -78,7 +78,7 @@ public abstract class CoreModelObject {
 	
 	static final String PROPERTY_MSG = "Property ";
 
-	private static final String ATTEMPTING_EXTERNAL_MSG = "Attempting to set {0} for an external model object";
+	private static final String ATTEMPTING_EXTERNAL_MSG = "Attempting to set {} for an external model object";
 	protected IModelStore modelStore;
 	protected String objectUri;
 	protected String specVersion;
@@ -862,7 +862,7 @@ public abstract class CoreModelObject {
 			retval.copyFrom(this);
 			return retval;
 		} catch (InvalidSPDXAnalysisException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeSpdxException(e);
 		}
 	}
 	
@@ -992,7 +992,7 @@ public abstract class CoreModelObject {
 	/**
 	 * @return the version of the SPDX specification this object complies with
 	 */
-	public String getSpecVersion() throws InvalidSPDXAnalysisException {
+	public String getSpecVersion() {
 		return this.specVersion;
 	}
 
