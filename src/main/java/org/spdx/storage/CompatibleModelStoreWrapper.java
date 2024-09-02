@@ -106,7 +106,7 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 
 	/**
 	 * @param documentUri a nameSpace for the ID
-	 * @param objectUri unique ID within the SPDX document
+	 * @param id unique ID within the SPDX document
 	 * @return true if the objectUri already exists for the documentUri
 	 */
 	public boolean exists(String documentUri, String id) {
@@ -160,7 +160,7 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 	 * Convenience method to convert an SPDX 2.X style typed value to the current TypedValue
 	 * @param documentUri SPDX v2 Document URI
 	 * @param id ID consistent with SPDX v2 spec
-	 * @param modelStore store used
+	 * @param store store used
 	 * @param type SPDX type
 	 * @return TypedValue with the proper Object URI formed by the documentUri and ID
 	 * @throws SpdxInvalidIdException if the ID is not valid
@@ -222,7 +222,7 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 	
 	/**
 	 * @param documentUri SPDX v2 spec document URI
-	 * @param objectUri SPDX ID
+	 * @param id SPDX ID
 	 * @param type type
 	 * @throws InvalidSPDXAnalysisException on any SPDX exception
 	 */
