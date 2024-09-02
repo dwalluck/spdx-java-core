@@ -108,7 +108,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <tbody>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="#org.spdx.core">org.spdx.core</a></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Common classes used by the SPDX model and library</div>
+</td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><a href="#org.spdx.storage">org.spdx.storage</a></th>
@@ -178,17 +180,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../IModelStore.IModelStoreLock.html" title="interface in org.spdx.storage">IModelStore.IModelStoreLock</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">CompatibleModelStoreWrapper.</span><code><span class="memberNameLink"><a href="../CompatibleModelStoreWrapper.html#enterCriticalSection(boolean)">enterCriticalSection</a></span>&#8203;(boolean&nbsp;readLockRequested)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../IModelStore.IModelStoreLock.html" title="interface in org.spdx.storage">IModelStore.IModelStoreLock</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">CompatibleModelStoreWrapper.</span><code><span class="memberNameLink"><a href="../CompatibleModelStoreWrapper.html#enterCriticalSection(java.lang.String,boolean)">enterCriticalSection</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;documentUri,
-                    boolean&nbsp;readLockRequested)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../IModelStore.IModelStoreLock.html" title="interface in org.spdx.storage">IModelStore.IModelStoreLock</a></code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">IModelStore.</span><code><span class="memberNameLink"><a href="../IModelStore.html#enterCriticalSection(boolean)">enterCriticalSection</a></span>&#8203;(boolean&nbsp;readLockRequested)</code></th>
 <td class="colLast">
 <div class="block">Enter a critical section.</div>
@@ -211,17 +202,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">CompatibleModelStoreWrapper.</span><code><span class="memberNameLink"><a href="../CompatibleModelStoreWrapper.html#leaveCriticalSection(org.spdx.storage.IModelStore.IModelStoreLock)">leaveCriticalSection</a></span>&#8203;(<a href="../IModelStore.IModelStoreLock.html" title="interface in org.spdx.storage">IModelStore.IModelStoreLock</a>&nbsp;lock)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">IModelStore.</span><code><span class="memberNameLink"><a href="../IModelStore.html#leaveCriticalSection(org.spdx.storage.IModelStore.IModelStoreLock)">leaveCriticalSection</a></span>&#8203;(<a href="../IModelStore.IModelStoreLock.html" title="interface in org.spdx.storage">IModelStore.IModelStoreLock</a>&nbsp;lock)</code></th>
 <td class="colLast">
 <div class="block">Leave a critical section.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><span class="typeNameLabel">NullModelStore.</span><code><span class="memberNameLink"><a href="../NullModelStore.html#leaveCriticalSection(org.spdx.storage.IModelStore.IModelStoreLock)">leaveCriticalSection</a></span>&#8203;(<a href="../IModelStore.IModelStoreLock.html" title="interface in org.spdx.storage">IModelStore.IModelStoreLock</a>&nbsp;lock)</code></th>
 <td class="colLast">&nbsp;</td>

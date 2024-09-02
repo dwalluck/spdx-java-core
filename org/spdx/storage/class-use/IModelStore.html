@@ -108,7 +108,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <tbody>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="#org.spdx.core">org.spdx.core</a></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Common classes used by the SPDX model and library</div>
+</td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><a href="#org.spdx.storage">org.spdx.storage</a></th>
@@ -490,77 +492,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../CompatibleModelStoreWrapper.html" title="class in org.spdx.storage">CompatibleModelStoreWrapper</a></span></code></th>
-<td class="colLast">
-<div class="block">Wraps a model store providing a compatible interface to the 1.X version of the SPDX Java Library</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../NullModelStore.html" title="class in org.spdx.storage">NullModelStore</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary">
-<caption><span>Methods in <a href="../package-summary.html">org.spdx.storage</a> that return <a href="../IModelStore.html" title="interface in org.spdx.storage">IModelStore</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colSecond" scope="col">Method</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../IModelStore.html" title="interface in org.spdx.storage">IModelStore</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">CompatibleModelStoreWrapper.</span><code><span class="memberNameLink"><a href="../CompatibleModelStoreWrapper.html#getBaseModelStore()">getBaseModelStore</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary">
-<caption><span>Methods in <a href="../package-summary.html">org.spdx.storage</a> with parameters of type <a href="../IModelStore.html" title="interface in org.spdx.storage">IModelStore</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colSecond" scope="col">Method</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">CompatibleModelStoreWrapper.</span><code><span class="memberNameLink"><a href="../CompatibleModelStoreWrapper.html#documentUriIdToUri(java.lang.String,java.lang.String,org.spdx.storage.IModelStore)">documentUriIdToUri</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;documentUri,
-                  <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;id,
-                  <a href="../IModelStore.html" title="interface in org.spdx.storage">IModelStore</a>&nbsp;store)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">CompatibleModelStoreWrapper.</span><code><span class="memberNameLink"><a href="../CompatibleModelStoreWrapper.html#objectUriToId(org.spdx.storage.IModelStore,java.lang.String,java.lang.String)">objectUriToId</a></span>&#8203;(<a href="../IModelStore.html" title="interface in org.spdx.storage">IModelStore</a>&nbsp;store,
-             <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;objectUri,
-             <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;documentUri)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static <a href="../../core/TypedValue.html" title="class in org.spdx.core">TypedValue</a></code></td>
-<th class="colSecond" scope="row"><span class="typeNameLabel">CompatibleModelStoreWrapper.</span><code><span class="memberNameLink"><a href="../CompatibleModelStoreWrapper.html#typedValueFromDocUri(java.lang.String,java.lang.String,org.spdx.storage.IModelStore,java.lang.String)">typedValueFromDocUri</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;documentUri,
-                    <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;id,
-                    <a href="../IModelStore.html" title="interface in org.spdx.storage">IModelStore</a>&nbsp;store,
-                    <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;type)</code></th>
 <td class="colLast">
-<div class="block">Convenience method to convert an SPDX 2.X style typed value to the current TypedValue</div>
+<div class="block">Null model store to be used with constants and individuals</div>
 </td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary">
-<caption><span>Constructors in <a href="../package-summary.html">org.spdx.storage</a> with parameters of type <a href="../IModelStore.html" title="interface in org.spdx.storage">IModelStore</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Constructor</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="../CompatibleModelStoreWrapper.html#%3Cinit%3E(org.spdx.storage.IModelStore)">CompatibleModelStoreWrapper</a></span>&#8203;(<a href="../IModelStore.html" title="interface in org.spdx.storage">IModelStore</a>&nbsp;baseStore)</code></th>
-<td class="colLast">&nbsp;</td>
 </tr>
 </tbody>
 </table>

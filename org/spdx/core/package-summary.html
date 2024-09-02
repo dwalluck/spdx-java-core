@@ -97,12 +97,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h1 title="Package" class="title">Package&nbsp;org.spdx.core</h1>
 </div>
 <div class="contentContainer">
-<section>
+<section><a id="package.description">
+<!--   -->
+</a>
+<div class="block">Common classes used by the SPDX model and library</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
-<dd>Gary O'Neall
- 
- Common classes used by the SPDX model and library</dd>
+<dd>Gary O'Neall</dd>
 </dl>
 </section>
 <ul class="blockList">
@@ -116,11 +117,17 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <tbody>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="IExternalElementInfo.html" title="interface in org.spdx.core">IExternalElementInfo</a></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Information about an Element which is external to the collection or store
+ 
+ The information stored is version dependent and implemented in the models</div>
+</td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><a href="IModelCopyManager.html" title="interface in org.spdx.core">IModelCopyManager</a></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Implementation classes of this interface helps facilitate copying objects from one model to another.</div>
+</td>
 </tr>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="IndividualUriValue.html" title="interface in org.spdx.core">IndividualUriValue</a></th>
@@ -130,7 +137,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><a href="ISpdxModelInfo.html" title="interface in org.spdx.core">ISpdxModelInfo</a></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Interface for SPDX model information</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -145,7 +154,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <tbody>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="CoreModelObject.html" title="class in org.spdx.core">CoreModelObject</a></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Superclass for all SPDX model objects
+ 
+ Provides the primary interface to the storage class that access and stores the data for 
+ the model objects.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><a href="CoreModelObject.CoreModelObjectBuilder.html" title="class in org.spdx.core">CoreModelObject.CoreModelObjectBuilder</a></th>
@@ -155,7 +169,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="DefaultModelStore.html" title="class in org.spdx.core">DefaultModelStore</a></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Singleton class to hold a default model store used when no model store is provided
+ 
+ WARNING: The model store is in memory and will continue to grow as it is utilized.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><a href="ModelCollection.html" title="class in org.spdx.core">ModelCollection</a>&lt;T&gt;</th>
@@ -171,7 +189,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><a href="ModelRegistry.html" title="class in org.spdx.core">ModelRegistry</a></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Singleton class which contains a registry of SPDX model versions
+ 
+ Each model version implements a model interface <code>ISpdxModelInfo</code> which 
+ supports inflating an SPDX type specific to that version</div>
+</td>
 </tr>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="ModelSet.html" title="class in org.spdx.core">ModelSet</a>&lt;T&gt;</th>
@@ -182,7 +205,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><a href="NotEquivalentReason.html" title="class in org.spdx.core">NotEquivalentReason</a></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Primarily used for debugging.</div>
+</td>
 </tr>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="SimpleUriValue.html" title="class in org.spdx.core">SimpleUriValue</a></th>
@@ -192,7 +217,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><a href="SpdxCoreConstants.html" title="class in org.spdx.core">SpdxCoreConstants</a></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Common constants used in the SPDX core library</div>
+</td>
 </tr>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="TypedValue.html" title="class in org.spdx.core">TypedValue</a></th>
@@ -232,23 +259,33 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <tbody>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="DefaultStoreNotInitialized.html" title="class in org.spdx.core">DefaultStoreNotInitialized</a></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Exception where the default store is used before it has been initialized</div>
+</td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><a href="DuplicateSpdxIdException.html" title="class in org.spdx.core">DuplicateSpdxIdException</a></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Exception for duplicate SPDX ID creations</div>
+</td>
 </tr>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="InvalidSPDXAnalysisException.html" title="class in org.spdx.core">InvalidSPDXAnalysisException</a></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Exception for invalid SPDX Documents</div>
+</td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><a href="InvalidSpdxPropertyException.html" title="class in org.spdx.core">InvalidSpdxPropertyException</a></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Invalid property name or value for an SPDX item</div>
+</td>
 </tr>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="ModelRegistryException.html" title="class in org.spdx.core">ModelRegistryException</a></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Exceptions related to a model registry</div>
+</td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><a href="SpdxIdInUseException.html" title="class in org.spdx.core">SpdxIdInUseException</a></th>
@@ -258,15 +295,21 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="SpdxIdNotFoundException.html" title="class in org.spdx.core">SpdxIdNotFoundException</a></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Exception for no SPDX identifier found</div>
+</td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><a href="SpdxInvalidIdException.html" title="class in org.spdx.core">SpdxInvalidIdException</a></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Invalid SPDX identifier</div>
+</td>
 </tr>
 <tr class="altColor">
 <th class="colFirst" scope="row"><a href="SpdxInvalidTypeException.html" title="class in org.spdx.core">SpdxInvalidTypeException</a></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Invalid type for an SPDX property</div>
+</td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><a href="SpdxObjectNotInStoreException.html" title="class in org.spdx.core">SpdxObjectNotInStoreException</a></th>
