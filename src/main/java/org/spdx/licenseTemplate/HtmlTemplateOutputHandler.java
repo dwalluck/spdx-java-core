@@ -96,7 +96,7 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 	/**
 	 * Format HTML for a replaceable string
 	 * @param text text for the optional license string
-	 * @param objectUri ID used for the div 
+	 * @param id ID used for the div 
 	 * @return a replaceable string
 	 */
 	public static String formatReplaceabledHTML(String text, String id) {
@@ -170,7 +170,7 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 	
 	/**
 	 * Format HTML for an optional string
-	 * @param objectUri ID used for the div 
+	 * @param id ID used for the div 
 	 * @return a formated id for use in the div
 	 */
 	public static String formatStartOptionalHTML(String id) {
