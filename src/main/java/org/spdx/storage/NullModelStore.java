@@ -21,6 +21,8 @@ import org.spdx.core.TypedValue;
  */
 public class NullModelStore implements IModelStore {
 
+	private static final String NULL_MODEL_MSG = "Null model store - can only be used with constants and individuals";
+
 	@Override
 	public void close() throws Exception {
 		// Nothing to close
@@ -34,7 +36,7 @@ public class NullModelStore implements IModelStore {
 	@Override
 	public void create(TypedValue typedValue)
 			throws InvalidSPDXAnalysisException {
-		throw new InvalidSPDXAnalysisException("Null model store - can only be used with constants and individuals");
+		throw new InvalidSPDXAnalysisException(NULL_MODEL_MSG);
 	}
 
 	@Override
@@ -47,7 +49,7 @@ public class NullModelStore implements IModelStore {
 	public void setValue(String objectUri,
 			PropertyDescriptor propertyDescriptor, Object value)
 			throws InvalidSPDXAnalysisException {
-		throw new InvalidSPDXAnalysisException("Null model store - can only be used with constants and individuals");
+		throw new InvalidSPDXAnalysisException(NULL_MODEL_MSG);
 	}
 
 	@Override
@@ -59,14 +61,14 @@ public class NullModelStore implements IModelStore {
 
 	@Override
 	public String getNextId(IdType idType) throws InvalidSPDXAnalysisException {
-		throw new InvalidSPDXAnalysisException("Null model store - can only be used with constants and individuals");
+		throw new InvalidSPDXAnalysisException(NULL_MODEL_MSG);
 	}
 
 	@Override
 	public void removeProperty(String objectUri,
 			PropertyDescriptor propertyDescriptor)
 			throws InvalidSPDXAnalysisException {
-		throw new InvalidSPDXAnalysisException("Null model store - can only be used with constants and individuals");
+		throw new InvalidSPDXAnalysisException(NULL_MODEL_MSG);
 	}
 
 	@Override
@@ -97,35 +99,35 @@ public class NullModelStore implements IModelStore {
 	public boolean removeValueFromCollection(String objectUri,
 			PropertyDescriptor propertyDescriptor, Object value)
 			throws InvalidSPDXAnalysisException {
-		throw new InvalidSPDXAnalysisException("Null model store - can only be used with constants and individuals");
+		throw new InvalidSPDXAnalysisException(NULL_MODEL_MSG);
 	}
 
 	@Override
 	public int collectionSize(String objectUri,
 			PropertyDescriptor propertyDescriptor)
 			throws InvalidSPDXAnalysisException {
-		throw new InvalidSPDXAnalysisException("Null model store - can only be used with constants and individuals");
+		throw new InvalidSPDXAnalysisException(NULL_MODEL_MSG);
 	}
 
 	@Override
 	public boolean collectionContains(String objectUri,
 			PropertyDescriptor propertyDescriptor, Object value)
 			throws InvalidSPDXAnalysisException {
-		throw new InvalidSPDXAnalysisException("Null model store - can only be used with constants and individuals");
+		throw new InvalidSPDXAnalysisException(NULL_MODEL_MSG);
 	}
 
 	@Override
 	public void clearValueCollection(String objectUri,
 			PropertyDescriptor propertyDescriptor)
 			throws InvalidSPDXAnalysisException {
-		throw new InvalidSPDXAnalysisException("Null model store - can only be used with constants and individuals");
+		throw new InvalidSPDXAnalysisException(NULL_MODEL_MSG);
 	}
 
 	@Override
 	public boolean addValueToCollection(String objectUri,
 			PropertyDescriptor propertyDescriptor, Object value)
 			throws InvalidSPDXAnalysisException {
-		throw new InvalidSPDXAnalysisException("Null model store - can only be used with constants and individuals");
+		throw new InvalidSPDXAnalysisException(NULL_MODEL_MSG);
 	}
 
 	@Override
@@ -139,21 +141,21 @@ public class NullModelStore implements IModelStore {
 	public boolean isCollectionMembersAssignableTo(String objectUri,
 			PropertyDescriptor propertyDescriptor, Class<?> clazz)
 			throws InvalidSPDXAnalysisException {
-		throw new InvalidSPDXAnalysisException("Null model store - can only be used with constants and individuals");
+		throw new InvalidSPDXAnalysisException(NULL_MODEL_MSG);
 	}
 
 	@Override
 	public boolean isPropertyValueAssignableTo(String objectUri,
 			PropertyDescriptor propertyDescriptor, Class<?> clazz,
 			String specVersion) throws InvalidSPDXAnalysisException {
-		throw new InvalidSPDXAnalysisException("Null model store - can only be used with constants and individuals");
+		throw new InvalidSPDXAnalysisException(NULL_MODEL_MSG);
 	}
 
 	@Override
 	public boolean isCollectionProperty(String objectUri,
 			PropertyDescriptor propertyDescriptor)
 			throws InvalidSPDXAnalysisException {
-		throw new InvalidSPDXAnalysisException("Null model store - can only be used with constants and individuals");
+		throw new InvalidSPDXAnalysisException(NULL_MODEL_MSG);
 	}
 
 	@Override
@@ -175,7 +177,7 @@ public class NullModelStore implements IModelStore {
 
 	@Override
 	public void delete(String objectUri) throws InvalidSPDXAnalysisException {
-		throw new InvalidSPDXAnalysisException("Null model store - can only be used with constants and individuals");
+		throw new InvalidSPDXAnalysisException(NULL_MODEL_MSG);
 	}
 
 	@Override

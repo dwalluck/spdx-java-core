@@ -62,6 +62,7 @@ public class TestCoreModelObject {
 	 */
 	@After
 	public void tearDown() throws Exception {
+		// Nothing to tear down (yet)
 	}
 
 	/**

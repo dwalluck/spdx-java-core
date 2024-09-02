@@ -253,7 +253,7 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 	 * @return all property names stored for the Object URI
 	 * @throws InvalidSPDXAnalysisException on any SPDX exception
 	 */
-	public Collection<? extends String> getPropertyValueNames(
+	public Collection<String> getPropertyValueNames(
 			String objectUri) throws InvalidSPDXAnalysisException {
 		return StreamSupport.stream(getPropertyValueDescriptors(objectUri).spliterator(), false)
 						.map(descriptor -> descriptor.getName())
@@ -266,7 +266,7 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 	 * @return all property names stored for the documentUri#id
 	 * @throws InvalidSPDXAnalysisException on any SPDX exception
 	 */
-	public Collection<? extends String> getPropertyValueNames(
+	public Collection<String> getPropertyValueNames(
 			String documentUri, String id) throws InvalidSPDXAnalysisException {
 		return getPropertyValueNames(documentUriIdToUri(documentUri, id, baseStore));
 	}
@@ -575,7 +575,7 @@ public class CompatibleModelStoreWrapper implements IModelStore {
 	@Override
 	public boolean equals(Object comp) {
 		return comp instanceof CompatibleModelStoreWrapper && getBaseModelStore().equals(((CompatibleModelStoreWrapper)comp).getBaseModelStore());
-		// TODO: Return true if the base is equal since this contains no properties
+		// Return true if the base is equal since this contains no properties
 	}
 	
 	@Override
