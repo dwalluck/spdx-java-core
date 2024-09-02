@@ -35,6 +35,7 @@ public class LicenseTextHelperTest extends TestCase {
 	/**
 	 * @throws java.lang.Exception
 	 */
+	@Override
 	public void setUp() throws Exception {
 		super.setUp();
 	}
@@ -42,6 +43,7 @@ public class LicenseTextHelperTest extends TestCase {
 	/**
 	 * @throws java.lang.Exception
 	 */
+	@Override
 	public void tearDown() throws Exception {
 		super.tearDown();
 	}

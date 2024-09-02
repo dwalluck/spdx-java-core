@@ -5,10 +5,9 @@
 package org.spdx.core;
 
 /**
- * @author Gary O'Neall
- * 
  * Common constants used in the SPDX core library
  *
+ * @author Gary O'Neall
  */
 public class SpdxCoreConstants {
 

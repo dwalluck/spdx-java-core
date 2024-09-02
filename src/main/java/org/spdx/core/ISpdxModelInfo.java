@@ -12,10 +12,9 @@ import javax.annotation.Nullable;
 import org.spdx.storage.IModelStore;
 
 /**
- * @author Gary O'Neall
- * 
  * Interface for SPDX model information
- *
+ * 
+ * @author Gary O'Neall
  */
 public interface ISpdxModelInfo {
 	

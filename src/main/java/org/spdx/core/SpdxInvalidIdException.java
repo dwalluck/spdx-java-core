@@ -18,9 +18,9 @@
 package org.spdx.core;
 
 /**
- * @author Gary O'Neall
+ * Invalid SPDX identifier
  * 
- * Ivalid SPDX identifier
+ * @author Gary O'Neall
  *
  */
 public class SpdxInvalidIdException extends InvalidSPDXAnalysisException {

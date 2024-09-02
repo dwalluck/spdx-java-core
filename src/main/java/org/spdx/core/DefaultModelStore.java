@@ -24,11 +24,11 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import org.spdx.storage.IModelStore;
 
 /**
- * @author Gary O'Neall
- * 
  * Singleton class to hold a default model store used when no model store is provided
  * 
  * WARNING: The model store is in memory and will continue to grow as it is utilized.  There is NO garbage collection.
+ * 
+ * @author Gary O'Neall
  *
  */
 public class DefaultModelStore {

@@ -38,7 +38,6 @@ import org.spdx.storage.IModelStore.IdType;
 import org.spdx.storage.IModelStore.ModelUpdate;
 
 /**
- * @author Gary O'Neall
  * 
  * Superclass for all SPDX model objects
  * 
@@ -70,12 +69,16 @@ import org.spdx.storage.IModelStore.ModelUpdate;
  *     
  * This class also handles the conversion of a CoreModelObject to and from a TypeValue for storage in the ModelStore.
  *
+ * @author Gary O'Neall
+ * 
  */
 public abstract class CoreModelObject {
 	
 	static final Logger logger = LoggerFactory.getLogger(CoreModelObject.class);
 	
 	static final String PROPERTY_MSG = "Property ";
+
+	private static final String ATTEMPTING_EXTERNAL_MSG = "Attempting to set {0} for an external model object";
 	protected IModelStore modelStore;
 	protected String objectUri;
 	protected String specVersion;
@@ -340,7 +343,7 @@ public abstract class CoreModelObject {
 			throw new InvalidSPDXAnalysisException("Can not set a property for the literal value "+((IndividualUriValue)this).getIndividualURI());
 		}
 		if (isExternal()) {
-			logger.warn("Attempting to set "+propertyDescriptor+" for an external model object");
+			logger.warn(ATTEMPTING_EXTERNAL_MSG, propertyDescriptor);
 			return;
 		}
 		ModelObjectHelper.setPropertyValue(this.modelStore, objectUri, propertyDescriptor, value, 
@@ -461,7 +464,7 @@ public abstract class CoreModelObject {
 	 */
 	public void removeProperty(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
 		if (isExternal()) {
-			logger.warn("Attempting to set "+propertyDescriptor+" for an external model object");
+			logger.warn(ATTEMPTING_EXTERNAL_MSG, propertyDescriptor);
 			return;
 		}
 		ModelObjectHelper.removeProperty(modelStore, objectUri, propertyDescriptor);
@@ -484,7 +487,7 @@ public abstract class CoreModelObject {
 	 */
 	public void clearValueCollection(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
 		if (isExternal()) {
-			logger.warn("Attempting to set "+propertyDescriptor+" for an external model object");
+			logger.warn(ATTEMPTING_EXTERNAL_MSG, propertyDescriptor);
 			return;
 		}
 		ModelObjectHelper.clearValueCollection(modelStore, objectUri, propertyDescriptor);
@@ -510,7 +513,7 @@ public abstract class CoreModelObject {
 	 */
 	public void addPropertyValueToCollection(PropertyDescriptor propertyDescriptor, Object value) throws InvalidSPDXAnalysisException {
 		if (isExternal()) {
-			logger.warn("Attempting to set "+propertyDescriptor+" for an external model object");
+			logger.warn(ATTEMPTING_EXTERNAL_MSG, propertyDescriptor);
 			return;
 		}
 		ModelObjectHelper.addValueToCollection(modelStore, objectUri, propertyDescriptor, value, 
@@ -539,7 +542,7 @@ public abstract class CoreModelObject {
 	 */
 	public void removePropertyValueFromCollection(PropertyDescriptor propertyDescriptor, Object value) throws InvalidSPDXAnalysisException {
 		if (isExternal()) {
-			logger.warn("Attempting to set "+propertyDescriptor+" for an external model object");
+			logger.warn(ATTEMPTING_EXTERNAL_MSG, propertyDescriptor);
 			return;
 		}
 		ModelObjectHelper.removePropertyValueFromCollection(modelStore, objectUri, propertyDescriptor, value);

@@ -18,9 +18,9 @@
 package org.spdx.core;
 
 /**
- * @author Gary O'Neall
- * 
  * Exception for invalid SPDX Documents
+ * 
+ * @author Gary O'Neall
  *
  */
 public class InvalidSPDXAnalysisException extends Exception {

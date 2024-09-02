@@ -5,12 +5,11 @@
 package org.spdx.core;
 
 /**
- * @author Gary O'Neall
- * 
  * Information about an Element which is external to the collection or store
  * 
  * The information stored is version dependent and implemented in the models
- *
+ * 
+ * @author Gary O'Neall
  */
 public interface IExternalElementInfo {
 

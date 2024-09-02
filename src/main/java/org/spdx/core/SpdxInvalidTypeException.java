@@ -18,9 +18,9 @@
 package org.spdx.core;
 
 /**
- * @author Gary O'Neall
- * 
  * Invalid type for an SPDX property
+ * 
+ * @author Gary O'Neall
  *
  */
 public class SpdxInvalidTypeException extends InvalidSPDXAnalysisException {

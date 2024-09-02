@@ -54,9 +54,7 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 	 */
 	protected Map<String, IExternalElementInfo> externalMap;
 	private Class<?> type;
-	//TODO: See if this boolean is needed before deleting the comments
-//	private boolean licensePrimitiveAssignable;  // If true, NONE and NOASSERTION should be converted to NoneLicense and NoAssertionLicense
-	
+
 	/**
 	 * @author Gary O'Neall
 	 * 
@@ -111,13 +109,9 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 		}
 		if (Objects.nonNull(type)) {
 			this.type = type;
-			// TODO: make sure the following commented logic is not needed
-//			licensePrimitiveAssignable = type.isAssignableFrom(SpdxNoneLicense.class) || type.isAssignableFrom(SpdxNoAssertionLicense.class);
 			if (!modelStore.isCollectionMembersAssignableTo(objectUri, propertyDescriptor, type)) {
 				throw new SpdxInvalidTypeException("Incompatible type for property "+propertyDescriptor+": "+type.toString());
 			}
-//		} else {
-//			licensePrimitiveAssignable = false;
 		}
 	}
 

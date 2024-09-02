@@ -113,7 +113,7 @@ public class SimpleUriValue implements IndividualUriValue {
 		} else {
 			retval = ModelRegistry.getModelRegistry().getExternalElement(store, uri, copyManager, type, specVersion);
 			if (Objects.isNull(retval)) {
-				logger.warn(this.getIndividualURI() + " does not match an enum, individual, or external pattern");
+				logger.warn("{0} does not match an enum, individual, or external pattern", this.getIndividualURI());
 				retval = this;
 			}
 		}
