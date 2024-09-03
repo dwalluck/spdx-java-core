@@ -37,7 +37,7 @@
   <scm>
     <url>https://github.com/spdx/spdx-java-core</url>
     <connection>scm:git:git://github.com/spdx/spdx-java-core.git</connection>
-    <developerConnection>scm:git:git@github.com:/spdx/spdx-java-core.git</developerConnection>
+    <developerConnection>scm:git:git@github.com:spdx/spdx-java-core.git</developerConnection>
   </scm>
   <properties>
     <maven.compiler.source>8</maven.compiler.source>
