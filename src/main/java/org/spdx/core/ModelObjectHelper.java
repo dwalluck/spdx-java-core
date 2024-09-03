@@ -48,7 +48,6 @@ public class ModelObjectHelper {
 	 * @param objectUri the Object URI or anonymous ID
 	 * @param propertyDescriptor property descriptor for the property
 	 * @param copyManager if non null, any ModelObject property value not stored in the modelStore under the stDocumentUri will be copied to make it available
-	 * @param documentUri URI for the SPDX document to store the external element reference - used for compatibility with SPDX 2.X model stores
 	 * @param specVersion - version of the SPDX spec the object complies with
 	 * @param type optional type hint - used for individuals where the type may be ambiguous
 	 * @param idPrefix prefix to be used when generating new SPDX IDs
