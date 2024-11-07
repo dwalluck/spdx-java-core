@@ -26,7 +26,7 @@ import org.spdx.storage.IModelStore;
 /**
  * Singleton class to hold a default model store used when no model store is provided
  * 
- * WARNING: The model store is in memory and will continue to grow as it is utilized.  There is NO garbage collection.
+ * WARNING: The model store and copy manager are in memory and will continue to grow as they are utilized.  There is NO garbage collection.
  * 
  * @author Gary O'Neall
  *
