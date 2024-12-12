@@ -26,12 +26,12 @@ import java.util.regex.Pattern;
  */
 public class LicenseTextHelper {
 	
-	protected static final String TOKEN_SPLIT_REGEX = "(^|[^\\s\\.,?'();:\"/\\[\\]]{1,100})((\\s|\\.|,|\\?|'|\"|\\(|\\)|;|:|/|\\[|\\]|$){1,100})";
+	protected static final String TOKEN_SPLIT_REGEX = "(^|[^\\s.,?'();:\"/\\[\\]]{1,100})((\\s|\\.|,|\\?|'|\"|\\(|\\)|;|:|/|\\[|]|$){1,100})";
 	public static final Pattern TOKEN_SPLIT_PATTERN = Pattern.compile(TOKEN_SPLIT_REGEX);
-	protected static final Set<String> PUNCTUATION = Collections.unmodifiableSet(new HashSet<String>(
+	protected static final Set<String> PUNCTUATION = Collections.unmodifiableSet(new HashSet<>(
 			Arrays.asList(".",",","?","\"","'","(",")",";",":","/","[", "]")));
 	// most of these are comments for common programming languages (C style, Java, Ruby, Python)
-	protected static final Set<String> SKIPPABLE_TOKENS = Collections.unmodifiableSet(new HashSet<String>(
+	protected static final Set<String> SKIPPABLE_TOKENS = Collections.unmodifiableSet(new HashSet<>(
 		Arrays.asList("//","/*","*/","/**","#","##","*","**","\"\"\"","/","=begin","=end")));
 	static final String DASHES_REGEX = "[\\u2012\\u2013\\u2014\\u2015]";
 	static final Pattern SPACE_PATTERN = Pattern.compile("[\\u202F\\u2007\\u2060\\u2009]");
@@ -41,7 +41,8 @@ public class LicenseTextHelper {
 	static final Pattern COPYRIGHT_HOLDERS_PATTERN = Pattern.compile("copyright holders", Pattern.CASE_INSENSITIVE);
 	static final Pattern COPYRIGHT_OWNERS_PATTERN = Pattern.compile("copyright owners", Pattern.CASE_INSENSITIVE);
 	static final Pattern COPYRIGHT_OWNER_PATTERN = Pattern.compile("copyright owner", Pattern.CASE_INSENSITIVE);
-	static final Pattern PER_CENT_PATTERN_LF = Pattern.compile("per\\s{0,100}\\n{1,10}\\s{0,100}cent", Pattern.CASE_INSENSITIVE);
+	@SuppressWarnings("unused")
+    static final Pattern PER_CENT_PATTERN_LF = Pattern.compile("per\\s{0,100}\\n{1,10}\\s{0,100}cent", Pattern.CASE_INSENSITIVE);
 	static final Pattern COPYRIGHT_HOLDERS_PATTERN_LF = Pattern.compile("copyright\\s{0,100}\\n{1,10}\\s{0,100}holders", Pattern.CASE_INSENSITIVE);
 	static final Pattern COPYRIGHT_HOLDER_PATTERN_LF = Pattern.compile("copyright\\s{0,100}\\n{1,10}\\s{0,100}holder", Pattern.CASE_INSENSITIVE);
 	static final Pattern COPYRIGHT_OWNERS_PATTERN_LF = Pattern.compile("copyright\\s{0,100}\\n{1,10}\\s{0,100}owners", Pattern.CASE_INSENSITIVE);
@@ -104,13 +105,13 @@ public class LicenseTextHelper {
 	}
 	
 	/**
-	 * Returns true if two sets of license text is considered a match per
-	 * the SPDX License matching guidelines documented at spdx.org (currently http://spdx.org/wiki/spdx-license-list-match-guidelines)
-	 * There are 2 unimplemented features - bullets/numbering is not considered and comments with no whitespace between text is not skipped
-	 * @param licenseTextA text to compare
-	 * @param licenseTextB text to compare
-	 * @return true if the license text is equivalent
-	 */
+     * Returns true if two sets of license text is considered a match per
+     * the SPDX License matching guidelines documented at spdx.org (currently <a href="https://spdx.github.io/spdx-spec/v2.3/license-matching-guidelines-and-templates/">license matching guidelines</a>)
+     * There are 2 unimplemented features - bullets/numbering is not considered and comments with no whitespace between text is not skipped
+     * @param licenseTextA text to compare
+     * @param licenseTextB text to compare
+     * @return true if the license text is equivalent
+     */
 	public static boolean isLicenseTextEquivalent(String licenseTextA, String licenseTextB) {
 		//TODO: Handle comment characters without white space before text
 		//TODO: Handle bullets and numbering
@@ -126,8 +127,8 @@ public class LicenseTextHelper {
 		if (licenseTextA.equals(licenseTextB)) {
 			return true;
 		}
-		Map<Integer, LineColumn> tokenToLocationA = new HashMap<Integer, LineColumn>();
-		Map<Integer, LineColumn> tokenToLocationB = new HashMap<Integer, LineColumn>();
+		Map<Integer, LineColumn> tokenToLocationA = new HashMap<>();
+		Map<Integer, LineColumn> tokenToLocationB = new HashMap<>();
 		String[] licenseATokens = tokenizeLicenseText(licenseTextA,tokenToLocationA);
 		String[] licenseBTokens = tokenizeLicenseText(licenseTextB,tokenToLocationB);
 		int bTokenCounter = 0;
@@ -137,7 +138,7 @@ public class LicenseTextHelper {
 		while (nextAToken != null) {
 			if (nextBToken == null) {
 				// end of b stream
-				while (nextAToken != null && canSkip(nextAToken)) {
+				while (canSkip(nextAToken)) {
 					nextAToken = getTokenAt(licenseATokens, aTokenCounter++);
 				}
 				if (nextAToken != null) {
@@ -149,11 +150,11 @@ public class LicenseTextHelper {
 				nextBToken = getTokenAt(licenseBTokens, bTokenCounter++);
 			} else {
 				// see if we can skip through some B tokens to find a match
-				while (nextBToken != null && canSkip(nextBToken)) {
+				while (canSkip(nextBToken)) {
 					nextBToken = getTokenAt(licenseBTokens, bTokenCounter++);
 				}
 				// just to be sure, skip forward on the A license
-				while (nextAToken != null && canSkip(nextAToken)) {
+				while (canSkip(nextAToken)) {
 					nextAToken = getTokenAt(licenseATokens, aTokenCounter++);
 				}
 				if (!tokensEquivalent(nextAToken, nextBToken)) {
@@ -165,7 +166,7 @@ public class LicenseTextHelper {
 			}
 		}
 		// need to make sure B is at the end
-		while (nextBToken != null && canSkip(nextBToken)) {
+        while (canSkip(nextBToken)) {
 			nextBToken = getTokenAt(licenseBTokens, bTokenCounter++);
 		}
 		return (nextBToken == null);
@@ -181,57 +182,48 @@ public class LicenseTextHelper {
 	 */
 	public static String[] tokenizeLicenseText(String licenseText, Map<Integer, LineColumn> tokenToLocation) {
 		String textToTokenize = normalizeText(replaceMultWord(replaceSpaceComma(licenseText))).toLowerCase();
-		List<String> tokens = new ArrayList<String>();
-		BufferedReader reader = null;
-		try {
-			reader = new BufferedReader(new StringReader(textToTokenize));
-			int currentLine = 1;
-			int currentToken = 0;
-			String line = reader.readLine();
-			while (line != null) {
-				line = removeLineSeparators(line);
-				Matcher lineMatcher = TOKEN_SPLIT_PATTERN.matcher(line);
-				while (lineMatcher.find()) {
-					String token = lineMatcher.group(1).trim();
-					if (!token.isEmpty()) {
-						tokens.add(token);
-						tokenToLocation.put(currentToken, new LineColumn(currentLine, lineMatcher.start(), token.length()));
-						currentToken++;
-					}
-					String fullMatch = lineMatcher.group(0);
-					for (int i = lineMatcher.group(1).length(); i < fullMatch.length(); i++) {
-						String possiblePunctuation = fullMatch.substring(i, i+1);
-						if (PUNCTUATION.contains(possiblePunctuation)) {
-							tokens.add(possiblePunctuation);
-							tokenToLocation.put(currentToken, new LineColumn(currentLine, lineMatcher.start()+i, 1));
-							currentToken++;
-						}
-					}
-				}
-				currentLine++;
-				line = reader.readLine();
-			}
-		} catch (IOException e) {
-			// Don't fill in the lines, take a simpler approach
-			Matcher m = TOKEN_SPLIT_PATTERN.matcher(textToTokenize);
-			while (m.find()) {
-				String word = m.group(1).trim();
-				String seperator = m.group(2).trim();
-				tokens.add(word);
-				if (PUNCTUATION.contains(seperator)) {
-					tokens.add(seperator);
-				}
-			}
-		} finally {
-			if (reader != null) {
-				try {
-					reader.close();
-				} catch (IOException e) {
-					// ignore
-				}
-			}
-		}
-		return tokens.toArray(new String[tokens.size()]);
+		List<String> tokens = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new StringReader(textToTokenize))) {
+            int currentLine = 1;
+            int currentToken = 0;
+            String line = reader.readLine();
+            while (line != null) {
+                line = removeLineSeparators(line);
+                Matcher lineMatcher = TOKEN_SPLIT_PATTERN.matcher(line);
+                while (lineMatcher.find()) {
+                    String token = lineMatcher.group(1).trim();
+                    if (!token.isEmpty()) {
+                        tokens.add(token);
+                        tokenToLocation.put(currentToken, new LineColumn(currentLine, lineMatcher.start(), token.length()));
+                        currentToken++;
+                    }
+                    String fullMatch = lineMatcher.group(0);
+                    for (int i = lineMatcher.group(1).length(); i < fullMatch.length(); i++) {
+                        String possiblePunctuation = fullMatch.substring(i, i + 1);
+                        if (PUNCTUATION.contains(possiblePunctuation)) {
+                            tokens.add(possiblePunctuation);
+                            tokenToLocation.put(currentToken, new LineColumn(currentLine, lineMatcher.start() + i, 1));
+                            currentToken++;
+                        }
+                    }
+                }
+                currentLine++;
+                line = reader.readLine();
+            }
+        } catch (IOException e) {
+            // Don't fill in the lines, take a simpler approach
+            Matcher m = TOKEN_SPLIT_PATTERN.matcher(textToTokenize);
+            while (m.find()) {
+                String word = m.group(1).trim();
+                String seperator = m.group(2).trim();
+                tokens.add(word);
+                if (PUNCTUATION.contains(seperator)) {
+                    tokens.add(seperator);
+                }
+            }
+        }
+        // ignore
+        return tokens.toArray(new String[0]);
 	}
 
 	/**

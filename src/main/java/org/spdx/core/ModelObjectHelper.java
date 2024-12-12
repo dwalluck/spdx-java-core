@@ -1,14 +1,14 @@
 /**
  * Copyright (c) 2023 Source Auditor Inc.
- *
+ * <p>
  * SPDX-License-Identifier: Apache-2.0
- * 
+ * <p>
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *
+ * <p>
  *       http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -63,8 +63,8 @@ public class ModelObjectHelper {
 			if (!modelStore.exists(objectUri)) {
 				return Optional.empty();
 			} else if (modelStore.isCollectionProperty(objectUri, propertyDescriptor)) {
-				return Optional.of(new ModelCollection<>(modelStore, objectUri, propertyDescriptor, copyManager, 
-						null, specVersion, idPrefix));
+                return Optional.of(new ModelCollection<>(modelStore, objectUri, propertyDescriptor, copyManager,
+                        null, specVersion, idPrefix));
 			} else {
 				return optionalStoredObjectToModelObject(modelStore.getValue(objectUri,
 						propertyDescriptor), modelStore, copyManager, specVersion, type, idPrefix);
@@ -191,9 +191,10 @@ public class ModelObjectHelper {
 	 *         ModelObject is returned
 	 * @throws InvalidSPDXAnalysisException on any SPDX related error
 	 */
-	public static Optional<Object> optionalStoredObjectToModelObject(Optional<Object> value, 
-			IModelStore modelStore, IModelCopyManager copyManager, String specVersion,
-			@Nullable Class<?> type, String idPrefix) throws InvalidSPDXAnalysisException {
+	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    public static Optional<Object> optionalStoredObjectToModelObject(Optional<Object> value,
+                                                                     IModelStore modelStore, IModelCopyManager copyManager, String specVersion,
+                                                                     @Nullable Class<?> type, String idPrefix) throws InvalidSPDXAnalysisException {
 		if (value.isPresent() && value.get() instanceof IndividualUriValue) {
 			return Optional.ofNullable(new SimpleUriValue((IndividualUriValue)value.get()).toModelObject(modelStore, copyManager, 
 					specVersion, type));
@@ -232,7 +233,7 @@ public class ModelObjectHelper {
 			} else {
 				return mValue.toTypedValue();
 			}
-		} else if (value instanceof Integer || value instanceof String || value instanceof Boolean || value instanceof IndividualUriValue) {
+		} else if (value instanceof Integer || value instanceof String || value instanceof Boolean) {
 			return value;
 		} else if (Objects.isNull(value)) {
 			throw new SpdxInvalidTypeException("Property value is null");

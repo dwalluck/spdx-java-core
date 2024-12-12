@@ -10,6 +10,7 @@ package org.spdx.core;
  * @author Gary O'Neall
  *
  */
+@SuppressWarnings("unused")
 public class DefaultStoreNotInitialized extends InvalidSPDXAnalysisException {
 
 	private static final long serialVersionUID = 1L;

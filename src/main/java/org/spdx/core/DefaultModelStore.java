@@ -1,14 +1,14 @@
 /**
  * Copyright (c) 2019 Source Auditor Inc.
- *
+ * <p>
  * SPDX-License-Identifier: Apache-2.0
- * 
+ * <p>
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *
+ * <p>
  *       http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,7 +25,7 @@ import org.spdx.storage.IModelStore;
 
 /**
  * Singleton class to hold a default model store used when no model store is provided
- * 
+ * <p>
  * WARNING: The model store is in memory and will continue to grow as it is utilized.  There is NO garbage collection.
  * 
  * @author Gary O'Neall
@@ -81,7 +81,7 @@ public class DefaultModelStore {
 	 * @param newDefaultDocumentUri new SPDX 2.X document URI
 	 * @param newDefaultCopyManager new default copy manager
 	 */
-	public static final void initialize(IModelStore newModelStore, String newDefaultDocumentUri, 
+	public static void initialize(IModelStore newModelStore, String newDefaultDocumentUri,
 			IModelCopyManager newDefaultCopyManager) {
 		Objects.requireNonNull(newModelStore, "Model store can not be null");
 		Objects.requireNonNull(newDefaultDocumentUri, "Document URI can not be null");

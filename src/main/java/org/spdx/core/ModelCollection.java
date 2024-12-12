@@ -1,14 +1,14 @@
 /**
  * Copyright (c) 2023 Source Auditor Inc.
- *
+ * <p>
  * SPDX-License-Identifier: Apache-2.0
- * 
+ * <p>
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *
+ * <p>
  *       http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,19 +40,21 @@ import org.spdx.storage.PropertyDescriptor;
  * @author Gary O'Neall
  *
  */
+@SuppressWarnings({"TypeParameterExplicitlyExtendsObject", "unused"})
 public class ModelCollection<T extends Object> implements Collection<Object> {
 
-	private IModelStore modelStore;
-	private String objectUri;
-	private PropertyDescriptor propertyDescriptor;
-	private IModelCopyManager copyManager;
-	private String specVersion;
-	private String idPrefix;
+	private final IModelStore modelStore;
+	private final String objectUri;
+	private final PropertyDescriptor propertyDescriptor;
+	private final IModelCopyManager copyManager;
+	private final String specVersion;
+	private final String idPrefix;
 	
 	/**
 	 * Map of URI's of elements referenced but not present in the store
 	 */
-	protected Map<String, IExternalElementInfo> externalMap;
+	@SuppressWarnings("unused")
+    protected Map<String, IExternalElementInfo> externalMap;
 	private Class<?> type;
 
 	/**
@@ -63,7 +65,7 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 	 */
 	class ModelCollectionIterator implements Iterator<Object> {
 		
-		private Iterator<Object> storageIterator;
+		private final Iterator<Object> storageIterator;
 
 		public ModelCollectionIterator(Iterator<Object> storageIterator) {
 			this.storageIterator = storageIterator;
@@ -110,7 +112,7 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 		if (Objects.nonNull(type)) {
 			this.type = type;
 			if (!modelStore.isCollectionMembersAssignableTo(objectUri, propertyDescriptor, type)) {
-				throw new SpdxInvalidTypeException("Incompatible type for property "+propertyDescriptor+": "+type.toString());
+				throw new SpdxInvalidTypeException("Incompatible type for property "+propertyDescriptor+": "+ type);
 			}
 		}
 	}
@@ -136,7 +138,7 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 	@Override
 	public boolean contains(Object o) {
 		try {
-			Object storedObject = null;
+			Object storedObject;
 			try {
 				storedObject = ModelObjectHelper.modelObjectToStoredObject(o, modelStore, copyManager, idPrefix);
 			} catch (SpdxObjectNotInStoreException e1) {
@@ -163,8 +165,8 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 					throw new SpdxInvalidTypeException("No enumeration, external or individual of the proper type was found for URI "+((IndividualUriValue)retval).getIndividualURI()+
 							" for type "+type.toString());
 				} else {
-					throw new SpdxInvalidTypeException("A collection element of type "+retval.getClass().toString()+
-							" was found in a collection of type "+type.toString());
+					throw new SpdxInvalidTypeException("A collection element of type "+ retval.getClass() +
+							" was found in a collection of type "+ type);
 				}
 			}
 			return retval;
@@ -177,7 +179,7 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 	 * Converts any typed or individual value objects to a ModelObject
 	 */
 	
-	private UnaryOperator<Object> checkConvertTypedValue = ModelCollection.this::checkConvertTypedValue;
+	private final UnaryOperator<Object> checkConvertTypedValue = ModelCollection.this::checkConvertTypedValue;
 	
 	/**
 	 * @return a list of objects for the model collection
@@ -199,12 +201,12 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 	}
 
 	@Override
-	public Object[] toArray() {
+	public Object [] toArray() {
 		return toImmutableList().toArray();
 	}
 
 	@Override
-	public <T1> T1[] toArray(T1[] a) {
+	public <T1> T1 [] toArray(T1 [] a) {
 		return toImmutableList().toArray(a);
 	}
 
@@ -229,7 +231,8 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 		}
 	}
 
-	@Override
+	@SuppressWarnings("SlowListContainsAll")
+    @Override
 	public boolean containsAll(Collection<?> c) {
 		return toImmutableList().containsAll(c);
 	}
@@ -237,24 +240,22 @@ public class ModelCollection<T extends Object> implements Collection<Object> {
 	@Override
 	public boolean addAll(Collection<? extends Object> c) {
 		boolean retval = false;
-		Iterator<? extends Object> iter = c.iterator();
-		while (iter.hasNext()) {
-			if (add(iter.next())) {
-				retval = true;
-			}
-		}
+        for (Object o : c) {
+            if (add(o)) {
+                retval = true;
+            }
+        }
 		return retval;
 	}
 
 	@Override
 	public boolean removeAll(Collection<?> c) {
 		boolean retval = false;
-		Iterator<? extends Object> iter = c.iterator();
-		while (iter.hasNext()) {
-			if (remove(iter.next())) {
-				retval = true;
-			}
-		}
+        for (Object o : c) {
+            if (remove(o)) {
+                retval = true;
+            }
+        }
 		return retval;
 	}
 

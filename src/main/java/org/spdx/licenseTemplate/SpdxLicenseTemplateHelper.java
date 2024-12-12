@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2013 Source Auditor Inc.
- *
+ * <p>
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *
+ * <p>
  *       http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -107,7 +107,7 @@ public class SpdxLicenseTemplateHelper {
 	 * rules or tags
 	 * @param licenseTemplate standard license template
 	 * @return an HTML representation of the license template
-	 * @throws LicenseTemplateRuleException on an rule parsing errors
+	 * @throws LicenseTemplateRuleException on a rule parsing errors
 	 */
 	public static String templateTextToHtml(String licenseTemplate) throws LicenseTemplateRuleException {
 		HtmlTemplateOutputHandler htmlOutput = new HtmlTemplateOutputHandler();
@@ -152,7 +152,7 @@ public class SpdxLicenseTemplateHelper {
 	 * 
 	 * @param text unformatted text
 	 * @param inParagraph true if inside a paragraph tag
-	 * @return text escapted and formatted for inclusion in HTML
+	 * @return text escaped and formatted for inclusion in HTML
 	 */
 	public static String formatEscapeHTML(String text, boolean inParagraph) {
 		String retval = StringEscapeUtils.escapeXml11(text);
@@ -223,7 +223,7 @@ public class SpdxLicenseTemplateHelper {
 	 * spaces or tabs
 	 * 
 	 * @param line line of license text
-	 * @return text incluing any paragraph tags
+	 * @return text including any paragraph tags
 	 */
 	private static String getParagraphTagConsideringTags(String line) {
 		int numSpaces = countLeadingSpaces(line);
@@ -236,7 +236,7 @@ public class SpdxLicenseTemplateHelper {
 
 			int pixels = PIXELS_PER_TAB[numTabs - 1];
 			result.append("<p style=\"margin-left: ");
-			result.append(String.valueOf(pixels));
+			result.append(pixels);
 			result.append("px;\">");
 		} else {
 			result.append("<p>");

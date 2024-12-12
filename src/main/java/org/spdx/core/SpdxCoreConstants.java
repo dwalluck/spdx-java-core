@@ -11,7 +11,8 @@ package org.spdx.core;
  */
 public class SpdxCoreConstants {
 
-	public enum SpdxMajorVersion {
+	@SuppressWarnings("unused")
+    public enum SpdxMajorVersion {
 		VERSION_1("SPDX-1."),
 		VERSION_2("SPDX-2."),
 		VERSION_3("3.");

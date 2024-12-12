@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2013 Source Auditor Inc.
- *
+ * <p>
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *
+ * <p>
  *       http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -136,7 +136,7 @@ public class LicenseTemplateRule {
 		Matcher rulePartMatcher = SPLIT_REGEX.matcher(parseableLicenseTemplateRule);
 		int start = 0;
 		// parse out the first field - should be the rule type
-		String typeStr = null;
+		String typeStr;
 		if (rulePartMatcher.find()) {
 			typeStr = parseableLicenseTemplateRule.substring(start, rulePartMatcher.start()+1).trim();
 			start = rulePartMatcher.end();
@@ -161,19 +161,20 @@ public class LicenseTemplateRule {
 
 	/**
 	 * @param typeStr string representing the type of rule
-	 * @return reule type
+	 * @return rule type
 	 * @throws LicenseTemplateRuleException if the license template could not be parsed
 	 */
 	private RuleType typeStringToType(String typeStr) throws LicenseTemplateRuleException {
-		if (typeStr.equals(VARIABLE_RULE_TYPE_STR)) {
-			return RuleType.VARIABLE;
-		} else if (typeStr.equals(BEGIN_OPTIONAL_TYPE_STR)) {
-			return RuleType.BEGIN_OPTIONAL;
-		} else if (typeStr.equals(END_OPTIONAL_TYPE_STR)) {
-			return RuleType.END_OPTIONAL;
-		} else {
-			throw new LicenseTemplateRuleException("Unknown rule type: "+typeStr);
-		}
+        switch (typeStr) {
+            case VARIABLE_RULE_TYPE_STR:
+                return RuleType.VARIABLE;
+            case BEGIN_OPTIONAL_TYPE_STR:
+                return RuleType.BEGIN_OPTIONAL;
+            case END_OPTIONAL_TYPE_STR:
+                return RuleType.END_OPTIONAL;
+            default:
+                throw new LicenseTemplateRuleException("Unknown rule type: " + typeStr);
+        }
 	}
 	
 	/**

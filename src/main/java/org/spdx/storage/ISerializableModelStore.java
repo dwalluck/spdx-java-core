@@ -1,14 +1,14 @@
 /**
  * Copyright (c) 2019 Source Auditor Inc.
- *
+ * <p>
  * SPDX-License-Identifier: Apache-2.0
- * 
+ * <p>
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *
+ * <p>
  *       http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,6 +31,7 @@ import org.spdx.core.InvalidSPDXAnalysisException;
  * @author Gary O'Neall
  *
  */
+@SuppressWarnings("unused")
 public interface ISerializableModelStore extends IModelStore {
 
 	/**
@@ -39,7 +40,7 @@ public interface ISerializableModelStore extends IModelStore {
 	 * @throws InvalidSPDXAnalysisException on any SPDX error
 	 * @throws IOException on IO error
 	 */
-	public void serialize(OutputStream stream)  throws InvalidSPDXAnalysisException, IOException;
+    void serialize(OutputStream stream)  throws InvalidSPDXAnalysisException, IOException;
 	
 	/**
 	 * Serialize the items stored in the model store.  The specific format for serialization depends on the document store.
@@ -49,7 +50,7 @@ public interface ISerializableModelStore extends IModelStore {
 	 * @throws InvalidSPDXAnalysisException on any SPDX error
 	 * @throws IOException on IO error
 	 */
-	public void serialize(OutputStream stream, @Nullable CoreModelObject objectToSerialize)  throws InvalidSPDXAnalysisException, IOException;
+    void serialize(OutputStream stream, @Nullable CoreModelObject objectToSerialize)  throws InvalidSPDXAnalysisException, IOException;
 	
 	/**
 	 * Deserialize / read an SPDX document from a stream
@@ -59,5 +60,5 @@ public interface ISerializableModelStore extends IModelStore {
 	 * @throws InvalidSPDXAnalysisException on any SPDX error
 	 * @throws IOException on IO error
 	 */
-	public CoreModelObject deSerialize(InputStream stream, boolean overwrite) throws InvalidSPDXAnalysisException, IOException;
+    CoreModelObject deSerialize(InputStream stream, boolean overwrite) throws InvalidSPDXAnalysisException, IOException;
 }

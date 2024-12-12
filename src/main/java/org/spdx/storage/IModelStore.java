@@ -1,14 +1,14 @@
 /**
  * Copyright (c) 2019 Source Auditor Inc.
- *
+ * <p>
  * SPDX-License-Identifier: Apache-2.0
- * 
+ * <p>
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *
+ * <p>
  *       http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,14 +29,14 @@ import org.spdx.core.TypedValue;
 
 /**
  * Service Provider Interface for storing and retrieving SPDX properties from the underlying store.
- * 
+ * <p>
  * The interface uses the URI to identify specific objects stored.
- * 
+ * <p>
  * Each object can have property values and property value lists associated with them.  
- * 
+ * <p>
  * A property value is an object of a primitive type (e.g. String or Boolean) or is another
- * object which includes it's own ID and must also have a type described in the SPDX model.
- * 
+ * object which includes its own ID and must also have a type described in the SPDX model.
+ * <p>
  * A property list is just a list of values.
  * 
  * @author Gary O'Neall
@@ -44,19 +44,19 @@ import org.spdx.core.TypedValue;
  */
 public interface IModelStore extends AutoCloseable {
 	
-	public interface IModelStoreLock {
-		public void unlock();
+	interface IModelStoreLock {
+		void unlock();
 	}
 	
 	@FunctionalInterface
-	public static interface ModelUpdate {
+    interface ModelUpdate {
 		void apply() throws InvalidSPDXAnalysisException;
 	}
 	
 	/**
 	 * Different types of ID's
 	 */
-	public enum IdType {
+    enum IdType {
 		LicenseRef, 		// ID's that start with LicenseRef-
 		DocumentRef, 		// ID's that start with DocumentRef- - for compatibility in SPDX 2.X versions
 		SpdxId, 			// ID's that start with SpdxRef-
@@ -68,21 +68,21 @@ public interface IModelStore extends AutoCloseable {
 	 * @param objectUri unique URI within the SPDX model store for the objects
 	 * @return true if the objectUri already exists for the document
 	 */
-	public boolean exists(String objectUri);
+    boolean exists(String objectUri);
 
 	/**
 	 * Create a new object with objectUri, type and version from the typedValue
 	 * @param typedValue TypedValue of the item to create
 	 * @throws InvalidSPDXAnalysisException on model store errors 
 	 */
-	public void create(TypedValue typedValue) throws InvalidSPDXAnalysisException;
+    void create(TypedValue typedValue) throws InvalidSPDXAnalysisException;
 
 	/**
 	 * @param objectUri unique URI within the SPDX model store for the objects
 	 * @return Property descriptors for all properties having a value for a given objectUri within a document
 	 * @throws InvalidSPDXAnalysisException on model store errors 
 	 */
-	public List<PropertyDescriptor> getPropertyValueDescriptors(String objectUri) throws InvalidSPDXAnalysisException;
+    List<PropertyDescriptor> getPropertyValueDescriptors(String objectUri) throws InvalidSPDXAnalysisException;
 
 	/**
 	 * Sets a property value for a String or Boolean type of value creating the propertyDescriptor if it does not exist
@@ -91,7 +91,7 @@ public interface IModelStore extends AutoCloseable {
 	 * @param value value to set
 	 * @throws InvalidSPDXAnalysisException on model store errors 
 	 */
-	public void setValue(String objectUri, PropertyDescriptor propertyDescriptor, Object value) throws InvalidSPDXAnalysisException;
+    void setValue(String objectUri, PropertyDescriptor propertyDescriptor, Object value) throws InvalidSPDXAnalysisException;
 
 	/**
 	 * @param objectUri unique URI within the SPDX model store for the objects
@@ -99,7 +99,7 @@ public interface IModelStore extends AutoCloseable {
 	 * @return the single value associated with the objectUri, propertyDescriptor and document
 	 * @throws InvalidSPDXAnalysisException on model store errors 
 	 */
-	public Optional<Object> getValue(String objectUri, PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException;
+    Optional<Object> getValue(String objectUri, PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException;
 
 	/**
 	 * Generate a unique ID within the model store - Note: for a full URI, the id should be prepended with a URI prefix
@@ -107,7 +107,7 @@ public interface IModelStore extends AutoCloseable {
 	 * @return next available unique ID for the specific idType - Note: for a full URI, the id should be prepended with a URI prefix
 	 * @throws InvalidSPDXAnalysisException on model store errors 
 	 */
-	public String getNextId(IdType idType) throws InvalidSPDXAnalysisException;
+    String getNextId(IdType idType) throws InvalidSPDXAnalysisException;
 	
 	/**
 	 * Removes a property from the document for the given ID if the property exists.  Does not raise any exception if the propertyDescriptor does not exist
@@ -115,7 +115,7 @@ public interface IModelStore extends AutoCloseable {
 	 * @param propertyDescriptor descriptor for the property
 	 * @throws InvalidSPDXAnalysisException on model store errors
 	 */
-	public void removeProperty(String objectUri, PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException;
+    void removeProperty(String objectUri, PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException;
 
 	/**
 	 * @param nameSpace Optional SPDX namespace to filter items by
@@ -123,19 +123,19 @@ public interface IModelStore extends AutoCloseable {
 	 * @return Stream of all items store within the document
 	 * @throws InvalidSPDXAnalysisException on model store errors
 	 */
-	public Stream<TypedValue> getAllItems(@Nullable String nameSpace, @Nullable String typeFilter) throws InvalidSPDXAnalysisException;
+    Stream<TypedValue> getAllItems(@Nullable String nameSpace, @Nullable String typeFilter) throws InvalidSPDXAnalysisException;
 	
 	/**
-	 * Enter a critical section. leaveCriticialSection must be called.
+	 * Enter a critical section. leaveCriticalSection must be called.
 	 * @param readLockRequested true implies a read lock, false implies write lock.
 	 * @throws InvalidSPDXAnalysisException on model store errors 
 	 */
-	public IModelStoreLock enterCriticalSection(boolean readLockRequested) throws InvalidSPDXAnalysisException;
+    IModelStoreLock enterCriticalSection(boolean readLockRequested) throws InvalidSPDXAnalysisException;
 	
 	/**
 	 * Leave a critical section. Releases the lock form the matching enterCriticalSection
 	 */
-	public void leaveCriticalSection(IModelStoreLock lock);
+    void leaveCriticalSection(IModelStoreLock lock);
 
 	/**
 	 * Removes a value from a collection of values associated with a property
@@ -144,14 +144,14 @@ public interface IModelStore extends AutoCloseable {
 	 * @param value Value to be removed
 	 * @return true if the value was removed
 	 */
-	public boolean removeValueFromCollection(String objectUri, PropertyDescriptor propertyDescriptor, Object value) throws InvalidSPDXAnalysisException;
+    boolean removeValueFromCollection(String objectUri, PropertyDescriptor propertyDescriptor, Object value) throws InvalidSPDXAnalysisException;
 
 	/**
 	 * @param objectUri unique URI within the SPDX model store for the objects
 	 * @param propertyDescriptor descriptor for the property
 	 * @return size of a collection associated with a property.  0 if the property does not exist.
 	 */
-	public int collectionSize(String objectUri, PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException;
+    int collectionSize(String objectUri, PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException;
 
 	/**
 	 * @param objectUri unique URI within the SPDX model store for the objects
@@ -159,7 +159,7 @@ public interface IModelStore extends AutoCloseable {
 	 * @param value value to check for contains
 	 * @return true if the collection associated with a property contains the value
 	 */
-	public boolean collectionContains(String objectUri, PropertyDescriptor propertyDescriptor, Object value) throws InvalidSPDXAnalysisException;
+    boolean collectionContains(String objectUri, PropertyDescriptor propertyDescriptor, Object value) throws InvalidSPDXAnalysisException;
 	
 	/**
 	 * Sets the value collection for the property to an empty collection creating the propertyDescriptor if it does not exist
@@ -177,7 +177,7 @@ public interface IModelStore extends AutoCloseable {
 	 * @return true if the collection was modified
 	 * @throws InvalidSPDXAnalysisException on model store errors 
 	 */
-	public boolean addValueToCollection(String objectUri, PropertyDescriptor propertyDescriptor, Object value) throws InvalidSPDXAnalysisException;
+    boolean addValueToCollection(String objectUri, PropertyDescriptor propertyDescriptor, Object value) throws InvalidSPDXAnalysisException;
 
 	/**
 	 * @param objectUri unique URI within the SPDX model store for the objects
@@ -185,7 +185,7 @@ public interface IModelStore extends AutoCloseable {
 	 * @return Iterator over the list of values associated with the objectUri, propertyDescriptor and document
 	 * @throws InvalidSPDXAnalysisException on model store errors 
 	 */
-	public Iterator<Object> listValues(String objectUri, PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException;
+    Iterator<Object> listValues(String objectUri, PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException;
 
 	/**
 	 * @param objectUri unique URI within the SPDX model store for the objects
@@ -194,7 +194,7 @@ public interface IModelStore extends AutoCloseable {
 	 * @return true if all members of a collection associated with the objectUri and propertyDescriptor can be assigned to the clazz
 	 * @throws InvalidSPDXAnalysisException on model store errors
 	 */
-	public boolean isCollectionMembersAssignableTo(String objectUri, PropertyDescriptor propertyDescriptor, Class<?> clazz) throws InvalidSPDXAnalysisException;
+    boolean isCollectionMembersAssignableTo(String objectUri, PropertyDescriptor propertyDescriptor, Class<?> clazz) throws InvalidSPDXAnalysisException;
 	
 	/**
 	 * @param objectUri unique URI within the SPDX model store for the objects
@@ -204,42 +204,42 @@ public interface IModelStore extends AutoCloseable {
 	 * @return true if the value associated with the objectUri and propertyDescriptor can be assigned to the clazz
 	 * @throws InvalidSPDXAnalysisException on model store errors
 	 */
-	public boolean isPropertyValueAssignableTo(String objectUri, PropertyDescriptor propertyDescriptor, 
-			Class<?> clazz, String specVersion) throws InvalidSPDXAnalysisException;
+    boolean isPropertyValueAssignableTo(String objectUri, PropertyDescriptor propertyDescriptor,
+                                        Class<?> clazz, String specVersion) throws InvalidSPDXAnalysisException;
 
 	/**
 	 * @param objectUri unique URI within the SPDX model store for the objects
 	 * @param propertyDescriptor descriptor for the property
 	 * @return true if the propertyDescriptor represents multiple values
 	 */
-	public boolean isCollectionProperty(String objectUri, PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException;
+    boolean isCollectionProperty(String objectUri, PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException;
 
 	/**
 	 * @param objectUri URI for the object or the anon. ID
 	 * @return The type of ID based on the string format
 	 */
-	public IdType getIdType(String objectUri);
+    IdType getIdType(String objectUri);
 
 	/**
-	 * In SPDX 2.2 license refs are allowed to be matched case insensitive.  This function will return
-	 * the case sensitivie ID (e.g. if you have LicenseRef-ABC, calling this function with licenseref-abc will return LicenseRef-ABC
+	 * In SPDX 2.2 license refs are allowed to be matched case-insensitive.  This function will return
+	 * the case-sensitive ID (e.g. if you have LicenseRef-ABC, calling this function with licenseref-abc will return LicenseRef-ABC
 	 * @param nameSpace the nameSpace used for the ID - the URI is formed by the nameSpace + "#" + caseInsensisitiveId
 	 * @param caseInsensisitiveId ID - case will be ignored
-	 * @return the case sensitive ID if it exists
+	 * @return the case-sensitive ID if it exists
 	 */
-	public Optional<String> getCaseSensisitiveId(String nameSpace, String caseInsensisitiveId);
+    Optional<String> getCaseSensisitiveId(String nameSpace, String caseInsensisitiveId);
 
 	/**
 	 * @param objectUri unique URI within the SPDX model store for the objects
 	 * @return type TypedValue containing the type of the ModelObject related to the ID
 	 */
-	public Optional<TypedValue> getTypedValue(String objectUri) throws InvalidSPDXAnalysisException;
+    Optional<TypedValue> getTypedValue(String objectUri) throws InvalidSPDXAnalysisException;
 	/**
 	 * Deletes an item from the document
 	 * @param objectUri unique URI within the SPDX model store for the objects
 	 * @throws InvalidSPDXAnalysisException on model store errors
 	 */
-	public void delete(String objectUri) throws InvalidSPDXAnalysisException;
+    void delete(String objectUri) throws InvalidSPDXAnalysisException;
 
 	/**
 	 * @param objectUri ID or URI for an item

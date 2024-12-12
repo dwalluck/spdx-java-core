@@ -10,6 +10,7 @@ package org.spdx.core;
  * @author Gary O'Neall
  *
  */
+@SuppressWarnings("unused")
 public class RuntimeSpdxException extends RuntimeException {
 
 
@@ -21,7 +22,8 @@ public class RuntimeSpdxException extends RuntimeException {
 	/**
 	 * @param message exception message
 	 */
-	public RuntimeSpdxException(String message) {
+	@SuppressWarnings("unused")
+    public RuntimeSpdxException(String message) {
 		super(message);
 	}
 
@@ -43,8 +45,8 @@ public class RuntimeSpdxException extends RuntimeException {
 	/**
 	 * @param message exception message
 	 * @param cause SPDX analysis cause
-	 * @param enableSuppression
-	 * @param writableStackTrace
+	 * @param enableSuppression to suppress message
+	 * @param writableStackTrace stack trace
 	 */
 	public RuntimeSpdxException(String message, Throwable cause,
 			boolean enableSuppression, boolean writableStackTrace) {

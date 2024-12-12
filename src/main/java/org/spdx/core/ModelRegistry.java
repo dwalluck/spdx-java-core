@@ -20,7 +20,7 @@ import org.spdx.storage.IModelStore;
 /**
 
  * Singleton class which contains a registry of SPDX model versions
- * 
+ * <p>
  * Each model version implements a model interface <code>ISpdxModelInfo</code> which 
  * supports inflating an SPDX type specific to that version
  * 
@@ -37,7 +37,7 @@ public class ModelRegistry {
 	private static final ModelRegistry _instance = new ModelRegistry();
 	private static final ReadWriteLock lock = new ReentrantReadWriteLock();
 
-	private Map<String, ISpdxModelInfo> registeredModels = new HashMap<>();
+	private final Map<String, ISpdxModelInfo> registeredModels = new HashMap<>();
 	
 	/**
 	 * Private constructor - singleton class
