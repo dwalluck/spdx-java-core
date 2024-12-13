@@ -139,14 +139,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>public interface <span class="typeNameLabel">IModelStore</span>
 extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang" class="externalLink">AutoCloseable</a></pre>
 <div class="block">Service Provider Interface for storing and retrieving SPDX properties from the underlying store.
- 
+ <p>
  The interface uses the URI to identify specific objects stored.
- 
+ <p>
  Each object can have property values and property value lists associated with them.  
- 
+ <p>
  A property value is an object of a primitive type (e.g. String or Boolean) or is another
- object which includes it's own ID and must also have a type described in the SPDX model.
- 
+ object which includes its own ID and must also have a type described in the SPDX model.
+ <p>
  A property list is just a list of values.</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
@@ -274,7 +274,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/AutoCloseab
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCaseSensisitiveId(java.lang.String,java.lang.String)">getCaseSensisitiveId</a></span>&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;nameSpace,
                     <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;caseInsensisitiveId)</code></th>
 <td class="colLast">
-<div class="block">In SPDX 2.2 license refs are allowed to be matched case insensitive.</div>
+<div class="block">In SPDX 2.2 license refs are allowed to be matched case-insensitive.</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
@@ -553,7 +553,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/AutoCloseab
 <h4>enterCriticalSection</h4>
 <pre class="methodSignature"><a href="IModelStore.IModelStoreLock.html" title="interface in org.spdx.storage">IModelStore.IModelStoreLock</a>&nbsp;enterCriticalSection&#8203;(boolean&nbsp;readLockRequested)
                                           throws <a href="../core/InvalidSPDXAnalysisException.html" title="class in org.spdx.core">InvalidSPDXAnalysisException</a></pre>
-<div class="block">Enter a critical section. leaveCriticialSection must be called.</div>
+<div class="block">Enter a critical section. leaveCriticalSection must be called.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>readLockRequested</code> - true implies a read lock, false implies write lock.</dd>
@@ -788,14 +788,14 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/AutoCloseab
 <h4>getCaseSensisitiveId</h4>
 <pre class="methodSignature"><a href="https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html?is-external=true" title="class or interface in java.util" class="externalLink">Optional</a>&lt;<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&nbsp;getCaseSensisitiveId&#8203;(<a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;nameSpace,
                                       <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;caseInsensisitiveId)</pre>
-<div class="block">In SPDX 2.2 license refs are allowed to be matched case insensitive.  This function will return
- the case sensitivie ID (e.g. if you have LicenseRef-ABC, calling this function with licenseref-abc will return LicenseRef-ABC</div>
+<div class="block">In SPDX 2.2 license refs are allowed to be matched case-insensitive.  This function will return
+ the case-sensitive ID (e.g. if you have LicenseRef-ABC, calling this function with licenseref-abc will return LicenseRef-ABC</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>nameSpace</code> - the nameSpace used for the ID - the URI is formed by the nameSpace + "#" + caseInsensisitiveId</dd>
 <dd><code>caseInsensisitiveId</code> - ID - case will be ignored</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the case sensitive ID if it exists</dd>
+<dd>the case-sensitive ID if it exists</dd>
 </dl>
 </li>
 </ul>

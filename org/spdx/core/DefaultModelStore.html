@@ -135,7 +135,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>public class <span class="typeNameLabel">DefaultModelStore</span>
 extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">Singleton class to hold a default model store used when no model store is provided
- 
+ <p>
  WARNING: The model store and copy manager are in memory and will continue to grow as they are utilized.  There is NO garbage collection.</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
@@ -247,9 +247,9 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>initialize</h4>
-<pre class="methodSignature">public static final&nbsp;void&nbsp;initialize&#8203;(<a href="../storage/IModelStore.html" title="interface in org.spdx.storage">IModelStore</a>&nbsp;newModelStore,
-                                    <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;newDefaultDocumentUri,
-                                    <a href="IModelCopyManager.html" title="interface in org.spdx.core">IModelCopyManager</a>&nbsp;newDefaultCopyManager)</pre>
+<pre class="methodSignature">public static&nbsp;void&nbsp;initialize&#8203;(<a href="../storage/IModelStore.html" title="interface in org.spdx.storage">IModelStore</a>&nbsp;newModelStore,
+                              <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;newDefaultDocumentUri,
+                              <a href="IModelCopyManager.html" title="interface in org.spdx.core">IModelCopyManager</a>&nbsp;newDefaultCopyManager)</pre>
 <div class="block">Initialize the default model store.  This must be done prior to any use</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

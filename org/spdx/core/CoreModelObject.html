@@ -135,18 +135,18 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>public abstract class <span class="typeNameLabel">CoreModelObject</span>
 extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">Superclass for all SPDX model objects
- 
+ <p>
  Provides the primary interface to the storage class that access and stores the data for 
  the model objects.
- 
+ <p>
  This class includes several helper methods to manage the storage and retrieval of properties.
- 
+ <p>
  Each model object is in itself stateless.  All state is maintained in the Model Store.  
- 
- The concrete classes are expected to implements getters for the model class properties which translate
+ <p>
+ The concrete classes are expected to implement getters for the model class properties which translate
  into calls to the getTYPEPropertyValue where TYPE is the type of value to be returned and the property descriptor
  is passed as a parameter.
- 
+ <p>
  There are 2 methods of setting values:
    - call the setPropertyValue, clearValueCollection or addValueToCollection methods - this will call the modelStore and store the
      value immediately
@@ -155,13 +155,13 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
      A convenience method <code>Write.applyUpdatesInOneTransaction</code> will perform all updates within
      a single transaction. This method may result in higher performance updates for some Model Store implementations.
      Note that none of the updates will be applied until the storage manager update method is invoked.
- 
+ <p>
  Property values are restricted to the following types:
    - String - Java Strings
    - Booolean - Java Boolean or primitive boolean types
    - CoreModelObject - A concrete subclass of this type
    - Collection&lt;T&gt; - A Collection of type T where T is one of the supported non-collection types
-     
+ <p>
  This class also handles the conversion of a CoreModelObject to and from a TypeValue for storage in the ModelStore.</div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
@@ -216,7 +216,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <td class="colFirst"><code>protected <a href="IModelCopyManager.html" title="interface in org.spdx.core">IModelCopyManager</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#copyManager">copyManager</a></span></code></th>
 <td class="colLast">
-<div class="block">If non null, a reference made to a model object stored in a different modelStore and/or
+<div class="block">If non-null, a reference made to a model object stored in a different modelStore and/or
  document will be copied to this modelStore and documentUri</div>
 </td>
 </tr>
@@ -694,7 +694,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <li class="blockList">
 <h4>copyManager</h4>
 <pre>protected&nbsp;<a href="IModelCopyManager.html" title="interface in org.spdx.core">IModelCopyManager</a> copyManager</pre>
-<div class="block">If non null, a reference made to a model object stored in a different modelStore and/or
+<div class="block">If non-null, a reference made to a model object stored in a different modelStore and/or
  document will be copied to this modelStore and documentUri</div>
 </li>
 </ul>
@@ -731,7 +731,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>specVersion</code> - - version of the SPDX spec the object complies with</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="InvalidSPDXAnalysisException.html" title="class in org.spdx.core">InvalidSPDXAnalysisException</a></code></dd>
+<dd><code><a href="InvalidSPDXAnalysisException.html" title="class in org.spdx.core">InvalidSPDXAnalysisException</a></code> - on any SPDX related exception</dd>
 </dl>
 </li>
 </ul>
