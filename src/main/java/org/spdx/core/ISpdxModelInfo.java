@@ -21,12 +21,12 @@ public interface ISpdxModelInfo {
 	/**
 	 * @return a map of URIs to Enums which represents individual vocabularies in the SPDX model
 	 */
-	public Map<String, Enum<?>> getUriToEnumMap();
+    Map<String, Enum<?>> getUriToEnumMap();
 
 	/**
 	 * @return the spec versions this model supports
 	 */
-	public List<String> getSpecVersions();
+    List<String> getSpecVersions();
 
 	/**
 	 * @param store store to use for the inflated object
@@ -35,15 +35,15 @@ public interface ISpdxModelInfo {
 	 * @param specVersion version of the SPDX specification used by the external element
 	 * @return model object of type type
 	 */
-	public CoreModelObject createExternalElement(IModelStore store, String uri,
-			@Nullable IModelCopyManager copyManager,Class<?> type, String specVersion) throws InvalidSPDXAnalysisException;
+    CoreModelObject createExternalElement(IModelStore store, String uri,
+                                          @Nullable IModelCopyManager copyManager, Class<?> type, String specVersion) throws InvalidSPDXAnalysisException;
 
 	/**
 	 * @param uri URI for the individual
 	 * @param type optional type hint - used for individuals where the type may be ambiguous
 	 * @return a matching individual for a given URI or null if no individual exists
 	 */
-	public @Nullable Object uriToIndividual(String uri, Class<?> type);
+	@Nullable Object uriToIndividual(String uri, Class<?> type);
 
 	/**
 	 * @param modelStore store to use for the inflated object
@@ -55,19 +55,19 @@ public interface ISpdxModelInfo {
 	 * @param idPrefix optional prefix used for any new object URI's created in support of this model object
 	 * @return fully inflated model object of type type
 	 */
-	public CoreModelObject createModelObject(IModelStore modelStore,
-			String objectUri, String type, IModelCopyManager copyManager,
-			String specVersion, boolean create, @Nullable String idPrefix) throws InvalidSPDXAnalysisException;
+    CoreModelObject createModelObject(IModelStore modelStore,
+                                      String objectUri, String type, IModelCopyManager copyManager,
+                                      String specVersion, boolean create, @Nullable String idPrefix) throws InvalidSPDXAnalysisException;
 
 	/**
 	 * @return a map of string representation of types to classes which implement those types
 	 */
-	public Map<String, Class<?>> getTypeToClassMap();
+    Map<String, Class<?>> getTypeToClassMap();
 
 	/**
 	 * @param clazz model class
 	 * @return true if clazz can be represented as external to the store
 	 */
-	public boolean canBeExternal(Class<?> clazz);
+    boolean canBeExternal(Class<?> clazz);
 
 }

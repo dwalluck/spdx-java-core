@@ -1,14 +1,14 @@
 /**
  * Copyright (c) 2023 Source Auditor Inc.
- *
+ * <p>
  * SPDX-License-Identifier: Apache-2.0
- * 
+ * <p>
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *
+ * <p>
  *       http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,18 +40,18 @@ import org.spdx.storage.IModelStore.ModelUpdate;
 /**
  * 
  * Superclass for all SPDX model objects
- * 
+ * <p>
  * Provides the primary interface to the storage class that access and stores the data for 
  * the model objects.
- * 
+ * <p>
  * This class includes several helper methods to manage the storage and retrieval of properties.
- * 
+ * <p>
  * Each model object is in itself stateless.  All state is maintained in the Model Store.  
- * 
- * The concrete classes are expected to implements getters for the model class properties which translate
+ * <p>
+ * The concrete classes are expected to implement getters for the model class properties which translate
  * into calls to the getTYPEPropertyValue where TYPE is the type of value to be returned and the property descriptor
  * is passed as a parameter.
- * 
+ * <p>
  * There are 2 methods of setting values:
  *   - call the setPropertyValue, clearValueCollection or addValueToCollection methods - this will call the modelStore and store the
  *     value immediately
@@ -60,18 +60,19 @@ import org.spdx.storage.IModelStore.ModelUpdate;
  *     A convenience method <code>Write.applyUpdatesInOneTransaction</code> will perform all updates within
  *     a single transaction. This method may result in higher performance updates for some Model Store implementations.
  *     Note that none of the updates will be applied until the storage manager update method is invoked.
- * 
+ * <p>
  * Property values are restricted to the following types:
  *   - String - Java Strings
  *   - Booolean - Java Boolean or primitive boolean types
  *   - CoreModelObject - A concrete subclass of this type
  *   - {@literal Collection<T>} - A Collection of type T where T is one of the supported non-collection types
- *     
+ * <p>
  * This class also handles the conversion of a CoreModelObject to and from a TypeValue for storage in the ModelStore.
  *
  * @author Gary O'Neall
  * 
  */
+@SuppressWarnings({"OptionalUsedAsFieldOrParameterType", "LoggingSimilarMessage"})
 public abstract class CoreModelObject {
 	
 	static final Logger logger = LoggerFactory.getLogger(CoreModelObject.class);
@@ -85,10 +86,10 @@ public abstract class CoreModelObject {
 	protected String idPrefix; // Optional prefix to be used when generating new IDs
 	
 	/**
-	 * If non null, a reference made to a model object stored in a different modelStore and/or
+	 * If non-null, a reference made to a model object stored in a different modelStore and/or
 	 * document will be copied to this modelStore and documentUri
 	 */
-	protected IModelCopyManager copyManager = null;
+	protected IModelCopyManager copyManager;
 	/**
 	 * if true, checks input values for setters to verify valid SPDX inputs
 	 */
@@ -99,7 +100,7 @@ public abstract class CoreModelObject {
 	/**
 	 * Create a new Model Object using an Anonymous ID with the default store and default document URI
 	 * @param specVersion - version of the SPDX spec the object complies with
-	 * @throws InvalidSPDXAnalysisException 
+	 * @throws InvalidSPDXAnalysisException on any SPDX related exception
 	 */
 	protected CoreModelObject(String specVersion) throws InvalidSPDXAnalysisException {
 		this(DefaultModelStore.getDefaultModelStore().getNextId(IdType.Anonymous), specVersion);
@@ -327,7 +328,7 @@ public abstract class CoreModelObject {
 		Optional<Object> retval = ModelObjectHelper.getObjectPropertyValue(modelStore, objectUri, 
 				propertyDescriptor, copyManager, specVersion, type, idPrefix);
 		if (retval.isPresent() && retval.get() instanceof CoreModelObject && !strict) {
-			((CoreModelObject)retval.get()).setStrict(strict);
+			((CoreModelObject)retval.get()).setStrict(false);
 		}
 		return retval;
 	}
@@ -442,9 +443,9 @@ public abstract class CoreModelObject {
 				// try to convert
 				String sResult = ((String)result.get()).toLowerCase();
 				if ("true".equals(sResult)) {
-					return Optional.of(Boolean.valueOf(true));
+					return Optional.of(Boolean.TRUE);
 				} else if ("false".equals(sResult)) {
-					return Optional.of(Boolean.valueOf(false));
+					return Optional.of(Boolean.FALSE);
 				} else {
 					throw new SpdxInvalidTypeException(PROPERTY_MSG+propertyDescriptor+" is not of type Boolean");
 				}
@@ -569,7 +570,7 @@ public abstract class CoreModelObject {
 	 * @return Collection of values associated with a property
 	 */
 	public ModelCollection<?> getObjectPropertyValueCollection(PropertyDescriptor propertyDescriptor, Class<?> type) throws InvalidSPDXAnalysisException {
-		return new ModelCollection<>(this.modelStore, this.objectUri, propertyDescriptor, 
+		return new ModelCollection<>(this.modelStore, this.objectUri, propertyDescriptor,
 				this.copyManager, type, specVersion, idPrefix);
 	}
 	
@@ -716,8 +717,8 @@ public abstract class CoreModelObject {
 	
     /**
 	 * Compares 2 simple optional objects considering NONE and NOASSERTION values which are equivalent to their strings
-	 * @param valueA
-	 * @param valueB
+	 * @param valueA value to compare
+	 * @param valueB value to compare
 	 * @return if the 2 values are equivalent
 	 */
 	private boolean optionalObjectsEquivalent(Optional<Object> valueA, Optional<Object> valueB) {
@@ -782,8 +783,9 @@ public abstract class CoreModelObject {
 	 * @return true if the list contains an equal or equivalent item
 	 * @throws InvalidSPDXAnalysisException on any SPDX related exception
 	 */
-	private boolean containsEqualOrEquivalentItem(List<?> list, Object itemToFind,
-			  boolean ignoreRelatedElements) throws InvalidSPDXAnalysisException {
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    private boolean containsEqualOrEquivalentItem(List<?> list, Object itemToFind,
+                                                  boolean ignoreRelatedElements) throws InvalidSPDXAnalysisException {
 		if (list.contains(itemToFind)) {
 			return true;
 		} else if (itemToFind instanceof IndividualUriValue && list.contains(new SimpleUriValue((IndividualUriValue) itemToFind))) {
@@ -839,7 +841,8 @@ public abstract class CoreModelObject {
 	 * @param modelStore model store to store the copy in
 	 * @return a copy of this model object
 	 */
-	public CoreModelObject clone(IModelStore modelStore) {
+	@SuppressWarnings("unused")
+    public CoreModelObject clone(IModelStore modelStore) {
 		if (Objects.isNull(this.copyManager)) {
 			throw new IllegalStateException("A copy manager must be provided to clone");
 		}

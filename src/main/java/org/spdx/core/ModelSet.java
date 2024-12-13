@@ -1,14 +1,14 @@
 /**
  * Copyright (c) 2019 Source Auditor Inc.
- *
+ * <p>
  * SPDX-License-Identifier: Apache-2.0
- * 
+ * <p>
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *
+ * <p>
  *       http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,7 +18,6 @@
 package org.spdx.core;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Set;
 
 import javax.annotation.Nullable;
@@ -36,9 +35,11 @@ import org.spdx.storage.PropertyDescriptor;
  * @author Gary O'Neall
  *
  */
+@SuppressWarnings({"TypeParameterExplicitlyExtendsObject", "unused"})
 public class ModelSet<T extends Object> extends ModelCollection<Object> implements Set<Object> {
 	
-	static final Logger logger = LoggerFactory.getLogger(ModelSet.class);
+	@SuppressWarnings("unused")
+    static final Logger logger = LoggerFactory.getLogger(ModelSet.class);
 	
 	/**
 	 * @param modelStore Storage for the model collection
@@ -74,8 +75,7 @@ public class ModelSet<T extends Object> extends ModelCollection<Object> implemen
 			this.getModelStore().leaveCriticalSection(lock);
 		}
 	}
-	
-	@SuppressWarnings("rawtypes")
+
 	@Override
 	public boolean addAll(Collection c) {
 		IModelStoreLock lock;
@@ -86,13 +86,11 @@ public class ModelSet<T extends Object> extends ModelCollection<Object> implemen
 		}
 		try {
 			boolean retval = false;
-			Iterator iter = c.iterator();
-			while (iter.hasNext()) {
-				Object item = iter.next();
-				if (!super.contains(item) && super.add(item)) {
-					retval = true;
-				}
-			}
+            for (Object item : c) {
+                if (!super.contains(item) && super.add(item)) {
+                    retval = true;
+                }
+            }
 			return retval;
 		} finally {
 			this.getModelStore().leaveCriticalSection(lock);

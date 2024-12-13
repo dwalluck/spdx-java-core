@@ -4,10 +4,7 @@
  */
 package org.spdx.storage;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
 import org.spdx.core.InvalidSPDXAnalysisException;
@@ -80,14 +77,9 @@ public class NullModelStore implements IModelStore {
 	@Override
 	public IModelStoreLock enterCriticalSection(boolean readLockRequested)
 			throws InvalidSPDXAnalysisException {
-		return new IModelStoreLock() {
-
-			@Override
-			public void unlock() {
-				// no need to do anything
-			}
-			
-		};
+		return () -> {
+            // no need to do anything
+        };
 	}
 
 	@Override
@@ -134,7 +126,7 @@ public class NullModelStore implements IModelStore {
 	public Iterator<Object> listValues(String objectUri,
 			PropertyDescriptor propertyDescriptor)
 			throws InvalidSPDXAnalysisException {
-		return new ArrayList<Object>().iterator();
+        return Collections.emptyIterator();
 	}
 
 	@Override
