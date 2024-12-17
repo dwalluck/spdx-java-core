@@ -43,7 +43,7 @@ import org.spdx.core.TypedValue;
  *
  */
 public interface IModelStore extends AutoCloseable {
-	
+
 	interface IModelStoreLock {
 		void unlock();
 	}
@@ -52,7 +52,7 @@ public interface IModelStore extends AutoCloseable {
     interface ModelUpdate {
 		void apply() throws InvalidSPDXAnalysisException;
 	}
-	
+
 	/**
 	 * Different types of ID's
 	 */
@@ -62,7 +62,8 @@ public interface IModelStore extends AutoCloseable {
 		SpdxId, 			// ID's that start with SpdxRef-
 		ListedLicense, 		// ID's associated with listed licenses
 		Anonymous, 			// ID's for object only referenced internally
-		Unkown}				// ID's that just don't fit any pattern
+		Unknown				// ID's that just don't fit any pattern
+	}
 
 	/**
 	 * @param objectUri unique URI within the SPDX model store for the objects
@@ -223,11 +224,11 @@ public interface IModelStore extends AutoCloseable {
 	/**
 	 * In SPDX 2.2 license refs are allowed to be matched case-insensitive.  This function will return
 	 * the case-sensitive ID (e.g. if you have LicenseRef-ABC, calling this function with licenseref-abc will return LicenseRef-ABC
-	 * @param nameSpace the nameSpace used for the ID - the URI is formed by the nameSpace + "#" + caseInsensisitiveId
-	 * @param caseInsensisitiveId ID - case will be ignored
+	 * @param nameSpace the nameSpace used for the ID - the URI is formed by the nameSpace + "#" + caseInsensitiveId
+	 * @param caseInsensitiveId ID - case will be ignored
 	 * @return the case-sensitive ID if it exists
 	 */
-    Optional<String> getCaseSensisitiveId(String nameSpace, String caseInsensisitiveId);
+    Optional<String> getCaseSensitiveId(String nameSpace, String caseInsensitiveId);
 
 	/**
 	 * @param objectUri unique URI within the SPDX model store for the objects

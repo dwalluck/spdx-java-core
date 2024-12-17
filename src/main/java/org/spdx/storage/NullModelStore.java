@@ -152,12 +152,12 @@ public class NullModelStore implements IModelStore {
 
 	@Override
 	public IdType getIdType(String objectUri) {
-		return IdType.Unkown;
+		return IdType.Unknown;
 	}
 
 	@Override
-	public Optional<String> getCaseSensisitiveId(String nameSpace,
-			String caseInsensisitiveId) {
+	public Optional<String> getCaseSensitiveId(String nameSpace,
+			String caseInsensitiveId) {
 		return Optional.empty();
 	}
 
