@@ -158,7 +158,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
  <p>
  Property values are restricted to the following types:
    - String - Java Strings
-   - Booolean - Java Boolean or primitive boolean types
+   - Boolean - Java Boolean or primitive boolean types
    - CoreModelObject - A concrete subclass of this type
    - Collection&lt;T&gt; - A Collection of type T where T is one of the supported non-collection types
  <p>
@@ -846,7 +846,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <h4>enterCriticalSection</h4>
 <pre class="methodSignature">public&nbsp;<a href="../storage/IModelStore.IModelStoreLock.html" title="interface in org.spdx.storage">IModelStore.IModelStoreLock</a>&nbsp;enterCriticalSection&#8203;(boolean&nbsp;readLockRequested)
                                                  throws <a href="InvalidSPDXAnalysisException.html" title="class in org.spdx.core">InvalidSPDXAnalysisException</a></pre>
-<div class="block">Enter a critical section. leaveCriticialSection must be called.</div>
+<div class="block">Enter a critical section. leaveCriticalSection must be called.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>readLockRequested</code> - true implies a read lock, false implies write lock.</dd>
@@ -896,7 +896,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>specVersion</code> - Version of the SPDX spec to verify against</dd>
-<dd><code>verifiedIds</code> - verifiedIds list of all Id's which have already been verifieds - prevents infinite recursion</dd>
+<dd><code>verifiedIds</code> - verifiedIds list of all Id's which have already been verified - prevents infinite recursion</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>Any verification errors or warnings associated with this object</dd>
 </dl>
@@ -945,7 +945,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>specVersion</code> - version of the SPDX specification to verify against</dd>
 <dd><code>collection</code> - collection to be verifies</dd>
-<dd><code>verifiedIds</code> - verifiedIds list of all Id's which have already been verifieds - prevents infinite recursion</dd>
+<dd><code>verifiedIds</code> - verifiedIds list of all Id's which have already been verified - prevents infinite recursion</dd>
 <dd><code>warningPrefix</code> - String to prefix any warning messages</dd>
 </dl>
 </li>
@@ -1551,7 +1551,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <pre class="methodSignature">public&nbsp;<a href="IModelCopyManager.html" title="interface in org.spdx.core">IModelCopyManager</a>&nbsp;getCopyManager()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the copy manager - value may be null if copies are not allowd</dd>
+<dd>the copy manager - value may be null if copies are not allowed</dd>
 </dl>
 </li>
 </ul>
@@ -1596,7 +1596,7 @@ extends <a href="https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the version of the SPDX specification this object complies with</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="InvalidSPDXAnalysisException.html" title="class in org.spdx.core">InvalidSPDXAnalysisException</a></code> - - this is here just for compatibility with overriden methods</dd>
+<dd><code><a href="InvalidSPDXAnalysisException.html" title="class in org.spdx.core">InvalidSPDXAnalysisException</a></code> - - this is here just for compatibility with overridden methods</dd>
 </dl>
 </li>
 </ul>
