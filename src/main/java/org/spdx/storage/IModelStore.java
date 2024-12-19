@@ -232,13 +232,13 @@ public interface IModelStore extends AutoCloseable {
 
 	/**
 	 * Alias for getCaseSensitiveId
-	 * @param nameSpace the nameSpace used for the ID - the URI is formed by the nameSpace + "#" + caseInsensitiveId
-	 * @param caseInsensitiveId ID - case will be ignored
+	 * @param nameSpace the nameSpace used for the ID - the URI is formed by the nameSpace + "#" + caseInsensisitiveId
+	 * @param caseInsensisitiveId ID - case will be ignored
 	 * @return the case-sensitive ID if it exists
 	 * @deprecated As of release 1.0, replaced by {@link #getCaseSensitiveId(String, String)}
 	 */
-    @Deprecated default Optional<String> getCaseSensisitiveId(String nameSpace, String caseInsensitiveId) {
-		return getCaseSensitiveId(nameSpace, caseInsensitiveId);
+    @Deprecated default Optional<String> getCaseSensisitiveId(String nameSpace, String caseInsensisitiveId) {
+		return getCaseSensitiveId(nameSpace, caseInsensisitiveId);
 	}
 
 	/**
