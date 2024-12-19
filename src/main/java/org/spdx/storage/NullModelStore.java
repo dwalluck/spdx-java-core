@@ -152,7 +152,7 @@ public class NullModelStore implements IModelStore {
 
 	@Override
 	public IdType getIdType(String objectUri) {
-		return IdType.Unknown;
+		return IdType.Unkown;
 	}
 
 	@Override

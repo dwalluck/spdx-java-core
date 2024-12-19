@@ -17,6 +17,7 @@
  */
 package org.spdx.storage;
 
+import java.time.ZonedDateTime;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -62,7 +63,7 @@ public interface IModelStore extends AutoCloseable {
 		SpdxId, 			// ID's that start with SpdxRef-
 		ListedLicense, 		// ID's associated with listed licenses
 		Anonymous, 			// ID's for object only referenced internally
-		Unknown				// ID's that just don't fit any pattern
+		Unkown				// ID's that just don't fit any pattern (supposed to be "Unknown")
 	}
 
 	/**
@@ -231,10 +232,22 @@ public interface IModelStore extends AutoCloseable {
     Optional<String> getCaseSensitiveId(String nameSpace, String caseInsensitiveId);
 
 	/**
+	 * Alias for getCaseSensitiveId
+	 * @param nameSpace the nameSpace used for the ID - the URI is formed by the nameSpace + "#" + caseInsensitiveId
+	 * @param caseInsensitiveId ID - case will be ignored
+	 * @return the case-sensitive ID if it exists
+	 * @deprecated As of release 1.0, replaced by {@link #getCaseSensitiveId(String, String)}
+	 */
+    @Deprecated default Optional<String> getCaseSensisitiveId(String nameSpace, String caseInsensitiveId) {
+		return getCaseSensitiveId(nameSpace, caseInsensitiveId);
+	}
+
+	/**
 	 * @param objectUri unique URI within the SPDX model store for the objects
 	 * @return type TypedValue containing the type of the ModelObject related to the ID
 	 */
     Optional<TypedValue> getTypedValue(String objectUri) throws InvalidSPDXAnalysisException;
+
 	/**
 	 * Deletes an item from the document
 	 * @param objectUri unique URI within the SPDX model store for the objects
