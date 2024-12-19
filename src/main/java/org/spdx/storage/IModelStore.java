@@ -237,7 +237,8 @@ public interface IModelStore extends AutoCloseable {
 	 * @return the case-sensitive ID if it exists
 	 * @deprecated As of release 1.0, replaced by {@link #getCaseSensitiveId(String, String)}
 	 */
-    @Deprecated default Optional<String> getCaseSensisitiveId(String nameSpace, String caseInsensisitiveId) {
+	@Deprecated
+	default Optional<String> getCaseSensisitiveId(String nameSpace, String caseInsensisitiveId) {
 		return getCaseSensitiveId(nameSpace, caseInsensisitiveId);
 	}
 
