@@ -233,7 +233,8 @@ public class ModelObjectHelper {
 			} else {
 				return mValue.toTypedValue();
 			}
-		} else if (value instanceof Integer || value instanceof String || value instanceof Boolean) {
+		} else if (value instanceof Integer || value instanceof String ||
+				value instanceof Boolean || value instanceof Double) {
 			return value;
 		} else if (Objects.isNull(value)) {
 			throw new SpdxInvalidTypeException("Property value is null");

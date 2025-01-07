@@ -399,6 +399,25 @@ public abstract class CoreModelObject {
 		}
 		return retval;
 	}
+
+	/**
+	 * @param propertyDescriptor Descriptor for a property
+	 * @return the Optional Double value associated with a property, null if no value is present
+	 * @throws InvalidSPDXAnalysisException on any SPDX related exception
+	 */
+	public Optional<Double> getDoublePropertyValue(PropertyDescriptor propertyDescriptor) throws InvalidSPDXAnalysisException {
+		Optional<Object> result = getObjectPropertyValue(propertyDescriptor, Double.class);
+		Optional<Double> retval;
+		if (result.isPresent()) {
+			if (!(result.get() instanceof Double)) {
+				throw new SpdxInvalidTypeException(PROPERTY_MSG+propertyDescriptor+" is not of type Double");
+			}
+			retval = Optional.of((Double)result.get());
+		} else {
+			retval = Optional.empty();
+		}
+		return retval;
+	}
 	
 	/**
 	 * @param propertyDescriptor descriptor for the property
