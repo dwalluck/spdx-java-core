@@ -31,7 +31,7 @@ public class ModelRegistry {
 	private static final String URI_NULL_MSG = "URI must not be null";
 	private static final String STORE_NULL_MSG = "Store must nut be null";
 	private static final String TYPE_NULL_MSG = "Type must not be null";
-	private static final String DOES_NOT_EXIST_MSG = " does not exits";
+	private static final String DOES_NOT_EXIST_MSG = " does not exist";
 	
 	private static final ModelRegistry _instance = new ModelRegistry();
 	private static final ReadWriteLock lock = new ReentrantReadWriteLock();
