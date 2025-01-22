@@ -115,6 +115,17 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 		return sb.toString();
 	}
 	
+	/**
+	 * Format HTML for a replaceable string
+	 * @param text text for the optional license string
+	 * @param id ID used for the div 
+	 * @return a replaceable string
+	 */
+	@Deprecated
+	public static String formatReplaceabledHTML(String text, String id) {
+		return formatReplaceableHTML(text, id);
+	}
+	
 
 	/**
 	 * Escape the ID string to conform to the legal characters for an HTML ID string
