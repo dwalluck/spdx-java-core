@@ -60,7 +60,7 @@ public class LicenseTextHelper {
 		NORMALIZE_TOKENS.put("authorised","authorized");   
 		NORMALIZE_TOKENS.put("calibre","caliber");   
 		NORMALIZE_TOKENS.put("cancelled","canceled");   
-		NORMALIZE_TOKENS.put("apitalisations","apitalizations");   
+		NORMALIZE_TOKENS.put("capitalisations","capitalizations");   
 		NORMALIZE_TOKENS.put("catalogue","catalog");   
 		NORMALIZE_TOKENS.put("categorise","categorize");   
 		NORMALIZE_TOKENS.put("centre","center");   
@@ -88,7 +88,7 @@ public class LicenseTextHelper {
 		NORMALIZE_TOKENS.put("signalling","signaling");   
 		NORMALIZE_TOKENS.put("utilisation","utilization");   
 		NORMALIZE_TOKENS.put("whilst","while");   
-		NORMALIZE_TOKENS.put("wilful","wilfull");   
+		NORMALIZE_TOKENS.put("wilful","willful");   
 		NORMALIZE_TOKENS.put("non-commercial","noncommercial");    
 		NORMALIZE_TOKENS.put("copyright-owner", "copyright-holder");
 		NORMALIZE_TOKENS.put("sublicense", "sub-license");
@@ -215,10 +215,10 @@ public class LicenseTextHelper {
             Matcher m = TOKEN_SPLIT_PATTERN.matcher(textToTokenize);
             while (m.find()) {
                 String word = m.group(1).trim();
-                String seperator = m.group(2).trim();
+                String separator = m.group(2).trim();
                 tokens.add(word);
-                if (PUNCTUATION.contains(seperator)) {
-                    tokens.add(seperator);
+                if (PUNCTUATION.contains(separator)) {
+                    tokens.add(separator);
                 }
             }
         }
@@ -339,7 +339,7 @@ public class LicenseTextHelper {
 		// then normalize non-breaking spaces to spaces
 		return s.replaceAll("[‘’‛‚`]", "'")	// Take care of single quotes first
 				.replace("http://", "https://") // Normalize the http protocol scheme
- 				.replace("''","\"")			// This way, we can change doulbe single quotes to a single double cquote
+ 				.replace("''","\"")			// This way, we can change double single quotes to a single double quote
 				.replaceAll("[“”‟„]", "\"")	// Now we can normalize the double quotes
 				.replaceAll("\\u00A0", " ")		// replace non-breaking spaces with spaces since Java does not handle the former well
 				.replaceAll("[—–]","-")			// replace em dash, en dash with simple dash

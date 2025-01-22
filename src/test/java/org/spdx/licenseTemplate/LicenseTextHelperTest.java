@@ -77,13 +77,13 @@ public class LicenseTextHelperTest extends TestCase {
 		assertTrue(result);
 		result = LicenseTextHelper.isLicenseTextEquivalent(testB, testA);
 		assertTrue(result);
-		// preceeding white space
+		// preceding white space
 		testB = whiteSpace + testA;
 		result = LicenseTextHelper.isLicenseTextEquivalent(testA, testB);
 		assertTrue(result);
 		result = LicenseTextHelper.isLicenseTextEquivalent(testB, testA);
 		assertTrue(result);
-		// case shouldnt matter
+		// case shouldn't matter
 		result = LicenseTextHelper.isLicenseTextEquivalent(testA, testA.toUpperCase());
 		assertTrue(result);
 		// punctuation should matter

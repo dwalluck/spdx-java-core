@@ -18,10 +18,10 @@
 package org.spdx.core;
 
 /**
- * Implementation classes of the <code>IndividuallUriValue</code> stores
+ * Implementation classes of the <code>IndividualUriValue</code> stores
  * a single URI value
  * <p>
- * Theses classes must NOT implement any properties themselves.
+ * These classes must NOT implement any properties themselves.
  * Any such properties will be lost during storage and retrieval.
  * 
  * @author Gary O'Neall

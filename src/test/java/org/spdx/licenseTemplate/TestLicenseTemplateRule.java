@@ -35,7 +35,7 @@ public class TestLicenseTemplateRule {
 	static final String RULE_EXAMPLE = "Copyright (C) 2013 John Doe\nAll rights reserved.";
 
 	@Test
-	public void testparseLicenseTemplateRule() throws LicenseTemplateRuleException {
+	public void testParseLicenseTemplateRule() throws LicenseTemplateRuleException {
 		LicenseTemplateRule rule = new LicenseTemplateRule("Name", RuleType.BEGIN_OPTIONAL, "original", "match", "example");
 		rule.parseLicenseTemplateRule(PARSEABLE_RULE);
 		assertEquals(RULE_EXAMPLE, rule.getExample());

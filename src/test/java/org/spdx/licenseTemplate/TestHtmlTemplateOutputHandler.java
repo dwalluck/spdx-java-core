@@ -60,17 +60,17 @@ public class TestHtmlTemplateOutputHandler {
 	}
 
 	/**
-	 * Test method for {@link org.spdx.licenseTemplate.HtmlTemplateOutputHandler#formatReplaceabledHTML(java.lang.String, java.lang.String)}.
+	 * Test method for {@link org.spdx.licenseTemplate.HtmlTemplateOutputHandler#formatReplaceableHTML(java.lang.String, java.lang.String)}.
 	 */
 	@Test
-	public void testFormatReplaceabledHTML() {
+	public void testFormatReplaceableHTML() {
 		String originalText = "Original \ntext";
 		String compareOriginalText = "Original <br/>\ntext";
 		String ruleName = "testRule";
 		String expectedResult = "\n<span objectUri=\"" + ruleName +
 		"\" class=\"replaceable-license-text\">" + compareOriginalText +
 		"</span>\n";
-		String result = HtmlTemplateOutputHandler.formatReplaceabledHTML(originalText, ruleName);
+		String result = HtmlTemplateOutputHandler.formatReplaceableHTML(originalText, ruleName);
 		assertEquals(expectedResult, result);
 	}
 
