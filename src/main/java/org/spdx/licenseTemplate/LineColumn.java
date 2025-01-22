@@ -63,7 +63,7 @@ public class LineColumn {
 	}
 
 	/**
-	 * @return lenght of the line
+	 * @return length of the line
 	 */
 	public int getLen() {
 		return len;

@@ -305,7 +305,7 @@ public class ModelObjectHelper {
 	 * Verifies all elements in a collection
 	 * @param specVersion version of the SPDX specification to verify against
 	 * @param collection collection to be verifies
-	 * @param verifiedIds verifiedIds list of all Id's which have already been verifieds - prevents infinite recursion
+	 * @param verifiedIds verifiedIds list of all Id's which have already been verified - prevents infinite recursion
 	 * @param warningPrefix String to prefix any warning messages
 	 */
 	public static List<String> verifyCollection(Collection<? extends CoreModelObject> collection, String warningPrefix, Set<String> verifiedIds, String specVersion) {

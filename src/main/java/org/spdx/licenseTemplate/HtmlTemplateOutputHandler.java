@@ -54,7 +54,7 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 	@Override
 	public void variableRule(LicenseTemplateRule rule) {
 		removeEndParagraphTag();
-		htmlString.append(formatReplaceabledHTML(rule.getOriginal(), rule.getName()));
+		htmlString.append(formatReplaceableHTML(rule.getOriginal(), rule.getName()));
 	}
 	
 	/**
@@ -99,7 +99,7 @@ public class HtmlTemplateOutputHandler implements ILicenseTemplateOutputHandler 
 	 * @param id ID used for the div 
 	 * @return a replaceable string
 	 */
-	public static String formatReplaceabledHTML(String text, String id) {
+	public static String formatReplaceableHTML(String text, String id) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("\n<span ");
 		if (id != null && !id.trim().isEmpty()) {

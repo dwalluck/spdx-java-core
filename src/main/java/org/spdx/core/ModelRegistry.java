@@ -29,7 +29,7 @@ public class ModelRegistry {
 
 	private static final String SPEC_VERSION_NULL_MSG = "Spec version must not be null";
 	private static final String URI_NULL_MSG = "URI must not be null";
-	private static final String STORE_NULL_MSG = "Store must nut be null";
+	private static final String STORE_NULL_MSG = "Store must not be null";
 	private static final String TYPE_NULL_MSG = "Type must not be null";
 	private static final String DOES_NOT_EXIST_MSG = " does not exist";
 	
@@ -222,7 +222,7 @@ public class ModelRegistry {
 	 * @param clazz model class
 	 * @param specVersion version of the spec
 	 * @return true if clazz can be represented as external to the store
-	 * @throws ModelRegistryException on unitialized registry
+	 * @throws ModelRegistryException on uninitialized registry
 	 */
 	public boolean canBeExternal(Class<?> clazz, String specVersion) throws ModelRegistryException {
 		Objects.requireNonNull(specVersion, SPEC_VERSION_NULL_MSG);
