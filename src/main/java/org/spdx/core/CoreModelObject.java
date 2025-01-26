@@ -52,20 +52,24 @@ import org.spdx.storage.IModelStore.ModelUpdate;
  * is passed as a parameter.
  * <p>
  * There are 2 methods of setting values:
- *   - call the setPropertyValue, clearValueCollection or addValueToCollection methods - this will call the modelStore and store the
- *     value immediately
- *   - Gather a list of updates by calling the updatePropertyValue, updateClearValueList, or updateAddPropertyValue
+ * <ul>
+ *   <li>Call the setPropertyValue, clearValueCollection or addValueToCollection methods.
+ *     This will call the modelStore and store the value immediately.</li>
+ *   <li>Gather a list of updates by calling the updatePropertyValue, updateClearValueList, or updateAddPropertyValue
  *     methods.  These methods return a ModelUpdate which can be applied later by calling the <code>apply()</code> method.
  *     A convenience method <code>Write.applyUpdatesInOneTransaction</code> will perform all updates within
  *     a single transaction. This method may result in higher performance updates for some Model Store implementations.
  *     Note that none of the updates will be applied until the storage manager update method is invoked.
+ *   </li>
+ * </ul>
  * <p>
  * Property values are restricted to the following types:
- *   - String - Java Strings
- *   - Boolean - Java Boolean or primitive boolean types
- *   - CoreModelObject - A concrete subclass of this type
- *   - {@literal Collection<T>} - A Collection of type T where T is one of the supported non-collection types
- * <p>
+ * <ul>
+ *   <li>String - Java Strings</li>
+ *   <li>Boolean - Java Boolean or primitive boolean types</li>
+ *   <li>CoreModelObject - A concrete subclass of this type</li>
+ *   <li>{@literal Collection<T>} - A Collection of type T where T is one of the supported non-collection types</li>
+ * </ul>
  * This class also handles the conversion of a CoreModelObject to and from a TypeValue for storage in the ModelStore.
  *
  * @author Gary O'Neall
@@ -107,7 +111,7 @@ public abstract class CoreModelObject {
 	/**
 	 * Open or create a model object with the default store
 	 * @param objectUri Anonymous ID or URI for the model object
-	 * @param specVersion - version of the SPDX spec the object complies with
+	 * @param specVersion Version of the SPDX spec the object complies with
 	 * @throws InvalidSPDXAnalysisException on any SPDX related exception
 	 */
 	protected CoreModelObject(String objectUri, String specVersion) throws InvalidSPDXAnalysisException {

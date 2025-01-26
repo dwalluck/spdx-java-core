@@ -28,24 +28,57 @@ import org.spdx.storage.PropertyDescriptor;
  * @author Gary O'Neall
  */
 public class NotEquivalentReason {
-	
+
+	/**
+	 * Enum representing the reasons why two model objects are not equivalent.
+	 */
 	public enum NotEquivalent {
-		DIFFERENT_CLASS, MISSING_PROPERTY, PROPERTY_NOT_EQUIVALENT, COMPARE_PROPERTY_MISSING}
-		
+		/**
+		 * Indicates that the objects are of different classes.
+		 */
+		DIFFERENT_CLASS,
+
+		/**
+		 * Indicates that a property is missing in one of the objects.
+		 */
+		MISSING_PROPERTY,
+
+		/**
+		 * Indicates that a property value is not equivalent between the objects.
+		 */
+		PROPERTY_NOT_EQUIVALENT,
+
+		/**
+		 * Indicates that a property to compare is missing.
+		 */
+		COMPARE_PROPERTY_MISSING
+	}
+
 		NotEquivalent reason;
 		PropertyDescriptor property = null;
-		
+
+		/**
+		 * Constructs a NotEquivalentReason with the specified reason.
+		 * 
+		 * @param reason the reason why the objects are not equivalent
+		 */
 		public NotEquivalentReason(NotEquivalent reason) {
 			this.reason = reason;
 		}
-		
+
+		/**
+		 * Constructs a NotEquivalentReason with the specified reason and property.
+		 * 
+		 * @param reason the reason why the objects are not equivalent
+		 * @param property the property descriptor associated with the reason
+		 */
 		public NotEquivalentReason(NotEquivalent reason, PropertyDescriptor property) {
 			this(reason);
 			this.property = property;
 		}
 
 		/**
-		 * @return the reason
+		 * @return the reason why the objects are not equivalent
 		 */
 		public NotEquivalent getReason() {
 			return reason;

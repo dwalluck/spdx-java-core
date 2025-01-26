@@ -48,9 +48,9 @@ public class LicenseTemplateRule {
 	/**
 	 * Create a new LicenseTemplateRule
 	 * @param name Name of the rule - must not be null
-	 * @param type - type of rule
-	 * @param original - Original text - must not be null
-	 * @param example - Example text - may be null
+	 * @param type Type of rule
+	 * @param original Original text - must not be null
+	 * @param example Example text - may be null
 	 * @throws LicenseTemplateRuleException if the license template could not be parsed
 	 */
 	public LicenseTemplateRule(String name, RuleType type, String original, String match, String example) throws LicenseTemplateRuleException {
