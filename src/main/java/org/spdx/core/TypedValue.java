@@ -11,6 +11,8 @@ public class TypedValue {
 	String specVersion;
 	
 	/**
+	 * Constructs a TypedValue with the specified object URI, type, and spec version.
+	 * 
 	 * @param objectUri URI or anon ID for the object
 	 * @param type a string representation of the type of the object
 	 * @param specVersion version of the spec

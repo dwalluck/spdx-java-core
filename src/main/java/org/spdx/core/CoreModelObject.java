@@ -70,6 +70,7 @@ import org.spdx.storage.IModelStore.ModelUpdate;
  *   <li>CoreModelObject - A concrete subclass of this type</li>
  *   <li>{@literal Collection<T>} - A Collection of type T where T is one of the supported non-collection types</li>
  * </ul>
+ * <p>
  * This class also handles the conversion of a CoreModelObject to and from a TypeValue for storage in the ModelStore.
  *
  * @author Gary O'Neall
